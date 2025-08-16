@@ -5,45 +5,6 @@ export const contact = {
 		"Avenida Luiz Carlos Berrini 1681<br/>Sala 111/112 - Cidade Monções<br/>São Paulo/SP - 04.571-011",
 };
 
-export const bedrooms = [
-	"Studio",
-	"1 dormitório",
-	"2 dormitórios",
-	"3 dormitórios",
-	"4+ dormitórios",
-];
-
-export const suites = [
-	"0 suíte",
-	"1 suíte",
-	"2 suítes",
-	"3 suítes",
-	"4+ suítes",
-];
-
-export const parkingSpaces = [
-	"0 vaga",
-	"1 vaga",
-	"2 vagas",
-	"3 vagas",
-	"4+ vagas",
-];
-
-export const prices = [
-	{ value: "100000", label: "R$ 100.000,00" },
-	{ value: "200000", label: "R$ 200.000,00" },
-	{ value: "300000", label: "R$ 300.000,00" },
-	{ value: "400000", label: "R$ 400.000,00" },
-	{ value: "500000", label: "R$ 500.000,00" },
-	{ value: "600000", label: "R$ 600.000,00" },
-	{ value: "700000", label: "R$ 700.000,00" },
-	{ value: "800000", label: "R$ 800.000,00" },
-	{ value: "900000", label: "R$ 900.000,00" },
-	{ value: "1000000", label: "R$ 1.000.000,00" },
-	{ value: "5000000", label: "R$ 5.000.000,00" },
-	{ value: "10000000", label: "R$ 10.000.000,00" },
-];
-
 export const blogData = [
 	{
 		id: 1,
@@ -142,39 +103,13 @@ export const brokerData = [
 		image: "/images/workers/01.webp",
 		name: "Carlos de Jesus",
 		title: "Consultor Imobiliário",
+		social: null,
 	},
 	{
 		image: "/images/workers/02.webp",
 		name: "Andressa Soares",
 		title: "Consultora Imobiliária",
-	},
-];
-
-export const categories = [
-	{
-		id: 1,
-		label: "Breve Lançamento",
-		image: "/images/property/residential.jpg",
-	},
-	{
-		id: 2,
-		label: "Em Construção",
-		image: "/images/property/residential.jpg",
-	},
-	{
-		id: 3,
-		label: "Lançamento",
-		image: "/images/property/residential.jpg",
-	},
-	{
-		id: 4,
-		label: "Pronto Novo",
-		image: "/images/property/residential.jpg",
-	},
-	{
-		id: 5,
-		label: "Investimento",
-		image: "/images/property/residential.jpg",
+		social: null,
 	},
 ];
 
@@ -231,6 +166,20 @@ export const propertyData = [
 			suite: "0 a 3 suítes",
 			parking: "0 a 3 vagas",
 		},
+		images: [
+			{ src: "/images/property/10.jpg", title: "Imagem 1" },
+			{ src: "/images/property/11.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 865,
 		bed: 4,
 		suite: 2,
@@ -256,6 +205,20 @@ export const propertyData = [
 			suite: "1 suíte",
 			parking: "2 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 732,
 		bed: 5,
 		suite: 1,
@@ -281,6 +244,20 @@ export const propertyData = [
 			suite: "2 e 3 suítes",
 			parking: "2 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 590,
 		bed: 3,
 		suite: 2,
@@ -306,6 +283,20 @@ export const propertyData = [
 			suite: "2 e 3 suítes",
 			parking: "2 e 4 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 875,
 		bed: 6,
 		suite: 3,
@@ -331,6 +322,20 @@ export const propertyData = [
 			suite: "2 e 3 suítes",
 			parking: "2 e 4 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 645,
 		bed: 4,
 		suite: 2,
@@ -356,6 +361,20 @@ export const propertyData = [
 			suite: "4 suítes",
 			parking: "3 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 700,
 		bed: 7,
 		suite: 4,
@@ -381,6 +400,20 @@ export const propertyData = [
 			suite: "1 e 3 suítes",
 			parking: "3 e 6 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 820,
 		bed: 8,
 		suite: 3,
@@ -406,6 +439,20 @@ export const propertyData = [
 			suite: "1 suíte",
 			parking: "2 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed:
+			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
 		area: 435,
 		bed: 3,
 		suite: 1,
@@ -431,6 +478,19 @@ export const propertyData = [
 			suite: "4 suítes",
 			parking: "4 vagas",
 		},
+		images: [
+			{ src: "/images/property/single/1.jpg", title: "Imagem 1" },
+			{ src: "/images/property/single/2.jpg", title: "Imagem 2" },
+			{ src: "/images/property/single/3.jpg", title: "Imagem 3" },
+			{ src: "/images/property/single/4.jpg", title: "Imagem 4" },
+			{ src: "/images/property/single/5.jpg", title: "Imagem 5" },
+		],
+		description: [
+			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
+			"A sala ampla, integrada à cozinha americana, cria um ambiente perfeito para receber amigos e familiares. Grandes janelas permitem a entrada abundante de luz natural, enquanto a varanda gourmet proporciona uma vista panorâmica encantadora da cidade.",
+			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
+		],
+		description_embed: null,
 		area: 900,
 		bed: 9,
 		suite: 4,

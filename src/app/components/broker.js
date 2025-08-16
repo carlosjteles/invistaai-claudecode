@@ -36,25 +36,52 @@ export default function Broker() {
 										className="img-fluid"
 										alt={item.name}
 									/>
-									<div className="card-overlay avatar avatar-ex-large rounded-pill"></div>
 
-									<ul className="list-unstyled team-social mb-0">
-										<li className="list-inline-item">
-											<Link href="#" className="btn btn-sm btn-pills btn-icon">
-												<FiFacebook className="icons fea-social" />
-											</Link>
-										</li>
-										<li className="list-inline-item">
-											<Link href="#" className="btn btn-sm btn-pills btn-icon">
-												<FiInstagram className="icons fea-social" />
-											</Link>
-										</li>
-										<li className="list-inline-item">
-											<Link href="#" className="btn btn-sm btn-pills btn-icon">
-												<FiTwitter className="icons fea-social" />
-											</Link>
-										</li>
-									</ul>
+									{item.social && (
+										<>
+											<div className="card-overlay avatar avatar-ex-large rounded-pill"></div>
+											<ul className="list-unstyled team-social mb-0">
+												{item.social.facebook && (
+													<li className="list-inline-item">
+														<Link
+															href={item.social.facebook}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="btn btn-sm btn-pills btn-icon"
+														>
+															<FiFacebook className="icons fea-social" />
+														</Link>
+													</li>
+												)}
+
+												{item.social.instagram && (
+													<li className="list-inline-item">
+														<Link
+															href={item.social.instagram}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="btn btn-sm btn-pills btn-icon"
+														>
+															<FiInstagram className="icons fea-social" />
+														</Link>
+													</li>
+												)}
+
+												{item.social.twitter && (
+													<li className="list-inline-item">
+														<Link
+															href={item.social.twitter}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="btn btn-sm btn-pills btn-icon"
+														>
+															<FiTwitter className="icons fea-social" />
+														</Link>
+													</li>
+												)}
+											</ul>
+										</>
+									)}
 								</div>
 
 								<div className="content mt-3">

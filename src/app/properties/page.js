@@ -9,13 +9,14 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ScrollTop from "../components/scrollTop";
 
+import { propertyData as data } from "../storage/data";
+
 import {
 	bedrooms,
 	categories,
 	parkingSpaces,
-	propertyData as data,
 	suites,
-} from "../storage/data";
+} from "../storage/filters";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
@@ -51,7 +52,15 @@ export default function Properties() {
 		parking !== "all" ||
 		suite !== "all";
 
+	const initialized = React.useRef(false);
+
 	React.useEffect(() => {
+		if (initialized.current) {
+			return;
+		}
+
+		initialized.current = true;
+
 		const release = categories.find((item) => item.label === "Lançamento");
 		const isReleases = pathname === "/lancamentos";
 		const isProperties = pathname === "/imoveis";
@@ -97,9 +106,17 @@ export default function Properties() {
 		});
 		setPropertyData(filtered);
 		setCurrentPage(1);
-	}, [searchParams, pathname]);
+	}, [
+		searchParams,
+		pathname,
+		category,
+		minPrice,
+		maxPrice,
+		searchTerm,
+		clearFilters,
+	]);
 
-	const clearFilters = () => {
+	const clearFilters = React.useCallback(() => {
 		const isReleases = pathname === "/lancamentos";
 
 		if (searchParams.size > 0 || isReleases) {
@@ -113,7 +130,7 @@ export default function Properties() {
 		setSuite("all");
 		setPropertyData(data);
 		setCurrentPage(1);
-	};
+	}, [pathname, searchParams, router]);
 
 	const getPropertyFiltered = () => {
 		return data.filter((item) => {

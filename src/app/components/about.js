@@ -26,6 +26,7 @@ export default function AboutUs() {
 			desc: "Apoio em documentação, financiamento e prazos até a assinatura do contrato — com previsibilidade.",
 		},
 	];
+
 	return (
 		<>
 			<div className="row justify-content-center">

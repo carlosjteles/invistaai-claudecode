@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -14,6 +14,21 @@ export default function Navbar({
 	let [scroll, setScroll] = useState(false);
 	let [isMenu, setisMenu] = useState(false);
 	let [modal, setModal] = useState(false);
+	const dropdownRef = useRef(null);
+
+	useEffect(() => {
+		function closeDropdown(event) {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setModal(false);
+			}
+		}
+
+		document.addEventListener("mousedown", closeDropdown);
+
+		return () => {
+			document.removeEventListener("mousedown", closeDropdown);
+		};
+	}, []);
 
 	useEffect(() => {
 		function activateMenu() {
@@ -86,11 +101,6 @@ export default function Navbar({
 			setScroll(window.scrollY > 50);
 		});
 
-		const closeDropdown = () => {
-			setModal(false);
-		};
-
-		document.addEventListener("mousedown", closeDropdown);
 		window.scrollTo(0, 0);
 	}, [currentPath]);
 
@@ -208,7 +218,7 @@ export default function Navbar({
 
 					<ul className="buy-button list-inline mb-0">
 						<li className="list-inline-item ps-1 mb-0">
-							<div className="dropdown">
+							<div className="dropdown" ref={dropdownRef}>
 								<button
 									type="button"
 									className="dropdown-toggle btn btn-sm btn-icon btn-pills btn-primary"

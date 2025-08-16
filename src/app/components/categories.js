@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { categories, propertyData } from "../storage/data";
+import { categories } from "../storage/filters";
+import { propertyData } from "../storage/data";
 
 export default function Categories() {
 	const CategoryListing = (id) => {

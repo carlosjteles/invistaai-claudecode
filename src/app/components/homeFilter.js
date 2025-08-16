@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-import { categories, prices } from "../storage/data";
+import { categories, prices } from "../storage/filters";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 

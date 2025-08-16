@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 
-import { categories, contact, propertyData as data } from "../../storage/data";
+import { categories } from "../../storage/filters";
+import { contact, propertyData as data } from "../../storage/data";
 import Error from "../../error/page";
 import PropertyDetailImg from "../../components/propertyDetailImg";
 import Navbar from "../../components/navbar";
@@ -30,7 +31,7 @@ export default function PropertyDetails(props) {
 			/>
 			<section className="section mt-5 pt-4">
 				<div className="container-fluid mt-2">
-					<PropertyDetailImg />
+					<PropertyDetailImg images={propertyData.images} />
 				</div>
 
 				<div className="container mt-100 mt-60">
@@ -77,40 +78,26 @@ export default function PropertyDetails(props) {
 									</li>
 								</ul>
 
-								<p className="text-muted">
-									Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-									accusantium doloremque laudantium, totam rem aperiam, eaque
-									ipsa quae ab illo inventore veritatis et quasi architecto
-									beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-									quia voluptas sit aspernatur aut odit aut fugit, sed quia
-									consequuntur magni dolores eos qui ratione voluptatem sequi
-									nesciunt.
-								</p>
-								<p className="text-muted">
-									But I must explain to you how all this mistaken idea of
-									denouncing pleasure and praising pain was born and I will give
-									you a complete account of the system, and expound the actual
-									teachings of the great explorer of the truth, the
-									master-builder of human happiness.
-								</p>
-								<p className="text-muted">
-									Nor again is there anyone who loves or pursues or desires to
-									obtain pain of itself, because it is pain, but because
-									occasionally circumstances occur in which toil and pain can
-									procure him some great pleasure.
-								</p>
+								{propertyData.description &&
+									propertyData.description.map((desc, index) => (
+										<p key={index} className="text-muted">
+											{desc}
+										</p>
+									))}
 
-								<div className="card map border-0">
-									<div className="card-body p-0">
-										<iframe
-											src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39206.002432144705!2d-95.4973981212445!3d29.709510002925988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640c16de81f3ca5%3A0xf43e0b60ae539ac9!2sGerald+D.+Hines+Waterwall+Park!5e0!3m2!1sen!2sin!4v1566305861440!5m2!1sen!2sin"
-											className="rounded-3"
-											style={{ border: "0" }}
-											title="Townter"
-											allowFullScreen
-										></iframe>
+								{propertyData.description_embed && (
+									<div className="card map border-0">
+										<div className="card-body p-0">
+											<iframe
+												src={propertyData.description_embed}
+												className="rounded-3"
+												style={{ border: "0" }}
+												title={propertyData.title}
+												allowFullScreen
+											></iframe>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 
