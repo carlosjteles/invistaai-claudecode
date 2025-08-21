@@ -21,6 +21,7 @@ import {
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
+
 import Pagination from "../components/pagination";
 
 export default function Properties() {
@@ -38,7 +39,7 @@ export default function Properties() {
 	const [maxPrice, setMaxPrice] = React.useState(9999999999);
 	const [propertyData, setPropertyData] = React.useState(data);
 
-	const itemsPerPage = 6;
+	const itemsPerPage = 8;
 	const totalPages = Math.ceil(propertyData.length / itemsPerPage);
 	const paginatedData = propertyData.slice(
 		itemsPerPage * (currentPage - 1),
@@ -52,15 +53,44 @@ export default function Properties() {
 		parking !== "all" ||
 		suite !== "all";
 
-	const initialized = React.useRef(false);
+	const clearFilters = React.useCallback(() => {
+		const isReleases = pathname === "/lancamentos";
 
-	React.useEffect(() => {
-		if (initialized.current) {
-			return;
+		if (searchParams.size > 0 || isReleases) {
+			router.push("/imoveis");
 		}
 
-		initialized.current = true;
+		console.log("Limpar filtros");
 
+		setSearchTerm("");
+		setCategory("all");
+		setBedroom("all");
+		setParking("all");
+		setSuite("all");
+		setPropertyData(data);
+
+		if (currentPage > 1) {
+			setCurrentPage(1);
+		}
+	}, [pathname, searchParams, router]);
+
+	const getPropertyFiltered = React.useCallback(() => {
+		return data.filter((item) => {
+			return (
+				(!searchTerm ||
+					item.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					item.neighborhood.toLowerCase().includes(searchTerm.toLowerCase())) &&
+				(category === "all" || item.category === Number(category)) &&
+				(bedroom === "all" || item.bed === bedroom) &&
+				(parking === "all" || item.parking === parking) &&
+				(suite === "all" || item.suite === suite) &&
+				item.price >= minPrice &&
+				item.price <= maxPrice
+			);
+		});
+	}, [data, searchTerm, category, bedroom, parking, suite, minPrice, maxPrice]);
+
+	React.useEffect(() => {
 		const release = categories.find((item) => item.label === "Lançamento");
 		const isReleases = pathname === "/lancamentos";
 		const isProperties = pathname === "/imoveis";
@@ -75,85 +105,48 @@ export default function Properties() {
 			return;
 		}
 
-		let categoryParam = searchParams.get("categoria") || category;
+		const searchParam = searchParams.get("q");
+		const minPriceParam = searchParams.get("preco-min");
+		const maxPriceParam = searchParams.get("preco-max");
+		let categoryParam = searchParams.get("categoria");
 
 		// If in "lancamentos", set categoryParam to release.id
 		if (isReleases) {
 			categoryParam = release.id;
 		}
 
-		const searchParam = searchParams.get("q") || searchTerm;
-		const minPriceParam = searchParams.get("preco-min") || minPrice;
-		const maxPriceParam = searchParams.get("preco-max") || maxPrice;
-
-		setSearchTerm(searchParam);
-		setCategory(categoryParam);
-		setMinPrice(minPriceParam);
-		setMaxPrice(maxPriceParam);
-
-		const filtered = data.filter((item) => {
-			return (
-				(!searchParam ||
-					item.title.toLowerCase().includes(searchParam.toLowerCase()) ||
-					item.address.toLowerCase().includes(searchParam.toLowerCase()) ||
-					item.neighborhood
-						.toLowerCase()
-						.includes(searchParam.toLowerCase())) &&
-				(categoryParam === "all" || item.category === Number(categoryParam)) &&
-				item.price >= Number(minPriceParam) &&
-				item.price <= Number(maxPriceParam)
-			);
-		});
-		setPropertyData(filtered);
-		setCurrentPage(1);
-	}, [
-		searchParams,
-		pathname,
-		category,
-		minPrice,
-		maxPrice,
-		searchTerm,
-		clearFilters,
-	]);
-
-	const clearFilters = React.useCallback(() => {
-		const isReleases = pathname === "/lancamentos";
-
-		if (searchParams.size > 0 || isReleases) {
-			router.push("/imoveis");
+		if (searchParam) {
+			setSearchTerm(searchParam);
 		}
 
-		setSearchTerm("");
-		setCategory("all");
-		setBedroom("all");
-		setParking("all");
-		setSuite("all");
-		setPropertyData(data);
-		setCurrentPage(1);
-	}, [pathname, searchParams, router]);
+		if (categoryParam) {
+			setCategory(categoryParam);
+		}
 
-	const getPropertyFiltered = () => {
-		return data.filter((item) => {
-			return (
-				(!searchTerm ||
-					item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					item.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					item.neighborhood.toLowerCase().includes(searchTerm.toLowerCase())) &&
-				(category === "all" || item.category === Number(category)) &&
-				(bedroom === "all" || item.bed === bedroom) &&
-				(parking === "all" || item.parking === parking) &&
-				(suite === "all" || item.suite === suite) &&
-				item.price >= minPrice &&
-				item.price <= maxPrice
-			);
-		});
-	};
+		if (minPriceParam) {
+			setMinPrice(minPriceParam);
+		}
+
+		if (maxPriceParam) {
+			setMaxPrice(maxPriceParam);
+		}
+
+		console.log("filtrando");
+
+		setPropertyData(getPropertyFiltered());
+
+		if (currentPage > 1) {
+			setCurrentPage(1);
+		}
+	}, [searchParams, pathname, category, clearFilters]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setPropertyData(getPropertyFiltered());
 		setCurrentPage(1);
 	};
+
+	console.log("renderizando", searchParams);
 
 	return (
 		<>
@@ -306,16 +299,16 @@ export default function Properties() {
 												<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
 													<div className="property-image position-relative overflow-hidden shadow">
 														<Image
-															src={item.image}
+															src={item.thumbnail}
 															width={0}
 															height={0}
 															sizes="100vw"
 															style={{ width: "100%", height: "auto" }}
 															className="img-fluid"
-															alt=""
+															alt={item.address}
 														/>
 														<ul className="list-unstyled property-icon">
-															<li className="">
+															<li>
 																<Link
 																	href={`/imovel/${item.slug}`}
 																	className="btn btn-sm btn-icon btn-pills btn-primary"
@@ -325,7 +318,7 @@ export default function Properties() {
 															</li>
 															<li className="mt-1">
 																<Link
-																	href="#"
+																	href={`/imovel/${item.slug}?openGallery=true`}
 																	className="btn btn-sm btn-icon btn-pills btn-primary"
 																>
 																	<FiCamera className="icons" />
@@ -419,12 +412,14 @@ export default function Properties() {
 							<div className="col-lg-8 col-md-6 col-12">
 								<div className="text-center p-5">
 									<h4>Nenhum imóvel encontrado com os filtros selecionados</h4>
-									<button
-										className="btn btn-primary mt-3"
-										onClick={clearFilters}
-									>
-										Limpar todos os filtros
-									</button>
+									{isAnyFilterActive && (
+										<button
+											className="btn btn-primary mt-3"
+											onClick={clearFilters}
+										>
+											Limpar todos os filtros
+										</button>
+									)}
 								</div>
 							</div>
 						)}

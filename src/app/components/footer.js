@@ -13,7 +13,7 @@ import {
 	AiOutlineWhatsApp,
 } from "../assets/icons/vander";
 
-import { contact } from "../storage/data";
+import { contact } from "../storage/about";
 import { formatPhone } from "../helper/formatter";
 
 export default function Footer({ showImage = false }) {
@@ -37,7 +37,7 @@ export default function Footer({ showImage = false }) {
 												src="/images/logo-light.png"
 												width={132}
 												height={32}
-												alt=""
+												alt="Logo"
 											/>
 										</Link>
 										<p className="mt-4">
@@ -157,7 +157,7 @@ export default function Footer({ showImage = false }) {
 
 										<div className="d-flex mt-4">
 											<FiMapPin className="fea icon-sm text-primary mt-1 me-3" />
-											<div className="">
+											<div>
 												<p
 													className="mb-2"
 													dangerouslySetInnerHTML={{ __html: contact.address }}
@@ -214,7 +214,7 @@ export default function Footer({ showImage = false }) {
 							<div className="col">
 								<div className="text-center">
 									<p className="mb-0">
-										© {new Date().getFullYear()} InvistaAi AI. Desenvolvido por{" "}
+										© {new Date().getFullYear()} InvistaAi. Desenvolvido por{" "}
 										<Link
 											href="https://www.damcdeveloper.com/"
 											target="_blank"

@@ -5,7 +5,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ScrollTop from "../components/scrollTop";
 
-import { contact } from "../storage/data";
+import { contact } from "../storage/about";
 
 import { FiArrowRight } from "../assets/icons/vander";
 

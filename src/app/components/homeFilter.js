@@ -16,10 +16,14 @@ export default function HomeFilter() {
 	const [minPrice, setMinPrice] = React.useState(null);
 	const [maxPrice, setMaxPrice] = React.useState(null);
 
-	const categoryOptions = categories.map((category) => ({
-		value: category.id,
-		label: category.label,
-	}));
+	const categoryOptions = React.useMemo(
+		() =>
+			categories.map((category) => ({
+				value: category.id,
+				label: category.label,
+			})),
+		[categories]
+	);
 
 	const router = useRouter();
 
@@ -77,6 +81,7 @@ export default function HomeFilter() {
 														id="job-keyword"
 														className="form-control filter-input-box bg-light border-0"
 														placeholder="O que você está procurando?"
+														aria-label="O que você está procurando?"
 														value={search}
 														onChange={(e) => setSearch(e.target.value)}
 													/>
@@ -93,6 +98,7 @@ export default function HomeFilter() {
 														className="form-input filter-input-box bg-gray-50 dark:bg-slate-800 border-0"
 														options={categoryOptions}
 														placeholder="Selecione uma categoria"
+														aria-label="Selecione uma categoria"
 														value={category}
 														onChange={(selectedOption) =>
 															setCategory(selectedOption)
@@ -113,6 +119,7 @@ export default function HomeFilter() {
 														className="form-input filter-input-box bg-gray-50 dark:bg-slate-800 border-0"
 														options={prices}
 														placeholder="Selecione preço mínimo"
+														aria-label="Selecione preço mínimo"
 														value={minPrice}
 														onChange={(selectedOption) =>
 															setMinPrice(selectedOption)
@@ -133,6 +140,7 @@ export default function HomeFilter() {
 														className="form-input filter-input-box bg-gray-50 dark:bg-slate-800 border-0"
 														options={prices}
 														placeholder="Selecione preço máximo"
+														aria-label="Selecione preço máximo"
 														value={maxPrice}
 														onChange={(selectedOption) =>
 															setMaxPrice(selectedOption)
@@ -150,6 +158,7 @@ export default function HomeFilter() {
 												style={{ height: "48px" }}
 												className="btn btn-primary searchbtn w-100"
 												value="Buscar imóveis"
+												aria-label="Buscar imóveis"
 											/>
 										</div>
 									</div>

@@ -1,8 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { propertyData } from "../storage/data";
+
 import { FiHome, FiCamera } from "../assets/icons/vander";
+
+import { propertyData } from "../storage/data";
+
 import { formatPrice } from "../helper/formatter";
 
 export default function FeaturedProperties() {
@@ -26,7 +29,7 @@ export default function FeaturedProperties() {
 							<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
 								<div className="property-image position-relative overflow-hidden shadow">
 									<Image
-										src={item.image}
+										src={item.thumbnail}
 										width={0}
 										height={0}
 										sizes="100vw"
@@ -35,7 +38,7 @@ export default function FeaturedProperties() {
 										alt={item.address}
 									/>
 									<ul className="list-unstyled property-icon">
-										<li className="">
+										<li>
 											<Link
 												href={`/imovel/${item.slug}`}
 												className="btn btn-sm btn-icon btn-pills btn-primary"
@@ -45,7 +48,7 @@ export default function FeaturedProperties() {
 										</li>
 										<li className="mt-1">
 											<Link
-												href="#"
+												href={`/imovel/${item.slug}?openGallery=true`}
 												className="btn btn-sm btn-icon btn-pills btn-primary"
 											>
 												<FiCamera className="icons" />

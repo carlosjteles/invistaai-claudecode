@@ -1,11 +1,15 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+
+import { useDispatch, useSelector } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ScrollTop from "../components/scrollTop";
 
-import { contact } from "../storage/data";
+import { contact } from "../storage/about";
 
 import {
 	FiPhone,
@@ -17,7 +21,66 @@ import {
 
 import { formatPhone } from "../helper/formatter";
 
+import { sendEmail } from "../store/contact";
+
+import Swal from "sweetalert2";
+
 export default function ContactUs() {
+	const [name, setName] = React.useState("");
+	const [email, setEmail] = React.useState("");
+	const [subject, setSubject] = React.useState("");
+	const [message, setMessage] = React.useState("");
+
+	const [alertShow, setAlertShow] = React.useState(null);
+
+	const recaptchaRef = React.useRef(null);
+
+	const { data, error, loading } = useSelector((state) => state.contact);
+
+	const dispatch = useDispatch();
+
+	React.useEffect(() => {
+		const formReset = () => {
+			setName("");
+			setEmail("");
+			setSubject("");
+			setMessage("");
+		};
+
+		if ((data && data.message) || error) {
+			Swal.fire({
+				icon: error ? "error" : "success",
+				title: error ? error : data.message,
+				showConfirmButton: false,
+				timer: 3500,
+			});
+			setAlertShow(true);
+		}
+
+		if (data && data.message) {
+			formReset();
+		}
+	}, [data, error, alertShow]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		//const recaptchaToken = await recaptchaRef.current.executeAsync();
+		//recaptchaRef.current.reset();
+		const recaptchaToken = "remover depois";
+
+		setAlertShow(false);
+
+		const formData = {
+			name,
+			email,
+			subject,
+			message,
+		};
+
+		dispatch(sendEmail(formData, recaptchaToken));
+	};
+
 	return (
 		<>
 			<Navbar
@@ -76,7 +139,7 @@ export default function ContactUs() {
 					<div className="row justify-content-center">
 						<div className="col-lg-8">
 							<div className="p-4 rounded-3 shadow">
-								<form>
+								<form onSubmit={handleSubmit}>
 									<div className="row">
 										<div className="col-md-6">
 											<div className="mb-3">
@@ -87,6 +150,8 @@ export default function ContactUs() {
 													name="name"
 													id="name"
 													type="text"
+													value={name}
+													onChange={(e) => setName(e.target.value)}
 													className="form-control"
 													placeholder="Nome :"
 												/>
@@ -102,6 +167,8 @@ export default function ContactUs() {
 													name="email"
 													id="email"
 													type="email"
+													value={email}
+													onChange={(e) => setEmail(e.target.value)}
 													className="form-control"
 													placeholder="E-mail :"
 												/>
@@ -110,10 +177,14 @@ export default function ContactUs() {
 
 										<div className="col-12">
 											<div className="mb-3">
-												<label className="form-label">Assunto</label>
+												<label className="form-label">
+													Assunto <span className="text-danger">*</span>
+												</label>
 												<input
 													name="subject"
 													id="subject"
+													value={subject}
+													onChange={(e) => setSubject(e.target.value)}
 													className="form-control"
 													placeholder="Assunto :"
 												/>
@@ -123,17 +194,27 @@ export default function ContactUs() {
 										<div className="col-12">
 											<div className="mb-3">
 												<label className="form-label">
-													Comentários <span className="text-danger">*</span>
+													Mensagem <span className="text-danger">*</span>
 												</label>
 												<textarea
-													name="comments"
-													id="comments"
+													name="message"
+													id="message"
 													rows="4"
+													value={message}
+													onChange={(e) => setMessage(e.target.value)}
 													className="form-control"
 													placeholder="Mensagem :"
 												></textarea>
 											</div>
 										</div>
+
+										<ReCAPTCHA
+											ref={recaptchaRef}
+											size="invisible"
+											sitekey={
+												process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
+											}
+										/>
 									</div>
 									<div className="row">
 										<div className="col-12">
@@ -143,8 +224,9 @@ export default function ContactUs() {
 													id="submit"
 													name="send"
 													className="btn btn-primary"
+													disabled={loading}
 												>
-													Enviar Mensagem
+													{loading ? "Enviando..." : "Enviar Mensagem"}
 												</button>
 											</div>
 										</div>

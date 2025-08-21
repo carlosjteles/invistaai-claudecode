@@ -3,38 +3,76 @@ import React from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import { clientData } from "../storage/data";
-
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
 
-export default function Customers() {
-	let settings = {
-		container: ".tiny-three-item",
-		controls: false,
-		mouseDrag: true,
-		loop: true,
-		rewind: true,
-		autoplay: true,
-		autoplayButtonOutput: false,
-		autoplayTimeout: 3000,
-		navPosition: "bottom",
-		speed: 400,
-		gutter: 12,
-		responsive: {
-			992: {
-				items: 3,
-			},
+const data = [
+	{
+		image: "/images/client/01.webp",
+		name: "Fernanda Souza",
+		title: "Arquiteta",
+		desc: '"Encontrei o imóvel ideal para minha família com rapidez. O atendimento foi transparente e o processo bem conduzido do começo ao fim."',
+	},
+	{
+		image: "/images/client/02.webp",
+		name: "Marcelo Andrade",
+		title: "Engenheiro Civil",
+		desc: '"A plataforma é prática e o corretor me passou total segurança durante a negociação. Me senti muito bem orientado."',
+	},
+	{
+		image: "/images/client/03.webp",
+		name: "Juliana Castro",
+		title: "Advogada",
+		desc: '"Tive uma experiência excelente. O corretor foi claro, atencioso e me ajudou a tirar todas as dúvidas antes da compra."',
+	},
+	{
+		image: "/images/client/04.webp",
+		name: "Carlos Menezes",
+		title: "Empresário",
+		desc: '"O imóvel estava exatamente como descrito. A transparência e o profissionalismo fizeram toda a diferença na hora da decisão."',
+	},
+	{
+		image: "/images/client/05.webp",
+		name: "Patrícia Lima",
+		title: "Designer Gráfica",
+		desc: '"Fui muito bem atendida desde o primeiro contato. O corretor demonstrou conhecimento e facilitou cada etapa da compra."',
+	},
+	{
+		image: "/images/client/06.webp",
+		name: "Renato Teixeira",
+		title: "Professor Universitário",
+		desc: '"Foi tudo muito ágil e confiável. Encontrei o imóvel que buscava com o suporte certo, sem burocracia e sem estresse."',
+	},
+];
 
-			767: {
-				items: 2,
-			},
-
-			320: {
-				items: 1,
-			},
+const settings = {
+	container: ".tiny-three-item",
+	controls: false,
+	mouseDrag: true,
+	loop: true,
+	rewind: true,
+	autoplay: true,
+	autoplayButtonOutput: false,
+	autoplayTimeout: 3000,
+	navPosition: "bottom",
+	speed: 400,
+	gutter: 12,
+	responsive: {
+		992: {
+			items: 3,
 		},
-	};
+
+		767: {
+			items: 2,
+		},
+
+		320: {
+			items: 1,
+		},
+	},
+};
+
+export default function Customers() {
 	return (
 		<>
 			<div className="row justify-content-center">
@@ -53,7 +91,7 @@ export default function Customers() {
 				<div className="col-12 mt-4">
 					<div className="tiny-three-item">
 						<TinySlider settings={settings}>
-							{clientData.map((item, index) => {
+							{data.map((item, index) => {
 								return (
 									<div className="tiny-slider client-testi" key={index}>
 										<div className="card border-0 bg-white">
@@ -66,7 +104,7 @@ export default function Customers() {
 														width={45}
 														height={45}
 														className="avatar avatar-md-sm rounded-circle shadow-md"
-														alt=""
+														alt={item.name}
 													/>
 													<div className="flex-1 ms-3">
 														<h6 className="mb-0">{item.name}</h6>

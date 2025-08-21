@@ -1,15 +1,16 @@
 "use client";
 import React, { useState } from "react";
 
+const accordianData = [
+	{
+		id: 1,
+		title: "Preciso de conhecimento técnico para usar?",
+		desc: "Não. Nossa plataforma é intuitiva e pensada para todos os níveis de experiência.",
+	},
+];
+
 export default function Accordion() {
-	let [activeIndex, setActiveIndex] = useState(1);
-	let accordianData = [
-		{
-			id: 1,
-			title: "Preciso de conhecimento técnico para usar?",
-			desc: "Não. Nossa plataforma é intuitiva e pensada para todos os níveis de experiência.",
-		},
-	];
+	const [activeIndex, setActiveIndex] = useState(1);
 
 	return (
 		<>

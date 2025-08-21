@@ -2,8 +2,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { FiSearch } from "../assets/icons/vander";
+
+import Swal from "sweetalert2";
 
 export default function Navbar({
 	navClass,
@@ -11,10 +14,13 @@ export default function Navbar({
 	menuClass,
 	currentPath,
 }) {
-	let [scroll, setScroll] = useState(false);
-	let [isMenu, setisMenu] = useState(false);
-	let [modal, setModal] = useState(false);
+	const [search, setSearch] = useState("");
+	const [scroll, setScroll] = useState(false);
+	const [isMenu, setisMenu] = useState(false);
+	const [modal, setModal] = useState(false);
 	const dropdownRef = useRef(null);
+
+	const router = useRouter();
 
 	useEffect(() => {
 		function closeDropdown(event) {
@@ -123,7 +129,8 @@ export default function Navbar({
 			});
 		}
 	};
-	function getClosest(elem, selector) {
+
+	const getClosest = (elem, selector) => {
 		if (!Element.prototype.matches) {
 			Element.prototype.matches =
 				Element.prototype.matchesSelector ||
@@ -145,7 +152,25 @@ export default function Navbar({
 			if (elem.matches(selector)) return elem;
 		}
 		return null;
-	}
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (!search || search.length < 3) {
+			Swal.fire({
+				icon: "error",
+				title: "Digite pelo menos 3 caracteres para pesquisar um imóvel.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
+			return;
+		}
+
+		router.push(`/imoveis?${new URLSearchParams({ q: search })}`);
+
+		setSearch("");
+	};
 
 	return (
 		<>
@@ -162,14 +187,14 @@ export default function Navbar({
 									width={132}
 									height={32}
 									className="l-dark"
-									alt=""
+									alt="Logo escuro"
 								/>
 								<Image
 									src="/images/logo-light.png"
 									width={132}
 									height={32}
 									className="l-light"
-									alt=""
+									alt="Logo claro"
 								/>
 							</span>
 							<Image
@@ -177,7 +202,7 @@ export default function Navbar({
 								width={132}
 								height={32}
 								className="logo-dark-mode"
-								alt=""
+								alt="Logo escuro 2"
 							/>
 						</Link>
 					) : (
@@ -187,14 +212,14 @@ export default function Navbar({
 								width={132}
 								height={32}
 								className="logo-light-mode"
-								alt=""
+								alt="Logo claro"
 							/>
 							<Image
 								src="/images/logo-light.png"
 								width={132}
 								height={32}
 								className="logo-dark-mode"
-								alt=""
+								alt="Logo escuro"
 							/>
 						</Link>
 					)}
@@ -234,24 +259,16 @@ export default function Navbar({
 								>
 									<div className="search-bar">
 										<div id="itemSearch" className="menu-search mb-0">
-											<form
-												role="search"
-												method="get"
-												id="searchItemform"
-												className="searchform"
-											>
+											<form onSubmit={handleSubmit} className="searchform">
 												<input
 													type="text"
 													className="form-control rounded-3 border"
-													name="s"
-													id="searchItem"
+													name="q"
+													value={search}
+													onChange={(e) => setSearch(e.target.value)}
 													placeholder="Procurar..."
 												/>
-												<input
-													type="submit"
-													id="searchItemsubmit"
-													value="Procurar"
-												/>
+												<input type="submit" value="Procurar" />
 											</form>
 										</div>
 									</div>

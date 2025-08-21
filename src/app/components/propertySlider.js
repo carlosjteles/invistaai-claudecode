@@ -10,44 +10,46 @@ import { FiHome, FiCamera } from "../assets/icons/vander";
 
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
+
 import { formatPrice } from "../helper/formatter";
 
-export default function ProprtySlider() {
-	let settings = {
-		container: ".tiny-slide-three",
-		controls: true,
-		mouseDrag: true,
-		loop: true,
-		rewind: true,
-		autoplay: true,
-		autoplayButtonOutput: false,
-		autoplayTimeout: 3000,
-		navPosition: "bottom",
-		controlsText: [
-			'<i class="mdi mdi-chevron-left "></i>',
-			'<i class="mdi mdi-chevron-right"></i>',
-		],
-		nav: false,
-		speed: 400,
-		gutter: 0,
-		responsive: {
-			1025: {
-				items: 3,
-			},
-
-			992: {
-				items: 2,
-			},
-
-			767: {
-				items: 2,
-			},
-
-			320: {
-				items: 1,
-			},
+const settings = {
+	container: ".tiny-slide-three",
+	controls: true,
+	mouseDrag: true,
+	loop: true,
+	rewind: true,
+	autoplay: true,
+	autoplayButtonOutput: false,
+	autoplayTimeout: 3000,
+	navPosition: "bottom",
+	controlsText: [
+		'<i class="mdi mdi-chevron-left "></i>',
+		'<i class="mdi mdi-chevron-right"></i>',
+	],
+	nav: false,
+	speed: 400,
+	gutter: 0,
+	responsive: {
+		1025: {
+			items: 3,
 		},
-	};
+
+		992: {
+			items: 2,
+		},
+
+		767: {
+			items: 2,
+		},
+
+		320: {
+			items: 1,
+		},
+	},
+};
+
+export default function ProprtySlider() {
 	return (
 		<div className="row">
 			<div className="col-12">
@@ -59,16 +61,16 @@ export default function ProprtySlider() {
 									<div className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2">
 										<div className="property-image position-relative overflow-hidden shadow">
 											<Image
-												src={item.image}
+												src={item.thumbnail}
 												width={0}
 												height={0}
 												sizes="100vw"
 												style={{ width: "100%", height: "auto" }}
 												className="img-fluid"
-												alt=""
+												alt={item.address}
 											/>
 											<ul className="list-unstyled property-icon">
-												<li className="">
+												<li>
 													<Link
 														href={`/imovel/${item.slug}`}
 														className="btn btn-sm btn-icon btn-pills btn-primary"
@@ -78,7 +80,7 @@ export default function ProprtySlider() {
 												</li>
 												<li className="mt-1">
 													<Link
-														href="#"
+														href={`/imovel/${item.slug}?openGallery=true`}
 														className="btn btn-sm btn-icon btn-pills btn-primary"
 													>
 														<FiCamera className="icons" />

@@ -59,14 +59,14 @@ export default function Home() {
 							<div className="row g-3 align-items-center">
 								<div className="col-lg-7 col-6">
 									<Image
-										src="/images/hero.jpg"
+										src="/images/home-about-01.webp"
 										width={0}
 										height={0}
 										sizes="100vw"
 										style={{ width: "100%", height: "auto" }}
 										className="img-fluid rounded-3"
-										alt="townter"
-										title="Townter"
+										alt="invistaai"
+										title="InvistaAi"
 									/>
 								</div>
 
@@ -74,14 +74,14 @@ export default function Home() {
 									<div className="row g-3">
 										<div className="col-lg-12 col-md-12">
 											<Image
-												src="/images/1.jpg"
+												src="/images/home-about-02.webp"
 												width={0}
 												height={0}
 												sizes="100vw"
 												style={{ width: "100%", height: "auto" }}
 												className="img-fluid rounded-3"
-												alt="townter"
-												title="Townter"
+												alt="invistaai"
+												title="InvistaAi"
 											/>
 										</div>
 
@@ -91,8 +91,8 @@ export default function Home() {
 												width={100}
 												height={100}
 												className="img-fluid"
-												alt="townter"
-												title="Townter"
+												alt="invistaai"
+												title="InvistaAi"
 											/>
 										</div>
 									</div>
@@ -106,15 +106,21 @@ export default function Home() {
 									Por que escolher a InvistaAi
 								</h6>
 								<h4 className="title mb-3">
-									A escolha certa para comprar seu imóvel com tranquilidade
+									Investimento imobiliário com foco em valorização
 								</h4>
 								<p className="text-muted para-desc mb-0">
-									A InvistaAi desenvolveu uma plataforma focada em venda de
-									imóveis que facilita todo o processo de compra, tornando a
-									experiência simples, segura e sem burocracia. Com negociações
-									claras e objetivas, oferecemos aos clientes total confiança e
-									praticidade para encontrar o lar ideal. <br />
-									InvistaAi é a nova forma de comprar imóveis.
+									Nossa plataforma une dados de mercado, tecnologia e curadoria
+									criteriosa para entregar comparativos claros e análises
+									fundamentadas. Isso garante decisões de investimento seguras e
+									alinhadas ao seu perfil, seja para diversificação de carteira
+									ou conquista da casa própria.
+								</p>
+
+								<p className="text-muted para-desc mb-0">
+									Mais do que uma plataforma, oferecemos acompanhamento
+									consultivo em todas as etapas: do estudo financeiro ao crédito
+									e documentação. Transparência e resultados reais são a base da
+									confiança que construímos com cada investidor.
 								</p>
 
 								<div className="mt-4">

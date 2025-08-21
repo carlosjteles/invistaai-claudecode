@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
@@ -12,27 +13,87 @@ import { blogData } from "../storage/data";
 
 export default function Blog() {
 	const [currentPage, setCurrentPage] = React.useState(1);
+	const [inputValue, setInputValue] = React.useState("");
+	const [searchTerm, setSearchTerm] = React.useState("");
 
-	const recentData = [...blogData]
-		.map((item) => ({
-			...item,
-			parsedDate: (() => {
-				const [day, month, year] = item.date.split("/").map(Number);
-				return new Date(year, month - 1, day);
-			})(),
-		}))
-		.sort((a, b) => b.parsedDate - a.parsedDate)
-		.slice(0, 3)
-		.map(({ parsedDate, ...item }) => item);
+	const searchParams = useSearchParams();
+	const tagParam = searchParams.get("tag");
 
-	const itemsPerPage = 6;
-	const totalPages = Math.ceil(blogData.length / itemsPerPage);
-	const paginatedData = blogData.slice(
-		itemsPerPage * (currentPage - 1),
-		itemsPerPage * currentPage
+	const router = useRouter();
+
+	React.useEffect(() => {
+		if (inputValue.length > 3) {
+			const timer = setTimeout(() => {
+				setSearchTerm(inputValue);
+				setCurrentPage(1);
+			}, 500);
+			return () => clearTimeout(timer);
+		} else {
+			setSearchTerm("");
+		}
+	}, [inputValue]);
+
+	const recentData = React.useMemo(() => {
+		return [...blogData]
+			.map((item) => ({
+				...item,
+				parsedDate: (() => {
+					const [day, month, year] = item.date.split("/").map(Number);
+					return new Date(year, month - 1, day);
+				})(),
+			}))
+			.sort((a, b) => b.parsedDate - a.parsedDate)
+			.slice(0, 3)
+			.map(({ parsedDate, ...item }) => item);
+	}, [blogData]);
+
+	const filteredData = React.useMemo(() => {
+		return searchTerm || tagParam
+			? blogData.filter((item) => {
+					return (
+						(!searchTerm ||
+							item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+							item.desc.toLowerCase().includes(searchTerm.toLowerCase())) &&
+						(!tagParam || item.tag.toLowerCase() === tagParam.toLowerCase())
+					);
+			  })
+			: blogData;
+	}, [searchTerm, tagParam, blogData]);
+
+	const itemsPerPage = 8;
+	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+	const paginatedData = React.useMemo(() => {
+		return filteredData.slice(
+			itemsPerPage * (currentPage - 1),
+			itemsPerPage * currentPage
+		);
+	}, [filteredData, currentPage, itemsPerPage]);
+
+	const tags = React.useMemo(
+		() => [...new Set(blogData.map((item) => item.tag))],
+		[blogData]
 	);
 
-	const tags = [...new Set(blogData.map((item) => item.tag))];
+	const clearFilters = React.useCallback(
+		(type) => {
+			if (["all", "search"].includes(type)) {
+				setSearchTerm("");
+				setInputValue("");
+			}
+
+			setCurrentPage(1);
+
+			if (["all", "tag"].includes(type)) {
+				router.push("/blogs");
+			}
+		},
+		[router]
+	);
+
+	const handleInputChange = React.useCallback((event) => {
+		setInputValue(event.target.value);
+	}, []);
 
 	return (
 		<>
@@ -112,7 +173,12 @@ export default function Blog() {
 														</div>
 
 														<div className="blog-tag p-3">
-															<Link href="" className="badge bg-primary">
+															<Link
+																href={`/blogs?tag=${encodeURIComponent(
+																	item.tag
+																)}`}
+																className="badge bg-primary"
+															>
 																{item.tag}
 															</Link>
 														</div>
@@ -153,12 +219,14 @@ export default function Blog() {
 							<div className="col-lg-8 col-md-6 col-12">
 								<div className="text-center p-5">
 									<h4>Nenhum post encontrado com os filtros selecionados</h4>
-									<button
-										className="btn btn-primary mt-3"
-										onClick={clearFilters}
-									>
-										Limpar todos os filtros
-									</button>
+									{searchTerm && searchTerm.length > 3 && (
+										<button
+											className="btn btn-primary mt-3"
+											onClick={() => clearFilters("all")}
+										>
+											Limpar todos os filtros
+										</button>
+									)}
 								</div>
 							</div>
 						)}
@@ -171,28 +239,28 @@ export default function Blog() {
 									</h6>
 
 									<div className="search-bar mt-4">
-										<div id="itemSearch2" className="menu-search mb-0">
-											<form
-												role="search"
-												method="get"
-												id="searchItemform2"
-												className="searchform"
-											>
-												<input
-													type="text"
-													className="form-control rounded-3 border"
-													name="s"
-													id="searchItem2"
-													placeholder="O que você está procurando?"
-												/>
-												<input
-													type="submit"
-													id="searchItemsubmit2"
-													value="Buscar"
-												/>
-											</form>
+										<div className="menu-search mb-0">
+											<input
+												type="text"
+												className="form-control rounded-3 border"
+												name="search"
+												id="search"
+												value={inputValue}
+												onChange={handleInputChange}
+												placeholder="O que você está procurando?"
+											/>
 										</div>
 									</div>
+
+									{searchTerm && searchTerm.length > 3 && (
+										<button
+											type="button"
+											className="btn btn-link btn-sm w-100 text-center"
+											onClick={() => clearFilters("search")}
+										>
+											Limpar filtros
+										</button>
+									)}
 								</div>
 								<div className="mt-4 pt-2">
 									<h6 className="pt-2 pb-2 bg-light rounded-3 text-center">
@@ -236,7 +304,7 @@ export default function Blog() {
 										{tags.map((tag, index) => (
 											<li className="list-inline-item m-1" key={index}>
 												<Link
-													href=""
+													href={`/blogs?tag=${encodeURIComponent(tag)}`}
 													className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
 												>
 													{tag}
@@ -244,6 +312,15 @@ export default function Blog() {
 											</li>
 										))}
 									</ul>
+									{tagParam && (
+										<button
+											type="button"
+											className="btn btn-link btn-sm ms-2 p-0"
+											onClick={() => clearFilters("tag")}
+										>
+											Limpar filtros
+										</button>
+									)}
 								</div>
 							</div>
 						</div>

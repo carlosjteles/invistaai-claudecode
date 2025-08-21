@@ -9,11 +9,11 @@ import GetInTouch from "../components/getInTouch";
 import Footer from "../components/footer";
 import ScrollTop from "../components/scrollTop";
 import AboutCounter from "../components/counter/aboutCounter";
+import Broker from "../components/broker";
 
 import { FiArrowRight } from "react-icons/fi";
 
-import { contact } from "../storage/data";
-import Broker from "../components/broker";
+import { contact } from "../storage/about";
 
 export default function AboutUs() {
 	return (
@@ -64,7 +64,7 @@ export default function AboutUs() {
 							<div className="about-left">
 								<div className="position-relative shadow p-2 rounded-top-pill rounded-5 bg-white img-one">
 									<Image
-										src="/images/aboutus-introduction.webp"
+										src="/images/about-01.webp"
 										width={0}
 										height={0}
 										sizes="100vw"

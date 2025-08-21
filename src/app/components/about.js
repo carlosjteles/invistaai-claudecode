@@ -8,25 +8,25 @@ import {
 	HiOutlineDocumentCheck,
 } from "../assets/icons/vander";
 
-export default function AboutUs() {
-	let aboutData = [
-		{
-			icon: TbHomeSearch,
-			title: "Avaliação & Curadoria",
-			desc: "Dados de mercado, due diligence e análise de risco-retorno para selecionar oportunidades com potencial real.",
-		},
-		{
-			icon: FiUsers,
-			title: "Encontro com o Consultor",
-			desc: "Entendimento do seu perfil (moradia, renda, valorização) e apresentação de opções alinhadas ao seu orçamento.",
-		},
-		{
-			icon: HiOutlineDocumentCheck,
-			title: "Fechamento com Segurança",
-			desc: "Apoio em documentação, financiamento e prazos até a assinatura do contrato — com previsibilidade.",
-		},
-	];
+const data = [
+	{
+		icon: TbHomeSearch,
+		title: "Avaliação & Curadoria",
+		desc: "Dados de mercado, due diligence e análise de risco-retorno para selecionar oportunidades com potencial real.",
+	},
+	{
+		icon: FiUsers,
+		title: "Encontro com o Consultor",
+		desc: "Entendimento do seu perfil (moradia, renda, valorização) e apresentação de opções alinhadas ao seu orçamento.",
+	},
+	{
+		icon: HiOutlineDocumentCheck,
+		title: "Fechamento com Segurança",
+		desc: "Apoio em documentação, financiamento e prazos até a assinatura do contrato — com previsibilidade.",
+	},
+];
 
+export default function AboutUs() {
 	return (
 		<>
 			<div className="row justify-content-center">
@@ -42,7 +42,7 @@ export default function AboutUs() {
 			</div>
 
 			<div className="row g-4 mt-0">
-				{aboutData.map((item, index) => {
+				{data.map((item, index) => {
 					let Icon = item.icon;
 					return (
 						<div className="col-md-4" key={index}>

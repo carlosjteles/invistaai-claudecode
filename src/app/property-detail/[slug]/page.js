@@ -1,22 +1,30 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { categories } from "../../storage/filters";
-import { contact, propertyData as data } from "../../storage/data";
 import Error from "../../error/page";
 import PropertyDetailImg from "../../components/propertyDetailImg";
 import Navbar from "../../components/navbar";
 import Footer from "../../components/footer";
 import ScrollTop from "../../components/scrollTop";
 import PropertySlider from "../../components/propertySlider";
-import { formatPrice, timeInSystem } from "../../helper/formatter";
+
+import { propertyData as data } from "../../storage/data";
+import { contact } from "../../storage/about";
+
+import { formatPrice } from "../../helper/formatter";
 
 export default function PropertyDetails(props) {
-	let propertyData = data.find((item) => item.slug === props.params.slug);
+	const propertyData = data.find((item) => item.slug === props.params.slug);
 
 	if (!propertyData) {
 		return <Error />;
 	}
+
+	const searchParams = useSearchParams();
+	const openGallery = searchParams.get("openGallery");
 
 	const whatsappMessage = (property) => {
 		const text = `Olá, quero agendar uma visita para o imóvel ${property} que vi no site.`;
@@ -31,7 +39,10 @@ export default function PropertyDetails(props) {
 			/>
 			<section className="section mt-5 pt-4">
 				<div className="container-fluid mt-2">
-					<PropertyDetailImg images={propertyData.images} />
+					<PropertyDetailImg
+						images={propertyData.images}
+						openGallery={openGallery}
+					/>
 				</div>
 
 				<div className="container mt-100 mt-60">
@@ -92,7 +103,7 @@ export default function PropertyDetails(props) {
 												src={propertyData.description_embed}
 												className="rounded-3"
 												style={{ border: "0" }}
-												title={propertyData.title}
+												title={propertyData.address}
 												allowFullScreen
 											></iframe>
 										</div>
@@ -116,11 +127,11 @@ export default function PropertyDetails(props) {
 									</span>
 								</div>
 
-								<div className="">
+								<div>
 									<div className="d-flex align-items-center justify-content-between mt-2">
 										<span className="small text-muted">Preço por m²</span>
 										<span className="small">
-											{formatPrice(propertyData.price / propertyData.area)}
+											{formatPrice(propertyData.price / propertyData.min_area)}
 										</span>
 									</div>
 
@@ -135,7 +146,7 @@ export default function PropertyDetails(props) {
 										Download Book
 									</Link>
 									<Link
-										href={whatsappMessage(propertyData.title)}
+										href={whatsappMessage(propertyData.id)}
 										className="btn btn-primary w-100 small"
 									>
 										Agendar Agora

@@ -36,11 +36,14 @@ export default function Categories() {
 									sizes="100vw"
 									style={{ width: "100%", height: "auto" }}
 									className="img-fluid"
-									alt=""
+									alt={item.label}
 								/>
 
 								<div className="p-3">
-									<Link href="" className="title text-dark fs-5 fw-medium">
+									<Link
+										href={`/imoveis?categoria=${encodeURIComponent(item.id)}`}
+										className="title text-dark fs-5 fw-medium"
+									>
 										{item.label}
 									</Link>
 									<p className="text-muted small mb-0">

@@ -11,29 +11,38 @@ import ScrollTop from "../../components/scrollTop";
 import { blogData as data } from "../../storage/data";
 
 export default function BlogDetail(props) {
-	let blogData = data.find((item) => item.slug === props.params.slug);
+	const blogData = data.find((item) => item.slug === props.params.slug);
 
 	if (!blogData) {
 		return <Error />;
 	}
 
-	const recentData = [...data]
-		.map((item) => ({
-			...item,
-			parsedDate: (() => {
-				const [day, month, year] = item.date.split("/").map(Number);
-				return new Date(year, month - 1, day);
-			})(),
-		}))
-		.sort((a, b) => b.parsedDate - a.parsedDate)
-		.slice(0, 3)
-		.map(({ parsedDate, ...item }) => item);
+	const recentData = React.useMemo(() => {
+		return [...data]
+			.map((item) => ({
+				...item,
+				parsedDate: (() => {
+					const [day, month, year] = item.date.split("/").map(Number);
+					return new Date(year, month - 1, day);
+				})(),
+			}))
+			.sort((a, b) => b.parsedDate - a.parsedDate)
+			.slice(0, 3)
+			.map(({ parsedDate, ...item }) => item);
+	}, [data]);
 
-	const relatedPosts = data
-		.filter((item) => item.tag === blogData.tag && item.slug !== blogData.slug)
-		.slice(0, 2);
+	const relatedPosts = React.useMemo(() => {
+		return data
+			.filter(
+				(item) => item.tag === blogData.tag && item.slug !== blogData.slug
+			)
+			.slice(0, 2);
+	}, [data, blogData]);
 
-	const tags = [...new Set(data.map((item) => item.tag))];
+	const tags = React.useMemo(
+		() => [...new Set(data.map((item) => item.tag))],
+		[data]
+	);
 
 	return (
 		<>
@@ -58,14 +67,14 @@ export default function BlogDetail(props) {
 
 								<ul className="list-inline text-center mb-0">
 									<li className="list-inline-item mx-4 mt-4">
-										<span className="text-white-50 d-block">Author</span>
+										<span className="text-white-50 d-block">Autor</span>
 										<Link href="#" className="text-white title-dark">
 											{blogData.author}
 										</Link>
 									</li>
 
 									<li className="list-inline-item mx-4 mt-4">
-										<span className="text-white-50 d-block">Date</span>
+										<span className="text-white-50 d-block">Data</span>
 										<span className="text-white title-dark">
 											{blogData.date}
 										</span>
@@ -121,29 +130,6 @@ export default function BlogDetail(props) {
 								/>
 
 								<div className="card-body">
-									<ul className="list-unstyled">
-										<li className="list-inline-item">
-											<span className="d-flex align-items-center me-2">
-												<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-												<span className="text-muted">8000sqf</span>
-											</span>
-										</li>
-
-										<li className="list-inline-item">
-											<span className="d-flex align-items-center me-2">
-												<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-												<span className="text-muted">4 Beds</span>
-											</span>
-										</li>
-
-										<li className="list-inline-item">
-											<span className="d-flex align-items-center">
-												<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-												<span className="text-muted">4 Baths</span>
-											</span>
-										</li>
-									</ul>
-
 									<p className="text-muted">
 										The most well-known dummy text is the Lorem Ipsum, which is
 										said to have originated in the 16th century. Lorem Ipsum is
@@ -216,7 +202,12 @@ export default function BlogDetail(props) {
 															</div>
 
 															<div className="blog-tag p-3">
-																<Link href="" className="badge bg-primary">
+																<Link
+																	href={`/blogs?tag=${encodeURIComponent(
+																		item.tag
+																	)}`}
+																	className="badge bg-primary"
+																>
 																	{item.tag}
 																</Link>
 															</div>
@@ -324,7 +315,7 @@ export default function BlogDetail(props) {
 										{tags.map((tag, index) => (
 											<li className="list-inline-item m-1" key={index}>
 												<Link
-													href=""
+													href={`/blogs?tag=${encodeURIComponent(tag)}`}
 													className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
 												>
 													{tag}

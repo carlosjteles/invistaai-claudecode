@@ -2,9 +2,22 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { brokerData } from "../storage/data";
-
 import { FiFacebook, FiInstagram, FiTwitter } from "../assets/icons/vander";
+
+const data = [
+	{
+		image: "/images/workers/01.webp",
+		name: "Carlos de Jesus",
+		title: "Consultor Imobiliário",
+		social: null,
+	},
+	{
+		image: "/images/workers/02.webp",
+		name: "Andressa Soares",
+		title: "Consultora Imobiliária",
+		social: null,
+	},
+];
 
 export default function Broker() {
 	return (
@@ -22,7 +35,7 @@ export default function Broker() {
 			</div>
 
 			<div className="row justify-content-center g-4 mt-0">
-				{brokerData.map((item, index) => {
+				{data.map((item, index) => {
 					return (
 						<div className="col-lg-3 col-md-4 col-12" key={index}>
 							<div className="card team team-primary text-center">

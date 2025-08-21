@@ -6,9 +6,9 @@ import Image from "next/image";
 import Lightbox from "react-18-image-lightbox";
 import "../../../node_modules/react-18-image-lightbox/style.css";
 
-export default function PropertyDetailImg({ images }) {
-	const [currentImageIndex, setCurrentImageIndex] = useState();
-	const [open, setIsOpen] = useState(false);
+export default function PropertyDetailImg({ images, openGallery = false }) {
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const [open, setIsOpen] = useState(openGallery);
 
 	const currentImage = images[currentImageIndex];
 	const firstImage = images.find((img, idx) => idx === 0);

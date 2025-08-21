@@ -4,17 +4,19 @@ import Image from "next/image";
 import { blogData } from "../storage/data";
 
 export default function Blog() {
-	const recentData = [...blogData]
-		.map((item) => ({
-			...item,
-			parsedDate: (() => {
-				const [day, month, year] = item.date.split("/").map(Number);
-				return new Date(year, month - 1, day);
-			})(),
-		}))
-		.sort((a, b) => b.parsedDate - a.parsedDate)
-		.slice(0, 3)
-		.map(({ parsedDate, ...item }) => item);
+	const recentData = React.useMemo(() => {
+		return [...blogData]
+			.map((item) => ({
+				...item,
+				parsedDate: (() => {
+					const [day, month, year] = item.date.split("/").map(Number);
+					return new Date(year, month - 1, day);
+				})(),
+			}))
+			.sort((a, b) => b.parsedDate - a.parsedDate)
+			.slice(0, 3)
+			.map(({ parsedDate, ...item }) => item);
+	}, [blogData]);
 
 	return (
 		<>
@@ -50,7 +52,10 @@ export default function Blog() {
 									</div>
 
 									<div className="blog-tag p-3">
-										<Link href="" className="badge bg-primary">
+										<Link
+											href={`/blogs?tag=${encodeURIComponent(item.tag)}`}
+											className="badge bg-primary"
+										>
 											{item.tag}
 										</Link>
 									</div>
