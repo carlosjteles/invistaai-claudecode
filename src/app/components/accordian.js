@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
 const accordianData = [
 	{
@@ -10,7 +10,7 @@ const accordianData = [
 ];
 
 export default function Accordion() {
-	const [activeIndex, setActiveIndex] = useState(1);
+	const [activeIndex, setActiveIndex] = React.useState(1);
 
 	return (
 		<>

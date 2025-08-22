@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -14,15 +14,15 @@ export default function Navbar({
 	menuClass,
 	currentPath,
 }) {
-	const [search, setSearch] = useState("");
-	const [scroll, setScroll] = useState(false);
-	const [isMenu, setisMenu] = useState(false);
-	const [modal, setModal] = useState(false);
-	const dropdownRef = useRef(null);
+	const [search, setSearch] = React.useState("");
+	const [scroll, setScroll] = React.useState(false);
+	const [isMenu, setisMenu] = React.useState(false);
+	const [modal, setModal] = React.useState(false);
+	const dropdownRef = React.useRef(null);
 
 	const router = useRouter();
 
-	useEffect(() => {
+	React.useEffect(() => {
 		function closeDropdown(event) {
 			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 				setModal(false);
@@ -36,7 +36,7 @@ export default function Navbar({
 		};
 	}, []);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		function activateMenu() {
 			const activeOldMenu = document.querySelectorAll(
 				".navigation-menu .active"

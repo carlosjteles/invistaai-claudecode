@@ -1,5 +1,3 @@
-import React from "react";
-
 import FaqTab from "../components/faqTab";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";

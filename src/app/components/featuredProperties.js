@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -29,7 +28,7 @@ export default function FeaturedProperties() {
 							<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
 								<div className="property-image position-relative overflow-hidden shadow">
 									<Image
-										src={item.thumbnail}
+										src={item.image}
 										width={0}
 										height={0}
 										sizes="100vw"

@@ -18,20 +18,38 @@ export default function Blog() {
 
 	const searchParams = useSearchParams();
 	const tagParam = searchParams.get("tag");
+	const searchParam = searchParams.get("q");
+
+	console.log("Search Param:", searchParam);
 
 	const router = useRouter();
+
+	React.useEffect(() => {
+		if (searchParam) {
+			setInputValue(searchParam);
+			setSearchTerm(searchParam);
+
+			if (currentPage > 1) {
+				setCurrentPage(1);
+			}
+		}
+	}, [currentPage, searchParam]);
 
 	React.useEffect(() => {
 		if (inputValue.length > 3) {
 			const timer = setTimeout(() => {
 				setSearchTerm(inputValue);
-				setCurrentPage(1);
+
+				if (currentPage > 1) {
+					setCurrentPage(1);
+				}
 			}, 500);
+
 			return () => clearTimeout(timer);
 		} else {
 			setSearchTerm("");
 		}
-	}, [inputValue]);
+	}, [currentPage, inputValue]);
 
 	const recentData = React.useMemo(() => {
 		return [...blogData]
@@ -45,7 +63,7 @@ export default function Blog() {
 			.sort((a, b) => b.parsedDate - a.parsedDate)
 			.slice(0, 3)
 			.map(({ parsedDate, ...item }) => item);
-	}, [blogData]);
+	}, []);
 
 	const filteredData = React.useMemo(() => {
 		return searchTerm || tagParam
@@ -58,7 +76,7 @@ export default function Blog() {
 					);
 			  })
 			: blogData;
-	}, [searchTerm, tagParam, blogData]);
+	}, [searchTerm, tagParam]);
 
 	const itemsPerPage = 8;
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -72,7 +90,7 @@ export default function Blog() {
 
 	const tags = React.useMemo(
 		() => [...new Set(blogData.map((item) => item.tag))],
-		[blogData]
+		[]
 	);
 
 	const clearFilters = React.useCallback(

@@ -323,10 +323,14 @@ export default function ContactUs() {
 
 								<div className="mt-4">
 									<h5 className="mb-3">Localização</h5>
-									<p
-										className="text-muted"
-										dangerouslySetInnerHTML={{ __html: contact.address }}
-									></p>
+									<p className="text-muted">
+										{contact.address.street} {contact.address.complement}
+										<br />
+										{contact.address.neighborhood}
+										<br />
+										{contact.address.city}/{contact.address.state} -{" "}
+										{contact.address.zip}
+									</p>
 									<Link
 										href="https://maps.app.goo.gl/Q8jFNpztn8ndJdj18"
 										className="text-primary"

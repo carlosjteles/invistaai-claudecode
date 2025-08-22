@@ -1,42 +1,49 @@
-export const formatPrice = (price) => {
-	if (typeof price !== "number") {
+export const formatPrice = (value) => {
+	if (typeof value !== "number") {
 		return "";
 	}
+
 	return new Intl.NumberFormat("pt-BR", {
 		style: "currency",
 		currency: "BRL",
-	}).format(price);
+	}).format(value);
 };
 
-export const formatDate = (dateString) => {
+export const formatDate = (value) => {
 	const options = { year: "numeric", month: "long", day: "numeric" };
-	const date = new Date(dateString);
+	const date = new Date(value);
+
 	return date.toLocaleDateString("pt-BR", options);
 };
 
-export const formatBathrooms = (bathrooms) => {
-	if (typeof bathrooms !== "number" || bathrooms < 0) {
-		return "";
-	}
-	return `${bathrooms} ${bathrooms === 1 ? "banheiro" : "banheiros"}`;
+export const formatDateISO = (value) => {
+	const [day, month, year] = value.split("/").map(Number);
+	return new Date(year, month - 1, day).toISOString();
 };
 
-export const formatBedrooms = (bedrooms) => {
-	if (typeof bedrooms !== "number" || bedrooms < 0) {
+export const formatBathrooms = (value) => {
+	if (typeof value !== "number" || value < 0) {
 		return "";
 	}
-	return `${bedrooms} ${bedrooms === 1 ? "quarto" : "quartos"}`;
+	return `${value} ${value === 1 ? "banheiro" : "banheiros"}`;
 };
 
-export const formatArea = (area) => {
-	if (typeof area !== "number" || area < 0) {
+export const formatBedrooms = (value) => {
+	if (typeof value !== "number" || value < 0) {
 		return "";
 	}
-	return `${area} m²`;
+	return `${value} ${value === 1 ? "quarto" : "quartos"}`;
 };
 
-export const formatPhone = (phone) => {
-	let digits = phone.replace(/\D/g, "");
+export const formatArea = (value) => {
+	if (!value || typeof value !== "number" || value < 0) {
+		return "";
+	}
+	return `${value} m²`;
+};
+
+export const formatPhone = (value) => {
+	let digits = value.replace(/\D/g, "");
 
 	if (digits.length < 10) {
 		return "";
@@ -55,16 +62,16 @@ export const formatPhone = (phone) => {
 	return digits.replace(regex, "($1) $2-$3");
 };
 
-export function timeInSystem(dateStr) {
-	if (!dateStr || typeof dateStr !== "string") {
+export function timeInSystem(value) {
+	if (!value || typeof value !== "string") {
 		return 0;
 	}
 
 	let createdDate;
 
-	if (dateStr.includes("/")) {
+	if (value.includes("/")) {
 		// Format: dd/mm/yyyy
-		const [day, month, year] = dateStr.split("/");
+		const [day, month, year] = value.split("/");
 
 		if (
 			!day ||
@@ -77,10 +84,10 @@ export function timeInSystem(dateStr) {
 		createdDate = new Date(`${year}-${month}-${day}T00:00:00`);
 	} else {
 		// Format: yyyy-mm-dd
-		if (isNaN(Date.parse(dateStr))) {
+		if (isNaN(Date.parse(value))) {
 			return 0;
 		}
-		createdDate = new Date(`${dateStr}T00:00:00`);
+		createdDate = new Date(`${value}T00:00:00`);
 	}
 
 	const today = new Date();

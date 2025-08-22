@@ -16,7 +16,7 @@ export default function Blog() {
 			.sort((a, b) => b.parsedDate - a.parsedDate)
 			.slice(0, 3)
 			.map(({ parsedDate, ...item }) => item);
-	}, [blogData]);
+	}, []);
 
 	return (
 		<>

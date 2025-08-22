@@ -72,7 +72,7 @@ export default function Properties() {
 		if (currentPage > 1) {
 			setCurrentPage(1);
 		}
-	}, [pathname, searchParams, router]);
+	}, [currentPage, pathname, searchParams, router]);
 
 	const getPropertyFiltered = React.useCallback(() => {
 		return data.filter((item) => {
@@ -88,7 +88,7 @@ export default function Properties() {
 				item.price <= maxPrice
 			);
 		});
-	}, [data, searchTerm, category, bedroom, parking, suite, minPrice, maxPrice]);
+	}, [searchTerm, category, bedroom, parking, suite, minPrice, maxPrice]);
 
 	React.useEffect(() => {
 		const release = categories.find((item) => item.label === "Lançamento");
@@ -138,7 +138,14 @@ export default function Properties() {
 		if (currentPage > 1) {
 			setCurrentPage(1);
 		}
-	}, [searchParams, pathname, category, clearFilters]);
+	}, [
+		currentPage,
+		searchParams,
+		pathname,
+		category,
+		clearFilters,
+		getPropertyFiltered,
+	]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -299,7 +306,7 @@ export default function Properties() {
 												<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
 													<div className="property-image position-relative overflow-hidden shadow">
 														<Image
-															src={item.thumbnail}
+															src={item.image}
 															width={0}
 															height={0}
 															sizes="100vw"

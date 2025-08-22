@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 
 import { FiArrowUp } from "../assets/icons/vander";
 
 export default function ScrollTop() {
-	const [visible, setVisible] = useState(false);
+	const [visible, setVisible] = React.useState(false);
 
 	const toggleVisible = () => {
 		const scrolled = document.documentElement.scrollTop;

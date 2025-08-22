@@ -8,6 +8,50 @@ export const blogData = [
 		title: "Habilidades Valiosas para Prosperar no Mercado Imobiliário",
 		desc: "Descubra competências essenciais que podem multiplicar seus resultados e abrir portas no mundo dos imóveis.",
 		date: "13/09/2023",
+		keywords: ["habilidades", "mercado imobiliário", "sucesso"],
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 2,
@@ -18,6 +62,49 @@ export const blogData = [
 		title: "A Verdade Que Ninguém Conta Sobre o Mercado Imobiliário",
 		desc: "Entenda os bastidores e segredos que movem esse setor bilionário e como você pode se beneficiar.",
 		date: "29/11/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 3,
@@ -28,6 +115,49 @@ export const blogData = [
 		title: "10 Dicas Rápidas para Acelerar Seus Negócios",
 		desc: "Aplique estratégias simples e eficazes para fechar mais vendas e expandir sua presença no mercado.",
 		date: "29/12/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 4,
@@ -38,6 +168,49 @@ export const blogData = [
 		title: "14 Mitos Comuns Sobre Desenvolvimento de Negócios",
 		desc: "Descubra as crenças equivocadas que podem estar limitando seu crescimento e saiba como superá-las.",
 		date: "13/03/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 5,
@@ -48,6 +221,49 @@ export const blogData = [
 		title: "10 Lições Que Seus Concorrentes Podem Ensinar Sobre Imóveis",
 		desc: "Aprenda com as estratégias de quem já domina o mercado e use isso a seu favor.",
 		date: "05/05/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 6,
@@ -58,6 +274,49 @@ export const blogData = [
 		title: "Por Que Amamos o Mercado Imobiliário",
 		desc: "Conheça os motivos que fazem dos imóveis um dos investimentos mais sólidos e lucrativos do mundo.",
 		date: "19/06/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 7,
@@ -68,6 +327,49 @@ export const blogData = [
 		title: "110 Dicas Rápidas Para Vencer no Mercado Imobiliário",
 		desc: "Um guia prático com ações imediatas para atrair mais clientes e aumentar sua lucratividade.",
 		date: "20/06/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 8,
@@ -78,6 +380,49 @@ export const blogData = [
 		title: "15 Blogs Imperdíveis Para Quem Quer Investir em Imóveis",
 		desc: "As melhores fontes de informação para se manter atualizado e encontrar oportunidades de ouro.",
 		date: "31/08/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 	{
 		id: 9,
@@ -88,6 +433,49 @@ export const blogData = [
 		title: "Como Usar Banners Para Aumentar o Fluxo em Feiras e Eventos",
 		desc: "Estratégias visuais que atraem atenção, geram engajamento e impulsionam vendas no setor imobiliário.",
 		date: "01/09/2023",
+		content: [
+			{
+				type: "text",
+				value:
+					"No mercado imobiliário, assim como em qualquer setor competitivo, o conhecimento técnico sozinho não garante o sucesso. Para se destacar, é preciso desenvolver um conjunto de habilidades estratégicas que potencializam resultados e fortalecem relacionamentos com clientes e parceiros.",
+			},
+			{
+				type: "text",
+				value:
+					"Por exemplo, imagine o corretor que consegue analisar o perfil do cliente e antecipar suas necessidades antes mesmo de serem expressas. Essa capacidade de leitura de mercado e percepção do cliente é comparável a um “texto dummy” em design: aparentemente simples, mas estruturado de forma a guiar decisões e gerar impacto.",
+			},
+			{
+				type: "text",
+				value:
+					"Da mesma forma, habilidades como negociação, comunicação clara, gestão do tempo e conhecimento profundo sobre tendências do mercado imobiliário funcionam como peças fundamentais de um layout bem planejado. Cada uma contribui para que o profissional se destaque e conquiste oportunidades que outros podem deixar passar.",
+			},
+			{
+				type: "quote",
+				value:
+					'"O profissional que entende o mercado e se adapta rapidamente nunca será o mesmo que apenas segue processos antigos sem questionar."',
+				author: "— Especialista em Imóveis",
+			},
+			{
+				type: "text",
+				value:
+					"Além disso, a prática constante de análise de dados e acompanhamento das mudanças no setor permite ao corretor ou investidor criar estratégias assertivas, aumentando a probabilidade de sucesso em vendas, locações e investimentos.",
+			},
+			{
+				type: "link",
+				value: "#MercadoImobiliário",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#HabilidadesProfissionais",
+				href: "#",
+			},
+			{
+				type: "link",
+				value: "#SucessoNosImóveis",
+				href: "#",
+			},
+		],
 	},
 ];
 
@@ -95,7 +483,7 @@ export const propertyData = [
 	{
 		id: 1,
 		slug: "imovel-1",
-		thumbnail: "/images/property/1.jpg",
+		image: "/images/property/1.jpg",
 		address: "Rua das Palmeiras, 1243 - Campinas, SP",
 		neighborhood: "Jardim das Flores",
 		bedroom: ["Studio", 1, 2],
@@ -106,7 +494,11 @@ export const propertyData = [
 			title: "Imóvel 1 - Jardim das Flores",
 			description:
 				"Apartamento de 120 m² com 3 quartos e 1 suíte no Jardim das Flores, Campinas.",
-			keywords: "imóvel, apartamento, Jardim das Flores, Campinas",
+			keywords: ["imóvel", "apartamento", "Jardim das Flores", "Campinas"],
+			city: "Campinas",
+			state: "SP",
+			zip: "13040-000",
+			street: "Rua das Palmeiras, 1243",
 		},
 		preview: {
 			area: "209 a 865 m²",
@@ -133,11 +525,12 @@ export const propertyData = [
 		quantity_reviews: 28,
 		category: 1,
 		delivery_in: "01/01/2023",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 2,
 		slug: "imovel-2",
-		thumbnail: "/images/property/2.jpg",
+		image: "/images/property/2.jpg",
 		address: "Avenida das Rosas, 908 - Belo Horizonte, MG",
 		neighborhood: "Centro",
 		bedroom: [5],
@@ -148,7 +541,11 @@ export const propertyData = [
 			title: "Imóvel 2 - Centro de Belo Horizonte",
 			description:
 				"Casa de luxo com 5 quartos e 1 suíte no Centro de Belo Horizonte.",
-			keywords: "imóvel, casa, Centro, Belo Horizonte",
+			keywords: ["imóvel", "casa", "Centro", "Belo Horizonte"],
+			city: "Belo Horizonte",
+			state: "MG",
+			zip: "30123-000",
+			street: "Avenida das Rosas, 908",
 		},
 		preview: {
 			area: "732 m²",
@@ -175,11 +572,12 @@ export const propertyData = [
 		quantity_reviews: 42,
 		category: 1,
 		delivery_in: "01/05/2023",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 3,
 		slug: "imovel-3",
-		thumbnail: "/images/property/3.jpg",
+		image: "/images/property/3.jpg",
 		address: "Rua Porto Seguro dos Açores, 77 - Curitiba, PR",
 		neighborhood: "Centro",
 		bedroom: [3, 4],
@@ -190,7 +588,11 @@ export const propertyData = [
 			title: "Imóvel 3 - Centro de Curitiba",
 			description:
 				"Apartamento de 300 a 590 m² com 3 e 4 quartos e 2 e 3 suítes no Centro de Curitiba.",
-			keywords: "imóvel, apartamento, Centro, Curitiba",
+			keywords: ["imóvel", "apartamento", "Centro", "Curitiba"],
+			city: "Curitiba",
+			state: "PR",
+			zip: "80000-000",
+			street: "Rua Porto Seguro dos Açores, 77",
 		},
 		preview: {
 			area: "300 a 590 m²",
@@ -217,11 +619,12 @@ export const propertyData = [
 		quantity_reviews: 15,
 		category: 1,
 		delivery_in: "01/08/2023",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 4,
 		slug: "imovel-4",
-		thumbnail: "/images/property/4.jpg",
+		image: "/images/property/4.jpg",
 		address: "Alameda Harmonia, 333 - São Paulo, SP",
 		neighborhood: "Alto de Pinheiros",
 		bedroom: [4, 5, 6],
@@ -232,7 +635,11 @@ export const propertyData = [
 			title: "Imóvel 4 - Alto de Pinheiros, São Paulo",
 			description:
 				"Casa de luxo com 4 a 6 quartos e 2 a 3 suítes no Alto de Pinheiros, São Paulo.",
-			keywords: "imóvel, casa, Alto de Pinheiros, São Paulo",
+			keywords: ["imóvel", "casa", "Alto de Pinheiros", "São Paulo"],
+			city: "São Paulo",
+			state: "SP",
+			zip: "05443-000",
+			street: "Alameda Harmonia, 333",
 		},
 		preview: {
 			area: "600 a 875 m²",
@@ -259,11 +666,12 @@ export const propertyData = [
 		quantity_reviews: 36,
 		category: 1,
 		delivery_in: "15/02/2024",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 5,
 		slug: "imovel-5",
-		thumbnail: "/images/property/5.jpg",
+		image: "/images/property/5.jpg",
 		address: "Rua do Cedro, 1010 - Florianópolis, SC",
 		neighborhood: "Jardim das Flores",
 		bedroom: [4, 5, 6],
@@ -274,7 +682,11 @@ export const propertyData = [
 			title: "Imóvel 5 - Jardim das Flores, Florianópolis",
 			description:
 				"Casa de luxo com 4 a 6 quartos e 2 a 3 suítes no Jardim das Flores, Florianópolis.",
-			keywords: "imóvel, casa, Jardim das Flores, Florianópolis",
+			keywords: ["imóvel", "casa", "Jardim das Flores", "Florianópolis"],
+			city: "Florianópolis",
+			state: "SC",
+			zip: "88000-000",
+			street: "Rua do Cedro, 1010",
 		},
 		preview: {
 			area: "600 a 875 m²",
@@ -301,11 +713,12 @@ export const propertyData = [
 		quantity_reviews: 20,
 		category: 2,
 		delivery_in: "08/12/2024",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 6,
 		slug: "imovel-6",
-		thumbnail: "/images/property/6.jpg",
+		image: "/images/property/6.jpg",
 		address: "Estrada do Sol Alegre, 215 - Salvador, BA",
 		neighborhood: "Jardim de Alá",
 		bedroom: [7],
@@ -316,7 +729,11 @@ export const propertyData = [
 			title: "Imóvel 6 - Jardim de Alá, Salvador",
 			description:
 				"Casa de luxo com 7 quartos e 4 suítes no Jardim de Alá, Salvador.",
-			keywords: "imóvel, casa, Jardim de Alá, Salvador",
+			keywords: ["imóvel", "casa", "Jardim de Alá", "Salvador"],
+			city: "Salvador",
+			state: "BA",
+			zip: "40100-000",
+			street: "Estrada do Sol Alegre, 215",
 		},
 		preview: {
 			area: "700 m²",
@@ -343,11 +760,12 @@ export const propertyData = [
 		quantity_reviews: 47,
 		category: 3,
 		delivery_in: "31/12/2024",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 7,
 		slug: "imovel-7",
-		thumbnail: "/images/property/7.jpg",
+		image: "/images/property/7.jpg",
 		address: "Rua Bela Vista, 312 - Porto Alegre, RS",
 		neighborhood: "Bela Vista",
 		bedroom: [8],
@@ -358,7 +776,11 @@ export const propertyData = [
 			title: "Imóvel 7 - Bela Vista, Porto Alegre",
 			description:
 				"Casa de luxo com 8 quartos e 3 suítes na Bela Vista, Porto Alegre.",
-			keywords: "imóvel, casa, Bela Vista, Porto Alegre",
+			keywords: ["imóvel", "casa", "Bela Vista", "Porto Alegre"],
+			city: "Porto Alegre",
+			state: "RS",
+			zip: "90000-000",
+			street: "Rua Bela Vista, 312",
 		},
 		preview: {
 			area: "500 e 820 m²",
@@ -385,11 +807,12 @@ export const propertyData = [
 		quantity_reviews: 51,
 		category: 4,
 		delivery_in: "06/08/2025",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 8,
 		slug: "imovel-8",
-		thumbnail: "/images/property/8.jpg",
+		image: "/images/property/8.jpg",
 		address: "Rua do Ipê, 480 - Vitória, ES",
 		neighborhood: "Centro",
 		bedroom: [3],
@@ -400,7 +823,11 @@ export const propertyData = [
 			title: "Imóvel 8 - Centro, Vitória",
 			description:
 				"Apartamento de 435 m² com 3 quartos e 1 suíte no Centro, Vitória.",
-			keywords: "imóvel, apartamento, Centro, Vitória",
+			keywords: ["imóvel", "apartamento", "Centro", "Vitória"],
+			city: "Vitória",
+			state: "ES",
+			zip: "29000-000",
+			street: "Rua do Ipê, 480",
 		},
 		preview: {
 			area: "435 m²",
@@ -427,11 +854,12 @@ export const propertyData = [
 		quantity_reviews: 18,
 		category: 4,
 		delivery_in: "15/07/2025",
+		book: "https://www.example.com/book-images.pdf",
 	},
 	{
 		id: 9,
 		slug: "imovel-9",
-		thumbnail: "/images/property/9.jpg",
+		image: "/images/property/9.jpg",
 		address: "Avenida Atlântica, 1200 - Rio de Janeiro, RJ",
 		neighborhood: "Copacabana",
 		bedroom: [9],
@@ -442,7 +870,11 @@ export const propertyData = [
 			title: "Imóvel 9 - Copacabana, Rio de Janeiro",
 			description:
 				"Apartamento de 900 m² com 9 quartos e 4 suítes em Copacabana, Rio de Janeiro.",
-			keywords: "imóvel, apartamento, Copacabana, Rio de Janeiro",
+			keywords: ["imóvel", "apartamento", "Copacabana", "Rio de Janeiro"],
+			city: "Rio de Janeiro",
+			state: "RJ",
+			zip: "22070-000",
+			street: "Avenida Atlântica, 1200",
 		},
 		preview: {
 			area: "900 m²",
@@ -468,5 +900,6 @@ export const propertyData = [
 		quantity_reviews: 60,
 		category: 4,
 		delivery_in: "07/07/2025",
+		book: "https://www.example.com/book-images.pdf",
 	},
 ];

@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Link as Link2 } from "react-scroll";
 import FaqTabContent from "./faqTabContent";
+
 import { BsDot } from "../assets/icons/vander";
 
 import { data, titles } from "../storage/faqs";
 
 export default function FaqTab() {
-	const [activeIndexes, setActiveIndexes] = useState(
+	const [activeIndexes, setActiveIndexes] = React.useState(
 		Array(data.length).fill(1)
 	);
 

@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -158,10 +157,15 @@ export default function Footer({ showImage = false }) {
 										<div className="d-flex mt-4">
 											<FiMapPin className="fea icon-sm text-primary mt-1 me-3" />
 											<div>
-												<p
-													className="mb-2"
-													dangerouslySetInnerHTML={{ __html: contact.address }}
-												></p>
+												<p className="mb-2">
+													{contact.address.street}
+													<br />
+													{contact.address.complement} -{" "}
+													{contact.address.neighborhood}
+													<br />
+													{contact.address.city}/{contact.address.state} -{" "}
+													{contact.address.zip}
+												</p>
 												<Link
 													href="https://maps.app.goo.gl/Q8jFNpztn8ndJdj18"
 													className="text-primary"

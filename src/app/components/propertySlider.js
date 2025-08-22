@@ -61,7 +61,7 @@ export default function ProprtySlider() {
 									<div className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2">
 										<div className="property-image position-relative overflow-hidden shadow">
 											<Image
-												src={item.thumbnail}
+												src={item.image}
 												width={0}
 												height={0}
 												sizes="100vw"

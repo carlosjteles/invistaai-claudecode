@@ -22,7 +22,7 @@ export default function HomeFilter() {
 				value: category.id,
 				label: category.label,
 			})),
-		[categories]
+		[]
 	);
 
 	const router = useRouter();
