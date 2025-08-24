@@ -6,7 +6,11 @@ import Image from "next/image";
 import Lightbox from "react-18-image-lightbox";
 import "../../../node_modules/react-18-image-lightbox/style.css";
 
-export default function PropertyDetailImg({ images, openGallery = false }) {
+export default function PropertyDetailImg({
+	images,
+	address,
+	openGallery = false,
+}) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [open, setIsOpen] = useState(openGallery);
 
@@ -29,13 +33,21 @@ export default function PropertyDetailImg({ images, openGallery = false }) {
 	};
 
 	return (
-		<div className="row g-2">
+		<div
+			className="row g-2"
+			itemScope
+			itemType="https://schema.org/ImageGallery"
+		>
+			<meta itemProp="about" content={address || "Detalhes do imóvel"} />
+			<meta itemProp="numberOfItems" content={images.length} />
+
 			<div className="col-md-6">
 				<Link
 					href="#"
 					onClick={() => handleImageClick(0)}
 					className="lightbox"
 					title={firstImage.title}
+					aria-label={`Ver imagem: ${firstImage.title}`}
 				>
 					<Image
 						src={firstImage.src}
@@ -44,7 +56,8 @@ export default function PropertyDetailImg({ images, openGallery = false }) {
 						sizes="100vw"
 						style={{ width: "100%", height: "auto" }}
 						className="img-fluid rounded-3 shadow"
-						alt={firstImage.title}
+						alt={firstImage.title || `Imóvel: vista principal`}
+						itemProp="image"
 					/>
 				</Link>
 			</div>
@@ -52,12 +65,18 @@ export default function PropertyDetailImg({ images, openGallery = false }) {
 			<div className="col-md-6">
 				<div className="row g-2">
 					{images.slice(1, 5).map((img, idx) => (
-						<div className="col-6" key={idx + 1}>
+						<div
+							className="col-6"
+							key={idx + 1}
+							itemScope
+							itemType="https://schema.org/ImageObject"
+						>
 							<Link
 								href="#"
 								onClick={() => handleImageClick(idx + 1)}
 								className="lightbox"
 								title={img.title}
+								aria-label={`Ver imagem: ${img.title || `Vista ${idx + 2}`}`}
 							>
 								<Image
 									src={img.src}
@@ -66,8 +85,15 @@ export default function PropertyDetailImg({ images, openGallery = false }) {
 									sizes="100vw"
 									style={{ width: "100%", height: "auto" }}
 									className="img-fluid rounded-3 shadow"
-									alt={img.title}
+									alt={img.title || `Imóvel: vista ${idx + 2}`}
+									itemProp="contentUrl"
 								/>
+
+								<meta
+									itemProp="name"
+									content={img.title || `Vista ${idx + 2}`}
+								/>
+								<meta itemProp="position" content={idx + 2} />
 							</Link>
 						</div>
 					))}
@@ -83,6 +109,7 @@ export default function PropertyDetailImg({ images, openGallery = false }) {
 					onCloseRequest={() => setIsOpen(false)}
 					onMovePrevRequest={handleMovePrev}
 					onMoveNextRequest={handleMoveNext}
+					imageTitle={currentImage.title}
 				/>
 			)}
 		</div>

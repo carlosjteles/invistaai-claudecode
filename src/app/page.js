@@ -1,33 +1,118 @@
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 
-import Categories from "./components/categories";
-import Customers from "./components/customers";
-import FeaturedProperties from "./components/featuredProperties";
-import Footer from "./components/footer";
-import GetInTouch from "./components/getInTouch";
-import HomeFilter from "./components/homeFilter";
-import Navbar from "./components/navbar";
-import ScrollTop from "./components/scrollTop";
-import TextAnimation from "./components/textAnimation";
+import Categories from "./components/Categories";
+import Customers from "./components/Customers";
+import FeaturedProperties from "./components/FeaturedProperties";
+import Footer from "./components/Footer";
+import GetInTouch from "./components/GetInTouch";
+import HomeFilter from "./components/HomeFilter";
+import Navbar from "./components/Navbar";
+import ScrollTop from "./components/ScrollTop";
+import TextAnimation from "./components/TextAnimation";
+
+import { getBaseUrl, getSiteName } from "./helper/Utils";
 
 export default function Home() {
+	const homeJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		publisher: {
+			"@type": "RealEstateAgent",
+			name: getSiteName(),
+		},
+		name: "Página Inicial",
+		description:
+			"Uma plataforma inteligente para quem quer comprar imóveis com agilidade, confiança e sem taxas abusivas.",
+		url: getBaseUrl(),
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Home",
+					item: getBaseUrl(),
+				},
+			],
+		},
+		potentialAction: {
+			"@type": "SearchAction",
+			target: {
+				"@type": "EntryPoint",
+				urlTemplate: `${getBaseUrl()}/imoveis?q={search_term_string}`,
+			},
+			"query-input": "required name=search_term_string",
+		},
+		datePublished: "2025-09-01",
+		dateModified: new Date().toISOString().split("T")[0],
+		primaryImageOfPage: {
+			"@type": "ImageObject",
+			url: `${getBaseUrl()}/images/bg/home.webp`,
+		},
+		speakable: {
+			"@type": "SpeakableSpecification",
+			cssSelector: [".title-heading", ".para-desc"],
+		},
+		mainEntityOfPage: {
+			"@type": "WebPage",
+			"@id": getBaseUrl(),
+		},
+		hasPart: [
+			{
+				"@type": "WebPageElement",
+				isPartOf: {
+					"@id": getBaseUrl(),
+				},
+				name: "Categorias de Imóveis",
+				position: 1,
+			},
+			{
+				"@type": "WebPageElement",
+				isPartOf: {
+					"@id": getBaseUrl(),
+				},
+				name: "Imóveis em destaque",
+				position: 2,
+			},
+			{
+				"@type": "WebPageElement",
+				isPartOf: {
+					"@id": getBaseUrl(),
+				},
+				name: "O que nossos clientes dizem",
+				position: 3,
+			},
+		],
+	};
+
 	return (
 		<>
+			<Script
+				id="homepage-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+			/>
+
 			<Navbar
 				navClass="defaultscroll sticky"
 				menuClass="navigation-menu nav-left"
 			/>
 			<section className="position-relative mt-5 pt-4">
-				<div className="container-fluid px-md-4 px-2 mt-2">
+				<div className="container-fluid px-md-4 px-2 mt-2 overflow-hidden">
 					<div
 						className="bg-home-one d-table w-100 shadow rounded-3 overflow-hidden"
 						id="home"
 					>
 						<div
-							className="bg-overlay image-wrap "
+							className="bg-overlay image-wrap"
 							id="hero-images"
-							style={{ backgroundImage: "url('/images/bg/03.jpg')" }}
+							style={{
+								backgroundImage: "url('/images/bg/home.webp')",
+								backgroundRepeat: "no-repeat",
+								backgroundSize: "cover",
+							}}
 						></div>
 						<div className="bg-overlay bg-black opacity-50"></div>
 
@@ -64,8 +149,8 @@ export default function Home() {
 										sizes="100vw"
 										style={{ width: "100%", height: "auto" }}
 										className="img-fluid rounded-3"
-										alt="invistaai"
-										title="InvistaAi"
+										alt={getSiteName().toLocaleLowerCase()}
+										title={getSiteName()}
 									/>
 								</div>
 
@@ -79,8 +164,8 @@ export default function Home() {
 												sizes="100vw"
 												style={{ width: "100%", height: "auto" }}
 												className="img-fluid rounded-3"
-												alt="invistaai"
-												title="InvistaAi"
+												alt={getSiteName().toLocaleLowerCase()}
+												title={getSiteName()}
 											/>
 										</div>
 
@@ -90,8 +175,8 @@ export default function Home() {
 												width={100}
 												height={100}
 												className="img-fluid"
-												alt="invistaai"
-												title="InvistaAi"
+												alt={getSiteName().toLocaleLowerCase()}
+												title={getSiteName()}
 											/>
 										</div>
 									</div>
@@ -102,7 +187,7 @@ export default function Home() {
 						<div className="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
 							<div className="section-title ms-lg-5">
 								<h6 className="text-primary fw-medium mb-2">
-									Por que escolher a InvistaAi
+									Por que escolher a {getSiteName()}
 								</h6>
 								<h4 className="title mb-3">
 									Investimento imobiliário com foco em valorização

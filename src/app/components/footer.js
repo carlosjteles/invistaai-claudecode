@@ -13,9 +13,13 @@ import {
 } from "../assets/icons/vander";
 
 import { contact } from "../storage/about";
-import { formatPhone } from "../helper/formatter";
+
+import { formatPhone } from "../helper/Formatter";
+import { getSiteName } from "../helper/Utils";
 
 export default function Footer({ showImage = false }) {
+	const hasSocial = contact.social && Object.keys(contact.social).length > 0;
+
 	return (
 		<>
 			{showImage && (
@@ -43,52 +47,57 @@ export default function Footer({ showImage = false }) {
 											Encontre o imóvel ideal para comprar com facilidade,
 											agilidade e atendimento personalizado.
 										</p>
-										<ul className="list-unstyled social-icon foot-social-icon mb-0 mt-4">
-											<li className="list-inline-item">
-												<Link
-													href="http://linkedin.com/company/shreethemes"
-													target="_blank"
-													className="rounded-3"
-												>
-													<FiLinkedin className="fea icon-sm align-middle" />
-												</Link>
-											</li>
-											<li className="list-inline-item">
-												<Link
-													href="https://www.facebook.com/shreethemes"
-													target="_blank"
-													className="rounded-3"
-												>
-													<FiFacebook className="fea icon-sm align-middle" />
-												</Link>
-											</li>
-											<li className="list-inline-item">
-												<Link
-													href="https://www.instagram.com/shreethemes/"
-													target="_blank"
-													className="rounded-3"
-												>
-													<FiInstagram className="fea icon-sm align-middle" />
-												</Link>
-											</li>
-											<li className="list-inline-item">
-												<Link
-													href="https://twitter.com/shreethemes"
-													target="_blank"
-													className="rounded-3"
-												>
-													<FiTwitter className="fea icon-sm align-middle" />
-												</Link>
-											</li>
-											<li className="list-inline-item">
-												<Link
-													href={`mailto:${contact.email}`}
-													className="rounded-3"
-												>
-													<FiMail className="fea icon-sm align-middle" />
-												</Link>
-											</li>
-										</ul>
+										{hasSocial && (
+											<ul className="list-unstyled social-icon foot-social-icon mb-0 mt-4">
+												{contact.social.linkedin && (
+													<li className="list-inline-item">
+														<Link
+															href={contact.social.linkedin}
+															target="_blank"
+															className="rounded-3"
+														>
+															<FiLinkedin className="fea icon-sm align-middle" />
+														</Link>
+													</li>
+												)}
+
+												{contact.social.facebook && (
+													<li className="list-inline-item">
+														<Link
+															href={contact.social.facebook}
+															target="_blank"
+															className="rounded-3"
+														>
+															<FiFacebook className="fea icon-sm align-middle" />
+														</Link>
+													</li>
+												)}
+
+												{contact.social.instagram && (
+													<li className="list-inline-item">
+														<Link
+															href={contact.social.instagram}
+															target="_blank"
+															className="rounded-3"
+														>
+															<FiInstagram className="fea icon-sm align-middle" />
+														</Link>
+													</li>
+												)}
+
+												{contact.social.twitter && (
+													<li className="list-inline-item">
+														<Link
+															href={contact.social.twitter}
+															target="_blank"
+															className="rounded-3"
+														>
+															<FiTwitter className="fea icon-sm align-middle" />
+														</Link>
+													</li>
+												)}
+											</ul>
+										)}
 									</div>
 
 									<div className="col-lg-2 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
@@ -167,7 +176,7 @@ export default function Footer({ showImage = false }) {
 													{contact.address.zip}
 												</p>
 												<Link
-													href="https://maps.app.goo.gl/Q8jFNpztn8ndJdj18"
+													href={contact.map}
 													className="text-primary"
 													rel="noopener noreferrer"
 													target="_blank"
@@ -218,7 +227,8 @@ export default function Footer({ showImage = false }) {
 							<div className="col">
 								<div className="text-center">
 									<p className="mb-0">
-										© {new Date().getFullYear()} InvistaAi. Desenvolvido por{" "}
+										© {new Date().getFullYear()} {getSiteName()}. Desenvolvido
+										por{" "}
 										<Link
 											href="https://www.damcdeveloper.com/"
 											target="_blank"

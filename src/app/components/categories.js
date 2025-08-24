@@ -24,10 +24,25 @@ export default function Categories() {
 				</div>
 			</div>
 
-			<div className="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 mt-0">
+			<div
+				className="row row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 mt-0"
+				itemScope
+				itemType="https://schema.org/ItemList"
+			>
+				<meta itemProp="name" content="Categorias de Imóveis" />
+				<meta itemProp="itemListOrder" content="Unordered" />
+
 				{categories.map((item, index) => {
 					return (
-						<div className="col" key={index}>
+						<div
+							className="col"
+							key={index}
+							itemProp="itemListElement"
+							itemScope
+							itemType="https://schema.org/ListItem"
+						>
+							<meta itemProp="position" content={index + 1} />
+
 							<div className="categories position-relative overflow-hidden rounded-3 shadow">
 								<Image
 									src={item.image}
@@ -37,16 +52,18 @@ export default function Categories() {
 									style={{ width: "100%", height: "auto" }}
 									className="img-fluid"
 									alt={item.label}
+									itemProp="image"
 								/>
 
 								<div className="p-3">
 									<Link
 										href={`/imoveis?categoria=${encodeURIComponent(item.id)}`}
 										className="title text-dark fs-5 fw-medium"
+										itemProp="url"
 									>
-										{item.label}
+										<span itemProp="name">{item.label}</span>
 									</Link>
-									<p className="text-muted small mb-0">
+									<p className="text-muted small mb-0" itemProp="description">
 										{CategoryListing(item.id)}
 									</p>
 								</div>

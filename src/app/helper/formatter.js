@@ -16,9 +16,13 @@ export const formatDate = (value) => {
 	return date.toLocaleDateString("pt-BR", options);
 };
 
-export const formatDateISO = (value) => {
+export const formatDateUS = (value) => {
 	const [day, month, year] = value.split("/").map(Number);
-	return new Date(year, month - 1, day).toISOString();
+	return new Date(year, month - 1, day);
+};
+
+export const formatDateISO = (value) => {
+	return formatDateUS(value).toISOString();
 };
 
 export const formatBathrooms = (value) => {

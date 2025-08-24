@@ -6,7 +6,7 @@ import "../app/assets/css/materialdesignicons.min.css";
 
 import { Providers } from "./providers";
 
-import { getBaseUrl, getSiteName } from "./helper/utils";
+import { getBaseUrl, getSiteName } from "./helper/Utils";
 
 import { contact } from "./storage/about";
 
@@ -18,6 +18,7 @@ const league = League_Spartan({
 });
 
 export const metadata = {
+	metadataBase: new URL(getBaseUrl()),
 	title: `Comprar Imóveis em São Paulo | ${getSiteName()}`,
 	description:
 		"Encontre apartamentos, studios e imóveis em São Paulo com potencial de valorização. Curadoria especializada e suporte completo para investidores e compradores.",
@@ -37,7 +38,7 @@ export const metadata = {
 		siteName: `${getSiteName()}`,
 		images: [
 			{
-				url: `${getBaseUrl()}/og-image.jpg`,
+				url: `${getBaseUrl()}/images/og-image.jpg`,
 				width: 1200,
 				height: 630,
 				alt: `Imóveis em São Paulo - ${getSiteName()}`,
@@ -52,7 +53,7 @@ export const metadata = {
 		title: `${getSiteName().toLocaleLowerCase()} | Investimento Imobiliário Reimaginado`,
 		description:
 			"Do primeiro imóvel ao investimento em alto padrão. Conectamos você às melhores oportunidades imobiliárias em São Paulo.",
-		images: [`${getBaseUrl()}/twitter-image.jpg`],
+		images: [`${getBaseUrl()}/images/og-image.jpg`],
 	},
 	robots: {
 		index: true,
@@ -67,8 +68,11 @@ export const metadata = {
 		maximumScale: 1,
 	},
 	icons: {
-		icon: [{ url: "/favicon.ico" }, { url: "/icon.png", sizes: "32x32" }],
-		apple: [{ url: "/apple-icon.png" }],
+		icon: [
+			{ url: "/favicon.ico" },
+			{ url: "/images/icon.png", sizes: "32x32" },
+		],
+		apple: [{ url: "/images/apple-icon.png" }],
 	},
 	themeColor: "#09acf4",
 };
@@ -79,7 +83,7 @@ export const jsonLd = {
 	name: getSiteName(),
 	url: getBaseUrl(),
 	logo: `${getBaseUrl()}/logo.png`,
-	image: `${getBaseUrl()}/og-image.jpg`,
+	image: `${getBaseUrl()}/images/og-image.jpg`,
 	description:
 		"Encontre apartamentos, studios e imóveis em São Paulo com potencial de valorização. Curadoria especializada e suporte completo para investidores e compradores.",
 	address: {
@@ -87,7 +91,7 @@ export const jsonLd = {
 		addressLocality: contact.address.city,
 		addressRegion: contact.address.state,
 		postalCode: contact.address.zip,
-		streetAddress: contact.address.street,
+		streetAddress: `${contact.address.street}, ${contact.address.complement}`,
 		addressCountry: "BR",
 	},
 	geo: {
@@ -95,11 +99,18 @@ export const jsonLd = {
 		latitude: -23.611426182116418,
 		longitude: -46.69457299672947,
 	},
+	hasMap: contact.map,
 	telephone: `+${contact.phone}`,
 	email: contact.email,
 	openingHours: "Mo,Tu,We,Th,Fr 09:00-18:00",
 	priceRange: "R$",
 	sameAs: Object.values(contact.social),
+	knowsAbout: [
+		"Investimento Imobiliário",
+		"Mercado Imobiliário São Paulo",
+		"Studios",
+		"Apartamentos",
+	],
 	areaServed: {
 		"@type": "City",
 		name: contact.address.city,
@@ -114,6 +125,7 @@ export const jsonLd = {
 		},
 	},
 };
+
 export default function RootLayout({ children }) {
 	return (
 		<html lang="pt-BR">

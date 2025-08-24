@@ -37,30 +37,31 @@ export const prices = [
 	{ value: "10000000", label: "R$ 10.000.000,00" },
 ];
 
+// Consegue mudar de posição o "Em construção com o Lançamento", pra ficar na ordem cronológica.
 export const categories = [
 	{
 		id: 1,
 		label: "Breve Lançamento",
-		image: "/images/property/residential.jpg",
+		image: "/images/categories/brief-launch.webp",
 	},
 	{
 		id: 2,
-		label: "Em Construção",
-		image: "/images/property/residential.jpg",
+		label: "Lançamento",
+		image: "/images/categories/launch.webp",
 	},
 	{
 		id: 3,
-		label: "Lançamento",
-		image: "/images/property/residential.jpg",
+		label: "Em Construção",
+		image: "/images/categories/under-construction.webp",
 	},
 	{
 		id: 4,
 		label: "Pronto Novo",
-		image: "/images/property/residential.jpg",
+		image: "/images/categories/ready-new.webp",
 	},
 	{
 		id: 5,
 		label: "Investimento",
-		image: "/images/property/residential.jpg",
+		image: "/images/categories/investment.webp",
 	},
 ];

@@ -2,16 +2,17 @@ import BlogDetailClient from "./BlogDetailClient";
 
 import { blogData as data } from "../../storage/data";
 
-import { formatDateISO } from "../../helper/formatter";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { formatDateISO } from "../../helper/Formatter";
+import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
 export async function generateMetadata({ params }) {
 	const blogPost = data.find((item) => item.slug === params.slug);
 
 	if (!blogPost) {
 		return {
-			title: "Artigo não encontrado",
-			description: "O artigo que você está procurando não foi encontrado.",
+			title: `Notícia não encontrada | ${getSiteName()}`,
+			description:
+				"O artigo que você está procurando não existe ou foi removido.",
 		};
 	}
 
@@ -22,9 +23,13 @@ export async function generateMetadata({ params }) {
 		openGraph: {
 			title: blogPost.title,
 			description: blogPost.desc,
+			url: `${getBaseUrl()}/blog/${blogPost.slug}`,
 			type: "article",
-			publishedTime: formatDateISO(blogPost.date),
-			authors: [blogPost.author],
+			article: {
+				publishedTime: formatDateISO(blogPost.date),
+				section: blogPost.tag,
+				authors: [blogPost.author],
+			},
 			images: [
 				{
 					url: `${getBaseUrl()}${blogPost.image}`,

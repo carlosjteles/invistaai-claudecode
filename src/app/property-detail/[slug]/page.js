@@ -4,14 +4,14 @@ import { categories } from "../../storage/filters";
 
 import { propertyData as data } from "../../storage/data";
 
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
 export async function generateMetadata({ params }) {
 	const propertyData = data.find((item) => item.slug === params.slug);
 
 	if (!propertyData) {
 		return {
-			title: "Imóvel não encontrado",
+			title: `Imóvel não encontrado | ${getSiteName()}`,
 			description: "O imóvel que você está procurando não foi encontrado.",
 		};
 	}
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
 		openGraph: {
 			title: propertyData.seo?.title || propertyData.address,
 			description: propertyData.seo?.description,
-			type: "product",
+			type: "article",
 			url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 			images: [
 				{
@@ -50,6 +50,12 @@ export async function generateMetadata({ params }) {
 		},
 		alternates: {
 			canonical: `${getBaseUrl()}/imovel/${propertyData.slug}`,
+		},
+		robots: {
+			index: true,
+			follow: true,
+			"max-snippet": -1,
+			"max-image-preview": "large",
 		},
 	};
 }

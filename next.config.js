@@ -56,6 +56,10 @@ const nextConfig = {
 				source: "/termos-e-condicoes",
 				destination: "/terms",
 			},
+			{
+				source: "/nao-encontrado",
+				destination: "/not-found",
+			},
 		];
 	},
 };

@@ -1,23 +1,120 @@
 import Link from "next/link";
+import Script from "next/script";
 
 import { FiArrowRight } from "../assets/icons/vander";
 
-import Accordion from "../components/accordian";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
-import ScrollTop from "../components/scrollTop";
+import Accordion from "../components/Accordian";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import ScrollTop from "../components/ScrollTop";
+
+import { getBaseUrl, getSiteName } from "../helper/Utils";
+
+export const metadata = {
+	title: `Termos e Condições | ${getSiteName()}`,
+	description:
+		"Conheça os termos e condições de uso da nossa plataforma imobiliária. Regras e diretrizes para uso responsável dos nossos serviços.",
+	keywords: [
+		"termos de uso",
+		"condições",
+		"acordo de usuário",
+		"regras",
+		"restrições",
+	],
+	alternates: {
+		canonical: `${getBaseUrl()}/termos-e-condicoes`,
+	},
+	openGraph: {
+		title: `Termos e Condições | ${getSiteName()}`,
+		description:
+			"Conheça os termos e condições de uso da nossa plataforma imobiliária.",
+		url: `${getBaseUrl()}/termos-e-condicoes`,
+		type: "website",
+		siteName: getSiteName(),
+	},
+	twitter: {
+		card: "summary",
+		title: `Termos e Condições | ${getSiteName()}`,
+		description:
+			"Conheça os termos e condições de uso da nossa plataforma imobiliária.",
+	},
+};
 
 export default function Terms() {
+	const termsJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		name: "Termos e Condições",
+		description: "Termos e condições de uso da plataforma imobiliária",
+		datePublished: "2025-09-01",
+		dateModified: "2025-09-01",
+		url: `${getBaseUrl()}/termos-e-condicoes`,
+		isPartOf: {
+			"@type": "WebSite",
+			name: getSiteName(),
+			url: getBaseUrl(),
+		},
+		mainEntity: {
+			"@type": "Article",
+			headline: "Termos e Condições",
+			description: "Regras e diretrizes para uso da plataforma",
+			datePublished: "2025-09-01",
+			author: {
+				"@type": "Organization",
+				name: getSiteName(),
+			},
+			publisher: {
+				"@type": "Organization",
+				name: getSiteName(),
+				logo: {
+					"@type": "ImageObject",
+					url: `${getBaseUrl()}/logo.png`,
+				},
+			},
+		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Início",
+					item: getBaseUrl(),
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Termos e Condições",
+					item: `${getBaseUrl()}/termos-e-condicoes`,
+				},
+			],
+		},
+		speakable: {
+			"@type": "SpeakableSpecification",
+			cssSelector: [".card-title", ".text-muted"],
+		},
+	};
+
 	return (
 		<>
+			<Script
+				id="terms-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(termsJsonLd) }}
+			/>
+
 			<Navbar
 				navClass="defaultscroll sticky"
 				logolight={true}
 				menuClass="navigation-menu nav-left nav-light"
 			/>
+
 			<section
 				className="bg-half-170 d-table w-100"
-				style={{ backgroundImage: "url('/images/bg/03.jpg')" }}
+				style={{
+					backgroundImage: "url('/images/bg/terms.webp')",
+					backgroundPosition: "bottom",
+				}}
 			>
 				<div className="bg-overlay bg-gradient-overlay-2"></div>
 				<div className="container">
@@ -32,12 +129,36 @@ export default function Terms() {
 					</div>
 					<div className="position-middle-bottom">
 						<nav aria-label="breadcrumb" className="d-block">
-							<ul className="breadcrumb breadcrumb-muted mb-0 p-0">
-								<li className="breadcrumb-item">
-									<Link href="/">Início</Link>
+							<ul
+								className="breadcrumb breadcrumb-muted mb-0 p-0"
+								itemScope
+								itemType="https://schema.org/BreadcrumbList"
+							>
+								<li
+									className="breadcrumb-item"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<Link href="/" itemProp="item">
+										<span itemProp="name">Início</span>
+									</Link>
+
+									<meta itemProp="position" content="1" />
 								</li>
-								<li className="breadcrumb-item active" aria-current="page">
-									Termos e condições
+								<li
+									className="breadcrumb-item active"
+									aria-current="page"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<span itemProp="name">Termos e condições</span>
+									<meta itemProp="position" content="2" />
+									<meta
+										itemProp="item"
+										content={`${getBaseUrl()}/termos-e-condicoes`}
+									/>
 								</li>
 							</ul>
 						</nav>
@@ -62,9 +183,20 @@ export default function Terms() {
 				<div className="container">
 					<div className="row justify-content-center">
 						<div className="col-lg-9">
-							<div className="card shadow border-0 rounded-3">
-								<div className="card-body">
-									<h5 className="card-title">Introdução :</h5>
+							<article
+								className="card shadow border-0 rounded-3"
+								itemScope
+								itemType="https://schema.org/Article"
+							>
+								<div className="card-body" itemProp="articleBody">
+									<meta itemProp="headline" content="Termos e Condições" />
+									<meta itemProp="datePublished" content="2025-09-01" />
+									<meta itemProp="dateModified" content="2025-09-01" />
+									<meta itemProp="author" content={getSiteName()} />
+
+									<h5 className="card-title" itemProp="name">
+										Introdução :
+									</h5>
 									<p className="text-muted">
 										Estes Termos e Condições regulam o uso deste site e de todos
 										os serviços nele oferecidos. Ao acessar nossa plataforma,
@@ -133,9 +265,11 @@ export default function Terms() {
 
 									<h5 className="card-title">Perguntas Frequentes :</h5>
 
-									<Accordion />
+									<div itemScope itemType="https://schema.org/FAQPage">
+										<Accordion />
+									</div>
 								</div>
-							</div>
+							</article>
 						</div>
 					</div>
 				</div>

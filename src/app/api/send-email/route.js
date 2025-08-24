@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+import { getSiteName } from "@/app/helper/Utils";
+
 async function validateRecaptcha(recaptchaResponse) {
 	try {
 		const secretKey = process.env.NEXT_GOOGLE_RECAPTCHA_SECRET_KEY;
@@ -57,7 +59,7 @@ export async function POST(request) {
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-                <title>Formulário de Contato - DAMC Developer</title>
+                <title>Formulário de Contato - ${getSiteName()}</title>
                 <style media="all">
                     /* ---- GLOBAL RESETS ---- */
                     body {
@@ -185,7 +187,7 @@ export async function POST(request) {
                         <td>&nbsp;</td>
                         <td class="container">
                             <div class="content">
-                                <span class="header">Novo Contato no Formulário InvistaAi</span>
+                                <span class="header">Novo Contato no Formulário ${getSiteName()}</span>
                                 <table role="presentation" class="main">
                                     <tr>
                                         <td class="wrapper">
@@ -209,7 +211,7 @@ export async function POST(request) {
 	const mailOptions = {
 		from: process.env.EMAIL_USER,
 		to: process.env.EMAIL_USER,
-		subject: `Formulário InvistaAi - Contato ${name}`,
+		subject: `Formulário ${getSiteName()} - Contato ${name}`,
 		html: template,
 	};
 

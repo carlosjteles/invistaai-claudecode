@@ -1,29 +1,34 @@
 export default function FaqTabContent({
-	id,
 	title,
+	id,
 	activeIndex,
 	setActiveIndex,
 	children,
+	titleProps = {},
+	contentWrapperProps = {},
 }) {
 	return (
-		<>
-			<div className="accordion-item rounded-3 mb-3">
-				<h2 className="accordion-header" id="headingOne">
-					<button
-						className={`accordion-button border-0 bg-light ${
-							activeIndex === id ? "active" : ""
-						}`}
-						onClick={() => setActiveIndex(id)}
-					>
-						{title}
-					</button>
-				</h2>
-				{activeIndex === id && (
-					<div id="collapseOne" className="accordion-collapse border-0">
-						<div className="accordion-body text-muted">{children}</div>
-					</div>
-				)}
+		<div className="accordion-item border-0 rounded-3 shadow mb-4">
+			<h2 className="accordion-header">
+				<button
+					className={`accordion-button border-0 bg-white ${
+						activeIndex === id ? "" : "collapsed"
+					}`}
+					type="button"
+					onClick={() => setActiveIndex(activeIndex === id ? 0 : id)}
+					{...titleProps}
+				>
+					{title}
+				</button>
+			</h2>
+			<div
+				className={`accordion-collapse border-0 collapse ${
+					activeIndex === id ? "show" : ""
+				}`}
+				{...contentWrapperProps}
+			>
+				<div className="accordion-body">{children}</div>
 			</div>
-		</>
+		</div>
 	);
 }

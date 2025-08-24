@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { getSiteName } from "../helper/Utils";
+
 export default function Error() {
 	return (
 		<section className="position-relative bg-soft-primary">
@@ -44,7 +46,7 @@ export default function Error() {
 							</div>
 							<div className="text-center">
 								<p className="mb-0 text-muted">
-									© {new Date().getFullYear()} InvistaAi. Desenvolvido por{" "}
+									© {new Date().getFullYear()} {getSiteName()}. Desenvolvido por{" "}
 									<Link
 										href="https://www.damcdeveloper.com/"
 										target="_blank"

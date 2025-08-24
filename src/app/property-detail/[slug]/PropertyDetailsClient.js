@@ -1,37 +1,47 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import Script from "next/script";
 
 import { categories } from "../../storage/filters";
-import Error from "../../error/page";
-import PropertyDetailImg from "../../components/propertyDetailImg";
-import Navbar from "../../components/navbar";
-import Footer from "../../components/footer";
-import ScrollTop from "../../components/scrollTop";
-import PropertySlider from "../../components/propertySlider";
+import PropertyDetailImg from "../../components/PropertyDetailImg";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import ScrollTop from "../../components/ScrollTop";
+import RelatedPropertySlider from "../../components/RelatedPropertySlider";
 
 import { propertyData as data } from "../../storage/data";
 import { contact } from "../../storage/about";
 
-import { formatPrice } from "../../helper/formatter";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { formatPrice } from "../../helper/Formatter";
+import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
-export default function PropertyDetails(props) {
+export default function PropertyDetailsClient(props) {
 	const searchParams = useSearchParams();
 	const openGallery = searchParams.get("openGallery");
 
 	const propertyData = data.find((item) => item.slug === props.params.slug);
 
 	if (!propertyData) {
-		return <Error />;
+		notFound();
 	}
 
 	const whatsappMessage = (property) => {
 		const text = `Olá, quero agendar uma visita para o imóvel ${property} que vi no site.`;
 		return `https://wa.me/${contact.phone}?text=${encodeURIComponent(text)}`;
 	};
+
+	const relatedProperties = React.useMemo(() => {
+		return data.filter((item) => {
+			return (
+				item.slug !== propertyData.slug &&
+				item.neighborhood === propertyData.neighborhood &&
+				item.price >= propertyData.price * 0.8 &&
+				item.price <= propertyData.price * 1.2
+			);
+		});
+	}, [propertyData]);
 
 	const propertySchema = {
 		"@context": "https://schema.org",
@@ -87,6 +97,29 @@ export default function PropertyDetails(props) {
 			telephone: `+${contact.phone}`,
 			email: contact.email,
 		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Home",
+					item: getBaseUrl(),
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Imóveis",
+					item: `${getBaseUrl()}/imoveis`,
+				},
+				{
+					"@type": "ListItem",
+					position: 3,
+					name: propertyData.address,
+					item: `${getBaseUrl()}/imovel/${propertyData.slug}`,
+				},
+			],
+		},
 	};
 
 	return (
@@ -105,11 +138,59 @@ export default function PropertyDetails(props) {
 				<div className="container-fluid mt-2">
 					<PropertyDetailImg
 						images={propertyData.images}
+						address={propertyData.address}
 						openGallery={openGallery}
 					/>
 				</div>
 
-				<div className="container mt-100 mt-60">
+				<div className="container text-center">
+					<nav aria-label="breadcrumb">
+						<ol
+							className="breadcrumb"
+							itemScope
+							itemType="https://schema.org/BreadcrumbList"
+						>
+							<li
+								className="breadcrumb-item"
+								itemProp="itemListElement"
+								itemScope
+								itemType="https://schema.org/ListItem"
+							>
+								<Link href="/" itemProp="item">
+									<span itemProp="name">Home</span>
+								</Link>
+								<meta itemProp="position" content="1" />
+							</li>
+							<li
+								className="breadcrumb-item"
+								itemProp="itemListElement"
+								itemScope
+								itemType="https://schema.org/ListItem"
+							>
+								<Link href="/imoveis" itemProp="item">
+									<span itemProp="name">Imóveis</span>
+								</Link>
+								<meta itemProp="position" content="2" />
+							</li>
+							<li
+								className="breadcrumb-item active"
+								aria-current="page"
+								itemProp="itemListElement"
+								itemScope
+								itemType="https://schema.org/ListItem"
+							>
+								<span itemProp="name">{propertyData.address}</span>
+								<meta itemProp="position" content="3" />
+								<meta
+									itemProp="item"
+									content={`${getBaseUrl()}/imovel/${propertyData.slug}`}
+								/>
+							</li>
+						</ol>
+					</nav>
+				</div>
+
+				<div className="container mt-80 mt-60">
 					<div className="row g-4">
 						<div className="col-lg-8 col-md-7 col-12">
 							<div
@@ -133,7 +214,7 @@ export default function PropertyDetails(props) {
 
 								<h4 className="title mb-0">{propertyData.address}</h4>
 
-								<ul className="list-unstyled d-flex gap-3 align-items-center justify-content-between mb-0 py-3">
+								<ul className="list-unstyled d-flex flex-wrap gap-3 align-items-center justify-content-between mb-0 py-3">
 									<li className="list-inline-item">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-arrow-expand-all fs-4 me-2 text-primary"></i>
@@ -275,6 +356,7 @@ export default function PropertyDetails(props) {
 									<Link
 										href={whatsappMessage(propertyData.id)}
 										className="btn btn-primary w-100 small"
+										aria-label="Agendar visita por WhatsApp"
 									>
 										Agendar Agora
 									</Link>
@@ -284,21 +366,30 @@ export default function PropertyDetails(props) {
 					</div>
 				</div>
 
-				<div className="container mt-100 mt-60">
-					<div className="row justify-content-center">
-						<div className="col">
-							<div className="section-title text-center mb-4 pb-2">
-								<h4 className="title mb-3">Você também pode gostar</h4>
-								<p className="text-muted para-desc mb-0 mx-auto">
-									Confira opções semelhantes à venda e encontre seu próximo
-									imóvel.
-								</p>
+				{relatedProperties && relatedProperties.length > 0 && (
+					<div
+						className="container mt-100 mt-60"
+						itemScope
+						itemType="https://schema.org/ItemList"
+					>
+						<meta itemProp="name" content="Imóveis Relacionados" />
+						<meta itemProp="numberOfItems" content={relatedProperties.length} />
+
+						<div className="row justify-content-center">
+							<div className="col">
+								<div className="section-title text-center mb-4 pb-2">
+									<h4 className="title mb-3">Você também pode gostar</h4>
+									<p className="text-muted para-desc mb-0 mx-auto">
+										Confira opções semelhantes à venda e encontre seu próximo
+										imóvel.
+									</p>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<PropertySlider />
-				</div>
+						<RelatedPropertySlider propertyData={relatedProperties} />
+					</div>
+				)}
 			</section>
 			<Footer />
 			<ScrollTop />

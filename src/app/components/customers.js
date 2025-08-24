@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
+import { getSiteName } from "../helper/Utils";
+
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
 
@@ -87,13 +89,25 @@ export default function Customers() {
 				</div>
 			</div>
 
-			<div className="row">
+			<div className="row" itemScope itemType="https://schema.org/ItemList">
+				<meta itemProp="name" content="Depoimentos de Clientes" />
+				<meta itemProp="itemListOrder" content="Unordered" />
+				<meta itemProp="numberOfItems" content={data.length} />
+
 				<div className="col-12 mt-4">
 					<div className="tiny-three-item">
 						<TinySlider settings={settings}>
 							{data.map((item, index) => {
 								return (
-									<div className="tiny-slider client-testi" key={index}>
+									<div
+										className="tiny-slider client-testi"
+										key={index}
+										itemScope
+										itemType="https://schema.org/Review"
+										itemProp="itemListElement"
+									>
+										<meta itemProp="position" content={index + 1} />
+
 										<div className="card border-0 bg-white">
 											<div className="card-body p-4 rounded-3 shadow m-2">
 												<i className="mdi mdi-format-quote-open display-1 text-primary opacity-25 position-absolute end-0 top-0"></i>
@@ -105,34 +119,67 @@ export default function Customers() {
 														height={45}
 														className="avatar avatar-md-sm rounded-circle shadow-md"
 														alt={item.name}
+														itemProp="image"
 													/>
 													<div className="flex-1 ms-3">
-														<h6 className="mb-0">{item.name}</h6>
+														<h6
+															className="mb-0"
+															itemProp="author"
+															itemScope
+															itemType="https://schema.org/Person"
+														>
+															<span itemProp="name">{item.name}</span>
+															<meta itemProp="jobTitle" content={item.title} />
+														</h6>
 														<small className="text-muted">{item.title}</small>
 													</div>
 												</div>
 
-												<p className="text-muted fst-italic mb-0 mt-4">
+												<p
+													className="text-muted fst-italic mb-0 mt-4"
+													itemProp="reviewBody"
+												>
 													{item.desc}
 												</p>
 
-												<ul className="list-unstyled mb-0 mt-3 text-warning h5">
-													<li className="list-inline-item">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item">
-														<i className="mdi mdi-star"></i>
-													</li>
-												</ul>
+												<div
+													itemProp="reviewRating"
+													itemScope
+													itemType="https://schema.org/Rating"
+												>
+													<meta itemProp="worstRating" content="1" />
+													<meta itemProp="bestRating" content="5" />
+													<meta itemProp="ratingValue" content="5" />
+
+													<ul className="list-unstyled mb-0 mt-3 text-warning h5">
+														<li className="list-inline-item">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item">
+															<i className="mdi mdi-star"></i>
+														</li>
+													</ul>
+												</div>
+
+												<div
+													itemProp="itemReviewed"
+													itemScope
+													itemType="https://schema.org/RealEstateAgent"
+												>
+													<meta itemProp="name" content={getSiteName()} />
+													<meta itemProp="priceRange" content="R$" />
+												</div>
+
+												<meta itemProp="datePublished" content="2023-01-01" />
 											</div>
 										</div>
 									</div>

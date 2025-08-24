@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 
 import { categories, prices } from "../storage/filters";
 
+import { getBaseUrl } from "../helper/Utils";
+
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
 import { FiDollarSign, FiHome, FiSearch } from "../assets/icons/vander";
@@ -67,8 +69,27 @@ export default function HomeFilter() {
 				<div className="features-absolute">
 					<div className="tab-content bg-white rounded-3 sm-rounded-0 shadow">
 						<div className="card border-0 active">
-							<form onSubmit={handleSubmit} className="card-body text-start">
-								<div className="registration-form text-dark text-start">
+							<form
+								onSubmit={handleSubmit}
+								className="card-body text-start"
+								role="search"
+								aria-label="Busca de imóveis"
+								itemScope
+								itemType="https://schema.org/WebSite"
+							>
+								<meta itemProp="url" content={getBaseUrl()} />
+
+								<div
+									className="registration-form text-dark text-start"
+									itemProp="potentialAction"
+									itemScope
+									itemType="https://schema.org/SearchAction"
+								>
+									<meta
+										itemProp="target"
+										content={`${getBaseUrl()}/imoveis?q=${search}`}
+									/>
+
 									<div className="row g-lg-0">
 										<div className="col-lg-3 col-md-6 col-12">
 											<div className="mb-3">
@@ -76,14 +97,14 @@ export default function HomeFilter() {
 												<div className="filter-search-form position-relative filter-border">
 													<FiSearch className="fea icon-ex-md icons" />
 													<input
-														name="name"
+														name="q"
 														type="text"
-														id="job-keyword"
 														className="form-control filter-input-box bg-light border-0"
 														placeholder="O que você está procurando?"
 														aria-label="O que você está procurando?"
 														value={search}
 														onChange={(e) => setSearch(e.target.value)}
+														itemProp="query-input"
 													/>
 												</div>
 											</div>
@@ -159,6 +180,7 @@ export default function HomeFilter() {
 												className="btn btn-primary searchbtn w-100"
 												value="Buscar imóveis"
 												aria-label="Buscar imóveis"
+												itemProp="query-input-button"
 											/>
 										</div>
 									</div>

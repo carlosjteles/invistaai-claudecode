@@ -1,23 +1,129 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 
-import Navbar from "../components/navbar";
-import About from "../components/about";
-import Blog from "../components/blog";
-import GetInTouch from "../components/getInTouch";
-import Footer from "../components/footer";
-import ScrollTop from "../components/scrollTop";
-import AboutCounter from "../components/counter/aboutCounter";
-import Broker from "../components/broker";
+import Navbar from "../components/Navbar";
+import About from "../components/About";
+import Blog from "../components/Blog";
+import GetInTouch from "../components/GetInTouch";
+import Footer from "../components/Footer";
+import ScrollTop from "../components/ScrollTop";
+import AboutCounter from "../components/counter/AboutCounter";
+import Broker from "../components/Broker";
 
 import { FiArrowRight } from "react-icons/fi";
 
 import { contact } from "../storage/about";
 
+import { getBaseUrl, getSiteName } from "../helper/Utils";
+
+export const metadata = {
+	title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
+	description:
+		"Conectamos pessoas e capital a oportunidades imobiliárias em São Paulo. Conheça nossa história e como ajudamos investidores a encontrar imóveis com alto potencial de valorização.",
+	keywords: [
+		"sobre InvistaAI",
+		"investimento imobiliário",
+		"imóveis São Paulo",
+		"consultoria imobiliária",
+		"casa própria",
+	],
+	alternates: {
+		canonical: `${getBaseUrl()}/sobre`,
+	},
+	openGraph: {
+		title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
+		description:
+			"Conectamos pessoas e capital a oportunidades imobiliárias em São Paulo com curadoria rigorosa e dados de mercado.",
+		url: `${getBaseUrl()}/sobre`,
+		type: "website",
+		images: [
+			{
+				url: `${getBaseUrl()}/images/bg/aboutus.webp`,
+				width: 1200,
+				height: 630,
+				alt: `Sobre a ${getSiteName()}`,
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: `Sobre a ${getSiteName()}`,
+		description:
+			"Especialistas em conectar pessoas às melhores oportunidades imobiliárias em São Paulo.",
+		images: [`${getBaseUrl()}/images/bg/aboutus.webp`],
+	},
+};
+
 export default function AboutUs() {
+	const aboutJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "AboutPage",
+		name: `Sobre a ${getSiteName()}`,
+		description:
+			"Conectamos pessoas e capital a oportunidades imobiliárias em São Paulo com curadoria rigorosa.",
+		url: `${getBaseUrl()}/sobre`,
+		mainEntity: {
+			"@type": "RealEstateAgent",
+			name: getSiteName(),
+			description: "Especialistas em investimento imobiliário em São Paulo.",
+			url: getBaseUrl(),
+			logo: `${getBaseUrl()}/logo.png`,
+			telephone: `+${contact.phone}`,
+			email: contact.email,
+			foundingDate: "2021",
+			numberOfEmployees: {
+				"@type": "QuantitativeValue",
+				value: "2+",
+			},
+			areaServed: {
+				"@type": "GeoCircle",
+				geoMidpoint: {
+					"@type": "GeoCoordinates",
+					latitude: -23.611426182116418,
+					longitude: -46.69457299672947,
+				},
+				geoRadius: "50 km",
+				name: "São Paulo e região metropolitana",
+			},
+			slogan: "Eficiência. Transparência. Controle. Invista com inteligência.",
+			address: {
+				"@type": "PostalAddress",
+				streetAddress: contact.address.street,
+				addressLocality: contact.address.city,
+				addressRegion: contact.address.state,
+				postalCode: contact.address.zip,
+				addressCountry: "BR",
+			},
+		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Início",
+					item: getBaseUrl(),
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Sobre Nós",
+					item: `${getBaseUrl()}/sobre`,
+				},
+			],
+		},
+	};
+
 	return (
 		<>
+			<Script
+				id="about-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+			/>
+
 			<Navbar
 				navClass="defaultscroll sticky"
 				logolight={true}
@@ -33,13 +139,46 @@ export default function AboutUs() {
 						<div className="col-12">
 							<div className="title-heading text-center">
 								<p className="text-white-50 para-desc mx-auto mb-0">
-									Nossa história: InvistaAi
+									Nossa história: {getSiteName()}
 								</p>
 								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Sobre nós
 								</h5>
 							</div>
 						</div>
+					</div>
+					{/* Adicionar após o div.container na section principal */}
+					<div className="position-middle-bottom">
+						<nav aria-label="breadcrumb" className="d-block">
+							<ul
+								className="breadcrumb breadcrumb-muted mb-0 p-0"
+								itemScope
+								itemType="https://schema.org/BreadcrumbList"
+							>
+								<li
+									className="breadcrumb-item"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<Link href="/" itemProp="item">
+										<span itemProp="name">Início</span>
+									</Link>
+									<meta itemProp="position" content="1" />
+								</li>
+								<li
+									className="breadcrumb-item active"
+									aria-current="page"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<span itemProp="name">Sobre Nós</span>
+									<meta itemProp="position" content="2" />
+									<meta itemProp="item" content={`${getBaseUrl()}/sobre`} />
+								</li>
+							</ul>
+						</nav>
 					</div>
 				</div>
 			</section>
@@ -70,7 +209,7 @@ export default function AboutUs() {
 										sizes="100vw"
 										style={{ width: "100%", height: "auto" }}
 										className="img-fluid rounded-top-pill rounded-5"
-										alt="Prédio InvistaAi"
+										alt={`Prédio ${getSiteName()}`}
 									/>
 									<div className="position-absolute top-0 start-0 z-n1">
 										<Image
@@ -103,13 +242,23 @@ export default function AboutUs() {
 							</div>
 						</div>
 
-						<div className="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+						<div
+							className="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0"
+							itemScope
+							itemType="https://schema.org/RealEstateAgent"
+						>
+							<meta itemProp="name" content={getSiteName()} />
+							<meta itemProp="url" content={getBaseUrl()} />
+							<meta itemProp="logo" content={`${getBaseUrl()}/logo.png`} />
+
 							<div className="section-title ms-lg-5">
-								<h6 className="text-primary fw-medium mb-2">InvistaAi</h6>
-								<h4 className="title mb-3">
+								<h6 className="text-primary fw-medium mb-2" itemProp="slogan">
+									{getSiteName()}
+								</h6>
+								<h4 className="title mb-3" itemProp="alternateName">
 									É investimento imobiliário reimaginado
 								</h4>
-								<p className="text-muted para-desc mb-3">
+								<p className="text-muted para-desc mb-3" itemProp="description">
 									Conectamos pessoas e capital a{" "}
 									<strong>oportunidades imobiliárias</strong> em São Paulo — do{" "}
 									<strong>primeiro imóvel / casa própria</strong> a ativos de{" "}
@@ -119,19 +268,33 @@ export default function AboutUs() {
 									comparativos claros e acompanhamento consultivo do início ao
 									fim.
 								</p>
-								<ul className="list-unstyled text-muted mb-2">
+								<ul
+									className="list-unstyled text-muted mb-2"
+									itemProp="makesOffer"
+									itemScope
+									itemType="https://schema.org/Offer"
+								>
+									<meta itemProp="category" content="Serviços Imobiliários" />
+
 									<li className="ms-0 mt-2">
 										<FiArrowRight className="fea icon-sm me-2 ms-0" />
-										Curadoria de empreendimentos com potencial de valorização
+										<span itemProp="description">
+											Curadoria de empreendimentos com potencial de valorização
+										</span>
 									</li>
 									<li className="ms-0 mt-2">
 										<FiArrowRight className="fea icon-sm me-2 ms-0" />
-										Atendimento consultivo para investidor e comprador do
-										primeiro imóvel
+										<span itemProp="description">
+											Atendimento consultivo para investidor e comprador do
+											primeiro imóvel
+										</span>
 									</li>
 									<li className="ms-0 mt-2">
 										<FiArrowRight className="fea icon-sm me-2 ms-0" />
-										Suporte completo: estudo financeiro, crédito e documentação
+										<span itemProp="description">
+											Suporte completo: estudo financeiro, crédito e
+											documentação
+										</span>
 									</li>
 								</ul>
 
@@ -141,7 +304,12 @@ export default function AboutUs() {
 										target="_blank"
 										rel="noopener noreferrer"
 										className="btn btn-pills btn-primary"
+										itemProp="contactPoint"
+										itemScope
+										itemType="https://schema.org/ContactPoint"
 									>
+										<meta itemProp="contactType" content="customer service" />
+										<meta itemProp="telephone" content={`+${contact.phone}`} />
 										Fale com um consultor{" "}
 										<i className="mdi mdi-arrow-right align-middle"></i>
 									</Link>
@@ -182,11 +350,21 @@ export default function AboutUs() {
 					</div>
 				</div>
 
-				<div className="container mt-100 mt-60">
+				<div
+					className="container mt-100 mt-60"
+					itemScope
+					itemType="https://schema.org/Organization"
+				>
+					<meta itemProp="subOrganization" content="Equipe de Corretores" />
+
 					<Broker />
 				</div>
 
-				<div className="container mt-100 mt-60">
+				<div
+					className="container mt-100 mt-60"
+					itemScope
+					itemType="https://schema.org/Blog"
+				>
 					<Blog />
 				</div>
 

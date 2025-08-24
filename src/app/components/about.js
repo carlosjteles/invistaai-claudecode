@@ -25,7 +25,7 @@ const data = [
 	},
 ];
 
-export default function AboutUs() {
+export default function About() {
 	return (
 		<>
 			<div className="row justify-content-center">

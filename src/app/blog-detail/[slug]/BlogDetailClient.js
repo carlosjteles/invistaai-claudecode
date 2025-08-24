@@ -2,23 +2,21 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import Script from "next/script";
 
-import Error from "../../error/page";
-
-import Navbar from "../../components/navbar";
-import Footer from "../../components/footer";
-import ScrollTop from "../../components/scrollTop";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import ScrollTop from "../../components/ScrollTop";
 
 import { blogData as data } from "../../storage/data";
 
-import { formatDateISO } from "../../helper/formatter";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { formatDateISO, formatDateUS } from "../../helper/Formatter";
+import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
 import Swal from "sweetalert2";
 
-export default function BlogDetail(props) {
+export default function BlogDetailClient(props) {
 	const router = useRouter();
 
 	const [search, setSearch] = React.useState("");
@@ -27,10 +25,7 @@ export default function BlogDetail(props) {
 		return [...data]
 			.map((item) => ({
 				...item,
-				parsedDate: (() => {
-					const [day, month, year] = item.date.split("/").map(Number);
-					return new Date(year, month - 1, day);
-				})(),
+				parsedDate: (() => formatDateUS(item.date))(),
 			}))
 			.sort((a, b) => b.parsedDate - a.parsedDate)
 			.slice(0, 3)
@@ -55,7 +50,7 @@ export default function BlogDetail(props) {
 	);
 
 	if (!blogData) {
-		return <Error />;
+		notFound();
 	}
 
 	const handleSubmit = (e) => {
@@ -83,6 +78,7 @@ export default function BlogDetail(props) {
 		description: blogData.desc,
 		image: `${getBaseUrl()}${blogData.image}`,
 		datePublished: formatDateISO(blogData.date),
+		dateModified: formatDateISO(blogData.date), // Data de modificação
 		author: {
 			"@type": "Person",
 			name: blogData.author,
@@ -100,6 +96,34 @@ export default function BlogDetail(props) {
 			"@type": "WebPage",
 			"@id": `${getBaseUrl()}/blog/${blogData.slug}`,
 		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Início",
+					item: getBaseUrl(),
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Notícias",
+					item: `${getBaseUrl()}/blogs`,
+				},
+				{
+					"@type": "ListItem",
+					position: 3,
+					name: blogData.title,
+					item: `${getBaseUrl()}/blog/${blogData.slug}`,
+				},
+			],
+		},
+		// Extrair o conteúdo do texto para facilitar a indexação
+		articleBody: blogData.content
+			.filter((item) => item.type === "text")
+			.map((item) => item.value)
+			.join(" "),
 	};
 
 	return (
@@ -117,7 +141,7 @@ export default function BlogDetail(props) {
 			/>
 			<section
 				className="bg-half-170 d-table w-100"
-				style={{ backgroundImage: "url('/images/bg/02.jpg')" }}
+				style={{ backgroundImage: "url('/images/bg/blog-detail.webp')" }}
 			>
 				<div className="bg-overlay bg-gradient-overlay-2"></div>
 				<div className="container">
@@ -149,15 +173,48 @@ export default function BlogDetail(props) {
 					</div>
 					<div className="position-middle-bottom">
 						<nav aria-label="breadcrumb" className="d-block">
-							<ul className="breadcrumb breadcrumb-muted mb-0 p-0">
-								<li className="breadcrumb-item">
-									<Link href="/">Início</Link>
+							<ul
+								className="breadcrumb breadcrumb-muted mb-0 p-0"
+								itemScope
+								itemType="https://schema.org/BreadcrumbList"
+							>
+								<li
+									className="breadcrumb-item"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<Link href="/" itemProp="item">
+										<span itemProp="name">Início</span>
+									</Link>
+
+									<meta itemProp="position" content="1" />
 								</li>
-								<li className="breadcrumb-item">
-									<Link href="/blogs">Notícias</Link>
+								<li
+									className="breadcrumb-item"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<Link href="/blogs" itemProp="item">
+										<span itemProp="name">Notícias</span>
+									</Link>
+
+									<meta itemProp="position" content="2" />
 								</li>
-								<li className="breadcrumb-item active" aria-current="page">
-									{blogData.title}
+								<li
+									className="breadcrumb-item active"
+									aria-current="page"
+									itemProp="itemListElement"
+									itemScope
+									itemType="https://schema.org/ListItem"
+								>
+									<span itemProp="name">{blogData.title}</span>
+									<meta itemProp="position" content="3" />
+									<meta
+										itemProp="item"
+										content={`${getBaseUrl()}/blog/${blogData.slug}`}
+									/>
 								</li>
 							</ul>
 						</nav>
@@ -262,15 +319,48 @@ export default function BlogDetail(props) {
 								</div>
 							</article>
 
-							<div className="card shadow rounded-3 mt-4">
+							<div
+								className="card shadow rounded-3 mt-4"
+								itemScope
+								itemType="https://schema.org/ItemList"
+							>
+								<meta itemProp="name" content="Notícias Relacionadas" />
+								<meta itemProp="numberOfItems" content={relatedPosts.length} />
+
 								<div className="card-body">
 									<h5 className="card-title mb-0">Notícias Relacionadas :</h5>
 
 									<div className="row g-4 mt-0">
 										{relatedPosts.map((item, index) => {
 											return (
-												<div className="col-lg-6" key={index}>
-													<div className="card blog blog-primary shadow rounded-3 overflow-hidden border-0">
+												<div
+													className="col-lg-6"
+													key={index}
+													itemProp="itemListElement"
+													itemScope
+													itemType="https://schema.org/ListItem"
+												>
+													<meta itemProp="position" content={index + 1} />
+
+													<div
+														className="card blog blog-primary shadow rounded-3 overflow-hidden border-0"
+														itemScope
+														itemType="https://schema.org/BlogPosting"
+													>
+														<meta itemProp="headline" content={item.title} />
+														<meta itemProp="description" content={item.desc} />
+														<meta
+															itemProp="datePublished"
+															content={formatDateISO(item.date)}
+														/>
+														<meta
+															itemProp="url"
+															content={`${getBaseUrl()}/blog/${item.slug}`}
+														/>
+														{item.author && (
+															<meta itemProp="author" content={item.author} />
+														)}
+
 														<div className="card-img blog-image position-relative overflow-hidden rounded-0">
 															<div className="position-relative overflow-hidden">
 																<Image
@@ -281,6 +371,7 @@ export default function BlogDetail(props) {
 																	style={{ width: "100%", height: "auto" }}
 																	className="img-fluid"
 																	alt={item.title}
+																	itemProp="image"
 																/>
 																<div className="card-overlay"></div>
 															</div>
@@ -302,15 +393,22 @@ export default function BlogDetail(props) {
 																<Link
 																	href={`/blog/${item.slug}`}
 																	className="title fw-medium fs-5 text-dark"
+																	itemProp="url"
 																>
-																	{item.title}
+																	<span itemProp="headline">{item.title}</span>
 																</Link>
 
-																<p className="text-muted mt-2">{item.desc}</p>
+																<p
+																	className="text-muted mt-2"
+																	itemProp="description"
+																>
+																	{item.desc}
+																</p>
 
 																<Link
 																	href={`/blog/${item.slug}`}
 																	className="text-dark read-more"
+																	aria-label={`Ler mais sobre ${item.title}`}
 																>
 																	Leia Mais{" "}
 																	<i className="mdi mdi-chevron-right align-middle"></i>
@@ -334,27 +432,55 @@ export default function BlogDetail(props) {
 									</h6>
 
 									<div className="search-bar mt-4">
-										<div id="itemSearch" className="menu-search mb-0">
-											<form onSubmit={handleSubmit} className="searchform">
-												<input
-													type="text"
-													className="form-control rounded-3 border"
-													name="q"
-													value={search}
-													onChange={(e) => setSearch(e.target.value)}
-													id="searchItemSubmit"
-													placeholder="O que você está procurando?"
+										<div
+											id="itemSearch"
+											className="menu-search mb-0"
+											itemScope
+											itemType="https://schema.org/WebSite"
+										>
+											<meta itemProp="url" content={`${getBaseUrl()}/blogs`} />
+
+											<div
+												itemProp="potentialAction"
+												itemScope
+												itemType="https://schema.org/SearchAction"
+											>
+												<meta
+													itemProp="target"
+													content={`${getBaseUrl()}/blogs?q={search_term_string}`}
 												/>
-												<input
-													type="submit"
-													id="searchItemSubmit"
-													value="Buscar"
-												/>
-											</form>
+												<form onSubmit={handleSubmit} className="searchform">
+													<input
+														type="text"
+														className="form-control rounded-3 border"
+														name="q"
+														value={search}
+														onChange={(e) => setSearch(e.target.value)}
+														id="searchItemSubmit"
+														placeholder="O que você está procurando?"
+														itemProp="query-input"
+														aria-label="Buscar no blog"
+														required
+													/>
+													<input
+														type="submit"
+														id="searchItemSubmit"
+														value="Buscar"
+														aria-label="Executar busca"
+													/>
+												</form>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div className="mt-4 pt-2">
+								<div
+									className="mt-4 pt-2"
+									itemScope
+									itemType="https://schema.org/ItemList"
+								>
+									<meta itemProp="name" content="Notícias Recentes" />
+									<meta itemProp="numberOfItems" content={recentData.length} />
+
 									<h6 className="pt-2 pb-2 bg-light rounded-3 text-center">
 										Notícias Recentes
 									</h6>
@@ -364,25 +490,47 @@ export default function BlogDetail(props) {
 												<div
 													className="blog blog-primary d-flex align-items-center mt-3"
 													key={index}
+													itemProp="itemListElement"
+													itemScope
+													itemType="https://schema.org/ListItem"
 												>
-													<Image
-														src={item.image}
-														width={105}
-														height={65}
-														className="avatar avatar-small rounded-3"
-														style={{ width: "auto" }}
-														alt={item.title}
-													/>
-													<div className="flex-1 ms-3">
-														<Link
-															href={`/blog/${item.slug}`}
-															className="d-block title text-dark fw-medium"
-														>
-															{item.title}
-														</Link>
-														<span className="text-muted small">
-															{item.date}
-														</span>
+													<meta itemProp="position" content={index + 1} />
+
+													<div
+														itemScope
+														itemType="https://schema.org/BlogPosting"
+													>
+														<meta itemProp="headline" content={item.title} />
+														<meta
+															itemProp="datePublished"
+															content={formatDateISO(item.date)}
+														/>
+														<meta
+															itemProp="url"
+															content={`${getBaseUrl()}/blog/${item.slug}`}
+														/>
+
+														<Image
+															src={item.image}
+															width={105}
+															height={65}
+															className="avatar avatar-small rounded-3"
+															style={{ width: "auto" }}
+															alt={item.title}
+															itemProp="image"
+														/>
+														<div className="flex-1 ms-3">
+															<Link
+																href={`/blog/${item.slug}`}
+																className="d-block title text-dark fw-medium"
+																itemProp="url"
+															>
+																<span itemProp="headline">{item.title}</span>
+															</Link>
+															<span className="text-muted small">
+																{item.date}
+															</span>
+														</div>
 													</div>
 												</div>
 											);
@@ -390,16 +538,32 @@ export default function BlogDetail(props) {
 									</div>
 								</div>
 
-								<div className="mt-4 pt-2 text-center">
+								<div
+									className="mt-4 pt-2 text-center"
+									itemScope
+									itemType="https://schema.org/ItemList"
+								>
+									<meta itemProp="name" content="Assuntos" />
+									<meta itemProp="numberOfItems" content={tags.length} />
+
 									<h6 className="pt-2 pb-2 bg-light rounded-3">Assuntos</h6>
 									<ul className="tagcloud list-unstyled mt-4">
 										{tags.map((tag, index) => (
-											<li className="list-inline-item m-1" key={index}>
+											<li
+												className="list-inline-item m-1"
+												key={index}
+												itemProp="itemListElement"
+												itemScope
+												itemType="https://schema.org/ListItem"
+											>
+												<meta itemProp="position" content={index + 1} />
+
 												<Link
 													href={`/blogs?tag=${encodeURIComponent(tag)}`}
 													className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
+													itemProp="url"
 												>
-													{tag}
+													<span itemProp="name">{tag}</span>
 												</Link>
 											</li>
 										))}

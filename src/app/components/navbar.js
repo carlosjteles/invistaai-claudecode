@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { FiSearch } from "../assets/icons/vander";
 
 import Swal from "sweetalert2";
+import { getBaseUrl, getSiteName } from "../helper/Utils";
 
 export default function Navbar({
 	navClass,
@@ -177,24 +178,40 @@ export default function Navbar({
 			<header
 				id="topnav"
 				className={`${scroll ? "nav-sticky" : ""} ${navClass}`}
+				role="navigation"
+				aria-label="Navegação principal"
 			>
-				<div className="container">
+				<div
+					className="container"
+					itemScope
+					itemType="https://schema.org/WPHeader"
+				>
 					{logolight === true ? (
-						<Link className="logo" href="/">
+						<Link
+							className="logo"
+							href="/"
+							itemScope
+							itemType="https://schema.org/Organization"
+						>
+							<meta itemProp="name" content={getSiteName()} />
+							<meta itemProp="url" content={getBaseUrl()} />
+
 							<span className="logo-light-mode">
 								<Image
 									src="/images/logo-dark.png"
 									width={132}
 									height={32}
 									className="l-dark"
-									alt="Logo escuro"
+									alt={`Logo escuro ${getSiteName()}`}
+									itemProp="logo"
 								/>
 								<Image
 									src="/images/logo-light.png"
 									width={132}
 									height={32}
 									className="l-light"
-									alt="Logo claro"
+									alt={`Logo claro ${getSiteName()}`}
+									itemProp="logo"
 								/>
 							</span>
 							<Image
@@ -202,24 +219,35 @@ export default function Navbar({
 								width={132}
 								height={32}
 								className="logo-dark-mode"
-								alt="Logo escuro 2"
+								alt={`Logo escuro 2 ${getSiteName()}`}
+								itemProp="logo"
 							/>
 						</Link>
 					) : (
-						<Link className="logo" href="/">
+						<Link
+							className="logo"
+							href="/"
+							itemScope
+							itemType="https://schema.org/Organization"
+						>
+							<meta itemProp="name" content={getSiteName()} />
+							<meta itemProp="url" content={getBaseUrl()} />
+
 							<Image
 								src="/images/logo-dark.png"
 								width={132}
 								height={32}
 								className="logo-light-mode"
-								alt="Logo claro"
+								alt={`Logo claro ${getSiteName()}`}
+								itemProp="logo"
 							/>
 							<Image
 								src="/images/logo-light.png"
 								width={132}
 								height={32}
 								className="logo-dark-mode"
-								alt="Logo escuro"
+								alt={`Logo escuro ${getSiteName()}`}
+								itemProp="logo"
 							/>
 						</Link>
 					)}
@@ -231,6 +259,8 @@ export default function Navbar({
 								className={`navbar-toggle ${isMenu ? "open" : ""}`}
 								id="isToggle"
 								onClick={() => toggleMenu()}
+								aria-label="Alternar menu de navegação"
+								aria-expanded={isMenu}
 							>
 								<div className="lines">
 									<span></span>
@@ -248,6 +278,8 @@ export default function Navbar({
 									type="button"
 									className="dropdown-toggle btn btn-sm btn-icon btn-pills btn-primary"
 									onClick={() => setModal(!modal)}
+									aria-label="Abrir pesquisa"
+									aria-expanded={modal}
 								>
 									<FiSearch className="icons" />
 								</button>
@@ -257,8 +289,25 @@ export default function Navbar({
 									} dropdown-menu dd-menu dropdown-menu-start bg-white rounded-3 border-0 mt-3 p-0 right-0`}
 									style={{ width: "240px", right: "0" }}
 								>
-									<div className="search-bar">
-										<div id="itemSearch" className="menu-search mb-0">
+									<div
+										className="search-bar"
+										itemScope
+										itemType="https://schema.org/WebSite"
+									>
+										<meta itemProp="url" content={getBaseUrl()} />
+
+										<div
+											id="itemSearch"
+											className="menu-search mb-0"
+											itemProp="potentialAction"
+											itemScope
+											itemType="https://schema.org/SearchAction"
+										>
+											<meta
+												itemProp="target"
+												content={`${getBaseUrl()}/imoveis?q={search_term_string}`}
+											/>
+
 											<form onSubmit={handleSubmit} className="searchform">
 												<input
 													type="text"
@@ -267,8 +316,14 @@ export default function Navbar({
 													value={search}
 													onChange={(e) => setSearch(e.target.value)}
 													placeholder="Procurar..."
+													itemProp="query-input"
+													aria-label="Pesquisar imóveis"
 												/>
-												<input type="submit" value="Procurar" />
+												<input
+													type="submit"
+													value="Procurar"
+													aria-label="Executar pesquisa"
+												/>
 											</form>
 										</div>
 									</div>
@@ -277,35 +332,44 @@ export default function Navbar({
 						</li>
 					</ul>
 
-					<div id="navigation" style={{ display: isMenu ? "block" : "none" }}>
+					<div
+						id="navigation"
+						style={{ display: isMenu ? "block" : "none" }}
+						itemScope
+						itemType="https://schema.org/SiteNavigationElement"
+					>
 						<ul className={menuClass}>
 							<li>
-								<Link href="/" className="sub-menu-item">
-									Home
+								<Link href="/" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Home</span>
 								</Link>
 							</li>
 
 							<li>
-								<Link href="/imoveis" className="sub-menu-item">
-									Venda
+								<Link href="/imoveis" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Venda</span>
 								</Link>
 							</li>
 
 							<li>
-								<Link href="/lancamentos" className="sub-menu-item">
-									Lançamentos
+								<Link
+									href="/lancamentos"
+									className="sub-menu-item"
+									itemProp="url"
+								>
+									<span itemProp="name">Lançamentos</span>
 								</Link>
 							</li>
 
 							<li>
-								<Link href="/blogs" className="sub-menu-item">
-									Notícias
+								<Link href="/blogs" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Notícias</span>
 								</Link>
 							</li>
 
 							<li>
-								<Link href="/contato" className="sub-menu-item">
-									Contato
+								<Link href="/contato" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Contato</span>
 								</Link>
 							</li>
 						</ul>

@@ -9,13 +9,13 @@ const data = [
 		image: "/images/workers/01.webp",
 		name: "Carlos de Jesus",
 		title: "Consultor Imobiliário",
-		social: null,
+		social: null, // ex {facebook: 'url', instagram: 'url', twitter: 'url'}
 	},
 	{
 		image: "/images/workers/02.webp",
 		name: "Andressa Soares",
 		title: "Consultora Imobiliária",
-		social: null,
+		social: null, // ex {facebook: 'url', instagram: 'url', twitter: 'url'}
 	},
 ];
 
