@@ -1,15 +1,101 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
+// localhost (SQLite):
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+// Para produção (PostgreSQL):
+//datasource db {
+//  provider = "postgresql"
+//  url      = env("DATABASE_URL")
+//}
+
+model Blog {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  thumb        String
+  image        String
+  tag          String
+  author       String
+  title        String
+  description  String
+  keywords     String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relationship with BlogContent
+  content      BlogContent[]
+}
+
+model BlogContent {
+  id      Int    @id @default(autoincrement())
+  type    String // availables 'text', 'quote', 'link'
+  value   String
+  author  String?
+  href    String?
+  
+  // Relationship with Blog
+  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId  Int
+  order   Int 
+}
+
+model Property {
+  id                Int      @id @default(autoincrement())
+  slug              String   @unique
+  address           String
+  neighborhood      String
+  bedroom           Int[]
+  suite             Int[]
+  parking           Int[]
+  min_area          Float
+  price             Float
+  rating            Float?
+  quantity_reviews  Int?
+  category          Int
+  delivery_in       String
+  book              String?
+  description       String[]
+  description_embed String?
+  preview           Json
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt  
+
+  // Relationship with PropertyImage and PropertySeo
+  images            PropertyImage[]
+  seo               PropertySeo?
+}
+
+model PropertySeo {
+  id           Int     @id @default(autoincrement())
+  title        String
+  description  String
+  keywords     String[]
+  city         String
+  state        String
+  zip          String
+  street       String
+  
+  // Relationship with Property
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId   Int      @unique
+}
+
+model PropertyImage {
+  id          Int      @id @default(autoincrement())
+  src         String
+  alt         String?
+  
+  // Relationship with Property
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  Int
+  order       Int
 }
