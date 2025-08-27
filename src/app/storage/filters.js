@@ -37,7 +37,6 @@ export const prices = [
 	{ value: "10000000", label: "R$ 10.000.000,00" },
 ];
 
-// Consegue mudar de posição o "Em construção com o Lançamento", pra ficar na ordem cronológica.
 export const categories = [
 	{
 		id: 1,

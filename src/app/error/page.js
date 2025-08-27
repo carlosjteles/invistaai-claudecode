@@ -45,14 +45,20 @@ export default function Error() {
 								</div>
 							</div>
 							<div className="text-center">
-								<p className="mb-0 text-muted">
+								<p className="mb-0 text-muted d-flex justify-content-center align-items-end gap-2">
 									© {new Date().getFullYear()} {getSiteName()}. Desenvolvido por{" "}
 									<Link
 										href="https://www.damcdeveloper.com/"
 										target="_blank"
 										className="text-reset"
+										aria-label="Desenvolvido por DAMC"
 									>
-										DAMC
+										<img
+											src="/images/damc.png"
+											alt="DAMC Developer"
+											className="img-fluid"
+											style={{ maxHeight: "30px" }}
+										/>
 									</Link>
 									.
 								</p>

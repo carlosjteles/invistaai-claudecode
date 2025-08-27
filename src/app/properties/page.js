@@ -1,6 +1,12 @@
 import PropertiesClient from "./PropertiesClient";
 
+import prisma from "../../db/prisma";
+
 import { getBaseUrl, getSiteName } from "../helper/Utils";
+
+import { categories } from "../storage/filters";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
 	title: `Imóveis à Venda em São Paulo | ${getSiteName()}`,
@@ -52,6 +58,136 @@ export const metadata = {
 	},
 };
 
-export default function Properties(props) {
-	return <PropertiesClient {...props} />;
+export default async function Properties({ searchParams, params }) {
+	/** Set category manually for "lancamentos" or param */
+	const pathname = params?.pathname || "";
+	let category = Number(searchParams.categoria || 0);
+
+	if (pathname && pathname.includes("lancamentos")) {
+		const release = categories.find((item) => item.label === "Lançamento");
+		category = Number(release.id);
+	}
+
+	/** Set pagination parameters */
+	const page = Number(searchParams.page) || 1;
+	const itemsPerPage = 8;
+
+	/** Set filter parameters */
+	const searchTerm = searchParams.q || "";
+	const bedroom = searchParams.quartos || "all";
+	const parking = searchParams.vagas || "all";
+	const suite = searchParams.suites || "all";
+
+	/** Set filters prisma */
+	const filterWhere = {};
+	const filterAnd = [];
+
+	if (searchTerm) {
+		filterAnd.push({
+			OR: [
+				{ address: { contains: searchTerm, mode: "insensitive" } },
+				{ neighborhood: { contains: searchTerm, mode: "insensitive" } },
+			],
+		});
+	}
+
+	if (category !== 0) {
+		filterAnd.push({ category });
+	}
+
+	if (bedroom !== "all") {
+		if (bedroom === "Studio") {
+			filterAnd.push({
+				bedroom: {
+					array_contains: "Studio",
+				},
+			});
+		} else if (bedroom.includes("4+")) {
+			filterAnd.push({
+				OR: Array.from({ length: 20 }, (_, i) => i + 4).map((num) => ({
+					bedroom: { array_contains: num },
+				})),
+			});
+		} else {
+			const numBedrooms = parseInt(bedroom.match(/\d+/)[0]);
+			filterAnd.push({
+				bedroom: {
+					array_contains: numBedrooms,
+				},
+			});
+		}
+	}
+
+	if (suite !== "all") {
+		if (suite.includes("4+")) {
+			filterAnd.push({
+				suite: {
+					hasSome: [
+						4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+					],
+				},
+			});
+		} else {
+			const numSuites = parseInt(suite.match(/\d+/)[0]);
+			filterAnd.push({
+				suite: {
+					has: numSuites,
+				},
+			});
+		}
+	}
+
+	if (parking !== "all") {
+		if (parking.includes("4+")) {
+			filterAnd.push({
+				parking: {
+					hasSome: [
+						4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+					],
+				},
+			});
+		} else {
+			const numParking = parseInt(parking.match(/\d+/)[0]);
+			filterAnd.push({
+				parking: {
+					has: numParking,
+				},
+			});
+		}
+	}
+
+	if (filterAnd.length > 0) {
+		filterWhere.AND = filterAnd;
+	}
+
+	const properties = await prisma.property.findMany({
+		where: { ...filterWhere, images: { some: {} } },
+		include: {
+			images: {
+				where: {
+					thumbnail: true,
+				},
+				take: 1,
+			},
+		},
+		orderBy: {
+			id: "desc",
+		},
+		skip: (page - 1) * itemsPerPage,
+		take: itemsPerPage,
+	});
+
+	/** Total pages */
+	const totalCount = await prisma.property.count({ where: filterWhere });
+	const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+	return (
+		<PropertiesClient
+			initialCategory={category}
+			initialProperties={properties}
+			totalPages={totalPages}
+			totalCount={totalCount}
+			currentPage={page}
+		/>
+	);
 }

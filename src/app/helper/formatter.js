@@ -22,7 +22,7 @@ export const formatDateUS = (value) => {
 };
 
 export const formatDateISO = (value) => {
-	return formatDateUS(value).toISOString();
+	return new Date(value).toISOString();
 };
 
 export const formatBathrooms = (value) => {

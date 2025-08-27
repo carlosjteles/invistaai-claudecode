@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Pagination({
 	currentPage,
 	setCurrentPage,
@@ -11,6 +13,8 @@ export default function Pagination({
 
 		event.currentTarget.blur();
 	};
+
+	if (totalPages <= 1) return null;
 
 	return (
 		<div className="row">
@@ -27,19 +31,54 @@ export default function Pagination({
 							</span>
 						</button>
 					</li>
-					{Array.from({ length: totalPages }, (_, i) => (
-						<li
-							key={i}
-							className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-						>
-							<button
-								className="page-link"
-								onClick={(event) => handlePageChange(event, i + 1)}
-							>
-								{i + 1}
-							</button>
-						</li>
-					))}
+
+					{Array.from({ length: totalPages }, (_, i) => i + 1)
+						.filter(
+							(pageNum) =>
+								pageNum === 1 ||
+								pageNum === totalPages ||
+								Math.abs(pageNum - currentPage) <= 1
+						)
+						.map((pageNum, i, array) => {
+							if (i > 0 && array[i] - array[i - 1] > 1) {
+								return (
+									<React.Fragment key={`ellipsis-${pageNum}`}>
+										<li className="page-item disabled">
+											<span className="page-link">...</span>
+										</li>
+										<li
+											className={`page-item ${
+												currentPage === pageNum ? "active" : ""
+											}`}
+										>
+											<button
+												className="page-link"
+												onClick={(event) => handlePageChange(event, pageNum)}
+											>
+												{pageNum}
+											</button>
+										</li>
+									</React.Fragment>
+								);
+							}
+
+							return (
+								<li
+									key={pageNum}
+									className={`page-item ${
+										currentPage === pageNum ? "active" : ""
+									}`}
+								>
+									<button
+										className="page-link"
+										onClick={(event) => handlePageChange(event, pageNum)}
+									>
+										{pageNum}
+									</button>
+								</li>
+							);
+						})}
+
 					<li
 						className={`page-item ${
 							currentPage === totalPages ? "disabled" : ""

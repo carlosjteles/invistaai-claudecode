@@ -2,12 +2,28 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { categories } from "../storage/filters";
-import { propertyData } from "../storage/data";
 
-export default function Categories() {
+import prisma from "../../db/prisma";
+
+export default async function Categories() {
+	const categoryCountsArray = await prisma.property.groupBy({
+		by: ["category"],
+		where: {
+			images: {
+				some: {},
+			},
+		},
+		_count: {
+			_all: true,
+		},
+	});
+
+	const countByCategory = Object.fromEntries(
+		categoryCountsArray.map((item) => [item.category, item._count._all])
+	);
+
 	const CategoryListing = (id) => {
-		const count = propertyData.filter((p) => p.category === id).length;
-		return `${count} imóveis disponíveis`;
+		return `${countByCategory[id] || 0} imóveis disponíveis`;
 	};
 
 	return (

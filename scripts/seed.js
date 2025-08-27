@@ -1,19 +1,21 @@
-const { PrismaClient } = require("@prisma/client");
-const { blogData, propertyData } = require("../src/app/storage/data");
+const { PrismaClient } = require("../src/generated/prisma/index.js");
 
-const prisma = new PrismaClient();
+const blogData = require("./blog/data.js");
+const propertyData = require("./properties/data.js");
 
 async function main() {
+	await prisma.blog.deleteMany();
+
 	for (const blog of blogData) {
 		await prisma.blog.create({
 			data: {
 				slug: blog.slug,
+				thumbnail: blog.image,
 				image: blog.image,
 				tag: blog.tag,
 				author: blog.author,
 				title: blog.title,
-				desc: blog.desc,
-				date: blog.date,
+				description: blog.desc,
 				keywords: blog.keywords || [],
 				content: {
 					create: blog.content.map((item, index) => ({
@@ -28,11 +30,12 @@ async function main() {
 		});
 	}
 
+	await prisma.property.deleteMany();
+
 	for (const property of propertyData) {
 		await prisma.property.create({
 			data: {
 				slug: property.slug,
-				image: property.image,
 				address: property.address,
 				neighborhood: property.neighborhood,
 				bedroom: property.bedroom,
@@ -60,17 +63,26 @@ async function main() {
 					},
 				},
 				images: {
-					create: property.images.map((img, index) => ({
+					create: [
+						{
+							src: property.image,
+							title: "Imagem de capa",
+							thumbnail: true,
+						},
+						...property.images,
+					].map((img, index) => ({
 						src: img.src,
-						title: img.title,
 						alt: img.title,
 						order: index,
+						thumbnail: img.thumbnail || false,
 					})),
 				},
 			},
 		});
 	}
 }
+
+const prisma = new PrismaClient();
 
 main()
 	.catch((e) => {

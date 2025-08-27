@@ -226,15 +226,21 @@ export default function Footer({ showImage = false }) {
 						<div className="row">
 							<div className="col">
 								<div className="text-center">
-									<p className="mb-0">
+									<p className="mb-0 d-flex justify-content-center align-items-end gap-2">
 										© {new Date().getFullYear()} {getSiteName()}. Desenvolvido
 										por{" "}
 										<Link
 											href="https://www.damcdeveloper.com/"
 											target="_blank"
 											className="text-reset"
+											aria-label="Desenvolvido por DAMC"
 										>
-											DAMC
+											<img
+												src="/images/damc.png"
+												alt="DAMC Developer"
+												className="img-fluid"
+												style={{ maxHeight: "30px" }}
+											/>
 										</Link>
 										.
 									</p>

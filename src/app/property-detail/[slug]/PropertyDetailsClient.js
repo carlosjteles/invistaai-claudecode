@@ -1,56 +1,44 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { notFound, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 
-import { categories } from "../../storage/filters";
 import PropertyDetailImg from "../../components/PropertyDetailImg";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 import RelatedPropertySlider from "../../components/RelatedPropertySlider";
+import FinancingSimulation from "../../components/FinancingSimulation";
 
-import { propertyData as data } from "../../storage/data";
+import { categories } from "../../storage/filters";
 import { contact } from "../../storage/about";
 
 import { formatPrice } from "../../helper/Formatter";
 import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
-export default function PropertyDetailsClient(props) {
+export default function PropertyDetailsClient({
+	propertyData,
+	relatedProperties,
+}) {
 	const searchParams = useSearchParams();
 	const openGallery = searchParams.get("openGallery");
-
-	const propertyData = data.find((item) => item.slug === props.params.slug);
-
-	if (!propertyData) {
-		notFound();
-	}
 
 	const whatsappMessage = (property) => {
 		const text = `Olá, quero agendar uma visita para o imóvel ${property} que vi no site.`;
 		return `https://wa.me/${contact.phone}?text=${encodeURIComponent(text)}`;
 	};
 
-	const relatedProperties = React.useMemo(() => {
-		return data.filter((item) => {
-			return (
-				item.slug !== propertyData.slug &&
-				item.neighborhood === propertyData.neighborhood &&
-				item.price >= propertyData.price * 0.8 &&
-				item.price <= propertyData.price * 1.2
-			);
-		});
-	}, [propertyData]);
-
 	const propertySchema = {
 		"@context": "https://schema.org",
 		"@type": "RealEstateListing",
 		name: propertyData.address,
 		description: propertyData.description
-			? propertyData.description.join(" ")
+			? Array.isArray(propertyData.description)
+				? propertyData.description.join(" ")
+				: propertyData.description
 			: "",
-		image: propertyData.images.map((img) => `${getBaseUrl()}${img.src}`),
+		image: propertyData.images?.map((img) => `${getBaseUrl()}${img.src}`) || [],
 		url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 		address: {
 			"@type": "PostalAddress",
@@ -66,8 +54,12 @@ export default function PropertyDetailsClient(props) {
 			priceCurrency: "BRL",
 			availability: "https://schema.org/InStock",
 		},
-		numberOfRooms: Math.min(...propertyData.bedroom),
-		numberOfBathroomsTotal: Math.min(...propertyData.suite),
+		numberOfRooms: Array.isArray(propertyData.bedroom)
+			? Math.min(...propertyData.bedroom.filter((v) => typeof v === "number"))
+			: propertyData.bedroom,
+		numberOfBathroomsTotal: Array.isArray(propertyData.suite)
+			? Math.min(...propertyData.suite)
+			: propertyData.suite,
 		floorSize: {
 			"@type": "QuantitativeValue",
 			value: propertyData.min_area,
@@ -78,17 +70,23 @@ export default function PropertyDetailsClient(props) {
 			{
 				"@type": "LocationFeatureSpecification",
 				name: "Quartos",
-				value: Math.min(...propertyData.bedroom),
+				value: Array.isArray(propertyData.bedroom)
+					? Math.min(
+							...propertyData.bedroom.filter((v) => typeof v === "number")
+					  )
+					: propertyData.bedroom,
 			},
 			{
 				"@type": "LocationFeatureSpecification",
 				name: "Suítes",
-				value: Math.min(...propertyData.suite),
+				value: Array.isArray(propertyData.suite)
+					? Math.min(...propertyData.suite)
+					: propertyData.suite,
 			},
 			{
 				"@type": "LocationFeatureSpecification",
 				name: "Vagas de Garagem",
-				value: Math.min(...propertyData.preview.parking),
+				value: propertyData.preview?.parking,
 			},
 		],
 		broker: {
@@ -203,13 +201,19 @@ export default function PropertyDetailsClient(props) {
 									itemProp="description"
 									content={
 										propertyData.description
-											? propertyData.description.join(" ")
+											? Array.isArray(propertyData.description)
+												? propertyData.description.join(" ")
+												: propertyData.description
 											: ""
 									}
 								/>
 								<meta
 									itemProp="image"
-									content={`${getBaseUrl()}${propertyData.image}`}
+									content={
+										propertyData.images?.[0]
+											? `${getBaseUrl()}${propertyData.images[0].src}`
+											: ""
+									}
 								/>
 
 								<h4 className="title mb-0">{propertyData.address}</h4>
@@ -226,7 +230,7 @@ export default function PropertyDetailsClient(props) {
 											>
 												<meta itemProp="name" content="Área" />
 												<span itemProp="value">
-													{propertyData.preview.area}
+													{propertyData.preview?.area}
 												</span>
 											</span>
 										</span>
@@ -243,7 +247,7 @@ export default function PropertyDetailsClient(props) {
 											>
 												<meta itemProp="name" content="Quartos" />
 												<span itemProp="value">
-													{propertyData.preview.bedroom}
+													{propertyData.preview?.bedroom}
 												</span>
 											</span>
 										</span>
@@ -260,7 +264,7 @@ export default function PropertyDetailsClient(props) {
 											>
 												<meta itemProp="name" content="Suítes" />
 												<span itemProp="value">
-													{propertyData.preview.suite}
+													{propertyData.preview?.suite}
 												</span>
 											</span>
 										</span>
@@ -277,7 +281,7 @@ export default function PropertyDetailsClient(props) {
 											>
 												<meta itemProp="name" content="Vagas" />
 												<span itemProp="value">
-													{propertyData.preview.parking}
+													{propertyData.preview?.parking}
 												</span>
 											</span>
 										</span>
@@ -285,10 +289,14 @@ export default function PropertyDetailsClient(props) {
 								</ul>
 
 								{propertyData.description &&
-									propertyData.description.map((desc, index) => (
-										<p key={index} className="text-muted">
-											{desc}
-										</p>
+									(Array.isArray(propertyData.description) ? (
+										propertyData.description.map((desc, index) => (
+											<p key={index} className="text-muted">
+												{desc}
+											</p>
+										))
+									) : (
+										<p className="text-muted">{propertyData.description}</p>
 									))}
 
 								{propertyData.description_embed && (
@@ -336,17 +344,23 @@ export default function PropertyDetailsClient(props) {
 								</div>
 
 								<div>
-									<div className="d-flex align-items-center justify-content-between mt-2">
-										<span className="small text-muted">Preço por m²</span>
-										<span className="small">
-											{formatPrice(propertyData.price / propertyData.min_area)}
-										</span>
-									</div>
+									{propertyData.price && propertyData.min_area && (
+										<div className="d-flex align-items-center justify-content-between mt-2">
+											<span className="small text-muted">Preço por m²</span>
+											<span className="small">
+												{formatPrice(
+													propertyData.price / propertyData.min_area
+												)}
+											</span>
+										</div>
+									)}
 
-									<div className="d-flex align-items-center justify-content-between mt-2">
-										<span className="small text-muted">Entrega</span>
-										<span className="small">{propertyData.delivery_in}</span>
-									</div>
+									{propertyData.delivery_in && (
+										<div className="d-flex align-items-center justify-content-between mt-2">
+											<span className="small text-muted">Entrega</span>
+											<span className="small">{propertyData.delivery_in}</span>
+										</div>
+									)}
 								</div>
 
 								<div className="d-flex mt-3">
@@ -361,6 +375,8 @@ export default function PropertyDetailsClient(props) {
 										Agendar Agora
 									</Link>
 								</div>
+
+								<FinancingSimulation />
 							</div>
 						</div>
 					</div>

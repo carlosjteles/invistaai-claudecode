@@ -1,0 +1,1157 @@
+"use client";
+import React, { useState } from "react";
+
+export default function FinancingSimulation() {
+	const [currentStep, setCurrentStep] = useState(1);
+	const [loading, setLoading] = useState(false);
+	const [formData, setFormData] = useState({
+		renda: "",
+		compor: "",
+		comporValor: "",
+		filhos: "",
+		fgts: "",
+		fgtsValor: "",
+		comporFgts: "",
+		comporFgtsValor: "",
+		ocupacao: [],
+		ocupacao2: [],
+		nome: "",
+		numero: "",
+		email: "",
+	});
+	const [resultData, setResultData] = useState(null);
+
+	// Tabela de valores do cálculo de financiamento
+	const tableOfValues = {
+		1700.0: [101211.0, 493.0, 55000.0, 16500.0],
+		1800.0: [107612.0, 523.0, 52097.0, 15629.0],
+		1900.0: [114012.0, 553.0, 46491.0, 13947.0],
+		2000.0: [121085.0, 583.0, 41266.0, 12380.0],
+		2100.0: [127521.0, 613.0, 36415.0, 10924.0],
+		2200.0: [129683.0, 643.0, 32192.0, 9657.0],
+		2300.0: [135914.0, 673.0, 28037.0, 8411.0],
+		2400.0: [142145.0, 703.0, 24227.0, 7268.0],
+		2500.0: [148377.0, 733.0, 20752.0, 6225.0],
+		2600.0: [154608.0, 763.0, 17604.0, 5281.0],
+		2700.0: [160839.0, 793.0, 14774.0, 4432.0],
+		2800.0: [167070.0, 823.0, 12254.0, 3676.0],
+		2900.0: [157806.0, 853.0, 10253.0, 3076.0],
+		3000.0: [163655.0, 883.0, 8290.0, 2487.0],
+		3100.0: [169505.0, 913.0, 6612.0, 1983.0],
+		3200.0: [174469.0, 943.0, 5212.0, 1563.0],
+		3300.0: [180289.0, 973.0, 4080.0, 1224.0],
+		3400.0: [186109.0, 1003.0, 3208.0, 962.0],
+		3500.0: [191929.0, 1033.0, 2589.0, 776.0],
+		3600.0: [186078.0, 1063.0, 2271.0, 681.0],
+		3700.0: [191555.0, 1093.0, 2129.0, 638.0],
+		3800.0: [197031.0, 1123.0, 2105.0, 631.0],
+		3900.0: [202507.0, 1153.0, 2099.0, 629.0],
+		4000.0: [207984.0, 1183.0, 2099.0, 629.0],
+		4100.0: [190155.0, 1213.0, 2142.0, 642.0],
+		4200.0: [195034.0, 1243.0, 2121.0, 636.0],
+		4300.0: [199912.0, 1273.0, 2100.0, 630.0],
+		4400.0: [204790.0, 1303.0, 2099.0, 629.0],
+		4500.0: [209669.0, 1333.0, 2099.0, 629.0],
+		4600.0: [187761.0, 1357.0, 0.0, 0.0],
+		12000.0: [400000.0, 3542.0, 0.0, 0.0],
+	};
+
+	const handleInputChange = (e) => {
+		if (e.target.value.startsWith("0") && e.target.value.length > 1) {
+			e.target.value = e.target.value.slice(1);
+		}
+
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
+
+	const handleOptionSelect = (name, value) => {
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+
+		if (name === "compor") {
+			if (value === "sim") {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					comporValor: prev.comporValor || "",
+				}));
+			} else {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					comporValor: "",
+					comporFgts: "",
+					comporFgtsValor: "",
+				}));
+			}
+		}
+
+		if (name === "fgts") {
+			if (value === "sim") {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					fgtsValor: prev.fgtsValor || "",
+				}));
+			} else {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					fgtsValor: "",
+				}));
+			}
+		}
+
+		if (name === "comporFgts") {
+			if (value === "sim") {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					comporFgtsValor: prev.comporFgtsValor || "",
+				}));
+			} else {
+				setFormData((prev) => ({
+					...prev,
+					[name]: value,
+					comporFgtsValor: "",
+				}));
+			}
+		}
+	};
+
+	const formatToBrl = (e) => {
+		if (e.target.value === "0") {
+			e.target.value = "";
+		}
+
+		let value = e.target.value.replace(/\D/g, "");
+		let formattedValue = "";
+
+		if (value.length > 2) {
+			formattedValue =
+				value.slice(0, value.length - 2) + "," + value.slice(value.length - 2);
+		} else if (value.length === 2) {
+			formattedValue = "0," + value;
+		} else if (value.length === 1) {
+			formattedValue = "0,0" + value;
+		} else {
+			formattedValue = "0,00";
+		}
+
+		formattedValue =
+			"R$ " + formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+		const { name } = e.target;
+		setFormData({
+			...formData,
+			[name]: formattedValue,
+		});
+	};
+
+	const formatPhone = (e) => {
+		let value = e.target.value.replace(/\D/g, "");
+
+		if (value.length > 11) {
+			value = value.slice(0, 11);
+		}
+
+		if (value.length >= 11) {
+			value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+		} else if (value.length >= 10) {
+			value = value.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+		} else if (value.length >= 6) {
+			value = value.replace(/^(\d{2})(\d{4})/, "($1) $2-");
+		} else if (value.length >= 2) {
+			value = value.replace(/^(\d{2})/, "($1) ");
+		}
+
+		setFormData({
+			...formData,
+			numero: value,
+		});
+	};
+
+	const formatCurrency = (number) => {
+		if (isNaN(number)) return "R$ 0,00";
+		return `R$ ${number
+			.toFixed(2)
+			.replace(".", ",")
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+	};
+
+	const parseNumber = (str) => {
+		if (!str) return 0;
+		return parseFloat(
+			str.replace(/\./g, "").replace(",", ".").replace("R$", "").trim()
+		);
+	};
+
+	const onlyNumbers = (e) => {
+		if (!/^\d*$/.test(e.target.value)) {
+			e.target.value = e.target.value.replace(/\D/g, "");
+		}
+	};
+
+	// Validações e navegação entre etapas
+	const validateStep1 = () => {
+		if (!formData.renda) {
+			alert("Por favor, informe sua renda mensal.");
+			return false;
+		}
+
+		if (!formData.compor) {
+			alert("Por favor, selecione se vai juntar renda com alguém.");
+			return false;
+		}
+
+		if (formData.compor === "sim" && !formData.comporValor) {
+			alert("Por favor, informe a renda da outra pessoa.");
+			return false;
+		}
+
+		if (!formData.filhos) {
+			alert("Por favor, selecione se possui dependentes.");
+			return false;
+		}
+
+		return true;
+	};
+
+	const validateStep2 = () => {
+		if (!formData.fgts) {
+			alert("Por favor, selecione se possui FGTS.");
+			return false;
+		}
+
+		if (formData.fgts === "sim" && !formData.fgtsValor) {
+			alert("Por favor, informe o valor do FGTS.");
+			return false;
+		}
+
+		if (formData.compor === "sim") {
+			if (!formData.comporFgts) {
+				alert("Por favor, selecione se a outra pessoa possui FGTS.");
+				return false;
+			}
+
+			if (formData.comporFgts === "sim" && !formData.comporFgtsValor) {
+				alert("Por favor, informe o valor do FGTS da outra pessoa.");
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	const validateStep3 = () => {
+		if (formData.ocupacao.length === 0) {
+			alert("Por favor, selecione pelo menos uma ocupação.");
+			return false;
+		}
+
+		return true;
+	};
+
+	const validateStep4 = () => {
+		if (formData.ocupacao2.length === 0) {
+			alert(
+				"Por favor, selecione pelo menos uma ocupação para a outra pessoa."
+			);
+			return false;
+		}
+
+		return true;
+	};
+
+	const validateStep5 = () => {
+		if (!formData.nome) {
+			alert("Por favor, informe seu nome.");
+			return false;
+		}
+
+		if (!formData.numero) {
+			alert("Por favor, informe seu número de telefone.");
+			return false;
+		}
+
+		const numeroTelefone = formData.numero.replace(/\D/g, "");
+		if (numeroTelefone.length !== 11) {
+			alert("Por favor, informe um número de telefone válido com DDD.");
+			return false;
+		}
+
+		if (!formData.email) {
+			alert("Por favor, informe seu e-mail.");
+			return false;
+		}
+
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(formData.email)) {
+			alert("Por favor, informe um e-mail válido.");
+			return false;
+		}
+
+		return true;
+	};
+
+	const advanceStep = () => {
+		switch (currentStep) {
+			case 1:
+				if (validateStep1()) setCurrentStep(2);
+				break;
+			case 2:
+				if (validateStep2()) setCurrentStep(3);
+				break;
+			case 3:
+				if (validateStep3()) {
+					if (formData.compor === "sim") {
+						setCurrentStep(4);
+					} else {
+						setCurrentStep(5);
+					}
+				}
+				break;
+			case 4:
+				if (validateStep4()) setCurrentStep(5);
+				break;
+			case 5:
+				if (validateStep5()) calculateResult();
+				break;
+		}
+	};
+
+	const voltarEtapa = () => {
+		if (currentStep === 4) {
+			setCurrentStep(3);
+		} else if (currentStep === 5) {
+			if (formData.compor === "sim") {
+				setCurrentStep(4);
+			} else {
+				setCurrentStep(3);
+			}
+		} else {
+			setCurrentStep(currentStep - 1);
+		}
+	};
+
+	const calculateResult = () => {
+		setLoading(true);
+
+		setTimeout(() => {
+			const renda = parseNumber(formData.renda);
+			const fgts =
+				formData.fgts === "sim" ? parseNumber(formData.fgtsValor) : 0;
+			const comporRenda =
+				formData.compor === "sim" ? parseNumber(formData.comporValor) : 0;
+			const comporFgts =
+				formData.comporFgts === "sim"
+					? parseNumber(formData.comporFgtsValor)
+					: 0;
+
+			const totalRenda = renda + comporRenda;
+			const totalFgts = fgts + comporFgts;
+
+			let financiamento = 0;
+			let parcelas = 0;
+			let subsidio = 0;
+
+			// Encontrar o valor mais próximo na tabela
+			for (const [key, value] of Object.entries(tableOfValues).reverse()) {
+				if (totalRenda >= parseFloat(key)) {
+					financiamento = value[0];
+					parcelas = value[1];
+					subsidio =
+						formData.filhos === "nao" && formData.compor === "nao"
+							? value[3]
+							: value[2];
+					break;
+				}
+			}
+
+			const totalFinanciamento = financiamento + totalFgts + subsidio;
+
+			setResultData({
+				totalRenda,
+				financiamento,
+				parcelas,
+				subsidio,
+				totalFinanciamento,
+				totalFgts,
+			});
+
+			setLoading(false);
+			setCurrentStep(6);
+
+			// Enviar dados para o formulário
+			sendForm(totalRenda, totalFinanciamento, parcelas, subsidio);
+		}, 2000);
+	};
+
+	// Enviar dados para formulário externo
+	const sendForm = (totalRenda, totalFinanciamento, parcelas, subsidio) => {
+		const data = {
+			"renda-principal": formatCurrency(parseNumber(formData.renda)),
+			"fgts-principal": formData.fgts,
+			"fgts-principal-valor": formatCurrency(parseNumber(formData.fgtsValor)),
+			dependentes: formData.filhos,
+			"tem-renda-secundaria": formData.compor,
+			"renda-secundaria": formatCurrency(parseNumber(formData.comporValor)),
+			"fgts-secundario": formData.comporFgts,
+			"fgts-secundario-valor": formatCurrency(
+				parseNumber(formData.comporFgtsValor)
+			),
+			nome: formData.nome,
+			numero: `"${formData.numero}"`,
+			email: formData.email,
+			"data-envio": new Date().toLocaleDateString("pt-BR"),
+			"hora-envio": new Date().toLocaleTimeString("pt-BR"),
+			empresa: "Cidade Villa-Lobos Maestro",
+			"total-renda": formatCurrency(totalRenda),
+			"total-financiamento": formatCurrency(totalFinanciamento),
+			parcelas: formatCurrency(parcelas),
+			subsidio: `"${formatCurrency(subsidio)}"`,
+			"ocupacao-principal": formData.ocupacao.join(", "),
+			"ocupacao-secundaria": formData.ocupacao2.join(", "),
+		};
+
+		fetch("https://formspree.io/f/mldnpalb", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Success:", data);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+	};
+
+	const openWhatsapp = () => {
+		window.open(
+			"https://api.whatsapp.com/send/?phone=5511951260713&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20Cidade%20Villa-Lobos%20Maestro",
+			"_blank"
+		);
+	};
+
+	const clearForm = () => {
+		setCurrentStep(1);
+		setResultData(null);
+		setFormData({
+			renda: "",
+			compor: "",
+			comporValor: "",
+			filhos: "",
+			fgts: "",
+			fgtsValor: "",
+			comporFgts: "",
+			comporFgtsValor: "",
+			ocupacao: [],
+			ocupacao2: [],
+			nome: "",
+			numero: "",
+			email: "",
+		});
+	};
+
+	return (
+		<div className="container mt-5">
+			<div className="row justify-content-center">
+				<div className="col-12">
+					{/* Etapa 1: Informações iniciais */}
+					{currentStep === 1 && (
+						<div>
+							<div className="section-title text-center mb-3">
+								<h5 className="mb-3">
+									Vamos simular o seu poder de financiamento?
+								</h5>
+							</div>
+
+							<div className="mb-4">
+								<label htmlFor="renda" className="form-label text-dark">
+									Informe sua renda mensal
+								</label>
+								<input
+									type="text"
+									className="form-control"
+									id="renda"
+									name="renda"
+									value={formData.renda}
+									onChange={handleInputChange}
+									onBlur={formatToBrl}
+									onKeyUp={onlyNumbers}
+									placeholder="Ex: 1.000,00"
+									required
+								/>
+							</div>
+
+							<div className="mb-4">
+								<label className="form-label text-dark">
+									Vai juntar renda com mais alguém?
+									<br />
+									<small className="text-muted">
+										Pode ser um familiar, Namorado(a), Esposo(a) ou até mesmo um
+										Amigo.
+									</small>
+								</label>
+								<div className="d-flex gap-3 justify-content-center mt-2">
+									<button
+										type="button"
+										className={`btn ${
+											formData.compor === "sim"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("compor", "sim")}
+									>
+										Sim
+									</button>
+									<button
+										type="button"
+										className={`btn ${
+											formData.compor === "nao"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("compor", "nao")}
+									>
+										Não
+									</button>
+								</div>
+							</div>
+
+							{formData.compor === "sim" && (
+								<div className="mb-4">
+									<label htmlFor="comporValor" className="form-label">
+										Qual a Renda Comprovada da Outra Pessoa:
+									</label>
+									<input
+										type="text"
+										className="form-control"
+										id="comporValor"
+										name="comporValor"
+										value={formData.comporValor}
+										onChange={handleInputChange}
+										onBlur={formatToBrl}
+										onKeyUp={onlyNumbers}
+										placeholder="Ex: 1.000,00"
+									/>
+								</div>
+							)}
+
+							<div className="mb-4">
+								<label className="form-label text-dark">
+									Você Possui Dependente(s)
+								</label>
+								<div className="d-flex gap-3 justify-content-center mt-2">
+									<button
+										type="button"
+										className={`btn ${
+											formData.filhos === "sim"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("filhos", "sim")}
+									>
+										Sim
+									</button>
+									<button
+										type="button"
+										className={`btn ${
+											formData.filhos === "nao"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("filhos", "nao")}
+									>
+										Não
+									</button>
+								</div>
+							</div>
+
+							<div className="text-center mt-4">
+								<button onClick={advanceStep} className="btn btn-primary">
+									Próximo Passo
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Etapa 2: Informações de FGTS */}
+					{currentStep === 2 && (
+						<div>
+							<div className="section-title text-center mb-3">
+								<h5 className="mb-3">Informações de FGTS</h5>
+							</div>
+
+							<div className="mb-4">
+								<label className="form-label text-dark">
+									Você Possui FGTS?
+								</label>
+								<div className="d-flex gap-3 justify-content-center mt-2">
+									<button
+										type="button"
+										className={`btn ${
+											formData.fgts === "sim"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("fgts", "sim")}
+									>
+										Sim
+									</button>
+									<button
+										type="button"
+										className={`btn ${
+											formData.fgts === "nao"
+												? "btn-primary"
+												: "btn-outline-primary"
+										}`}
+										onClick={() => handleOptionSelect("fgts", "nao")}
+									>
+										Não
+									</button>
+								</div>
+							</div>
+
+							{formData.fgts === "sim" && (
+								<div className="mb-4">
+									<label htmlFor="fgtsValor" className="form-label">
+										Qual o valor do seu FGTS?
+									</label>
+									<input
+										type="text"
+										className="form-control"
+										id="fgtsValor"
+										name="fgtsValor"
+										value={formData.fgtsValor}
+										onChange={handleInputChange}
+										onBlur={formatToBrl}
+										onKeyUp={onlyNumbers}
+										placeholder="Ex: 1.000,00"
+									/>
+								</div>
+							)}
+
+							{formData.compor === "sim" && (
+								<>
+									<div className="mb-4">
+										<label className="form-label text-dark">
+											A Outra Pessoa Possui FGTS?
+										</label>
+										<div className="d-flex gap-3 justify-content-center mt-2">
+											<button
+												type="button"
+												className={`btn ${
+													formData.comporFgts === "sim"
+														? "btn-primary"
+														: "btn-outline-primary"
+												}`}
+												onClick={() => handleOptionSelect("comporFgts", "sim")}
+											>
+												Sim
+											</button>
+											<button
+												type="button"
+												className={`btn ${
+													formData.comporFgts === "nao"
+														? "btn-primary"
+														: "btn-outline-primary"
+												}`}
+												onClick={() => handleOptionSelect("comporFgts", "nao")}
+											>
+												Não
+											</button>
+										</div>
+									</div>
+
+									{formData.comporFgts === "sim" && (
+										<div className="mb-4">
+											<label htmlFor="comporFgtsValor" className="form-label">
+												Qual o valor do FGTS da outra pessoa?
+											</label>
+											<input
+												type="text"
+												className="form-control"
+												id="comporFgtsValor"
+												name="comporFgtsValor"
+												value={formData.comporFgtsValor}
+												onChange={handleInputChange}
+												onBlur={formatToBrl}
+												onKeyUp={onlyNumbers}
+												placeholder="Ex: 1.000,00"
+											/>
+										</div>
+									)}
+								</>
+							)}
+
+							<div className="d-flex justify-content-between mt-4">
+								<button
+									onClick={voltarEtapa}
+									className="btn btn-outline-secondary px-4"
+								>
+									Voltar
+								</button>
+								<button onClick={advanceStep} className="btn btn-primary px-4">
+									Próximo
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Etapa 3: Ocupação Principal */}
+					{currentStep === 3 && (
+						<div>
+							<div className="section-title text-center mb-3">
+								<h5 className="mb-0">Qual é a Sua Ocupação de Trabalho?</h5>
+								<small className="text-muted mx-auto">
+									(se necessário pode selecionar mais de 1 opção)
+								</small>
+							</div>
+
+							<div className="row justify-content-center">
+								<div className="col-md-8">
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao-clt"
+											value="Trabalho Registrado(CLT)"
+											checked={formData.ocupacao.includes(
+												"Trabalho Registrado(CLT)"
+											)}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao: isChecked
+														? [...formData.ocupacao, "Trabalho Registrado(CLT)"]
+														: formData.ocupacao.filter(
+																(item) => item !== "Trabalho Registrado(CLT)"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao-clt"
+										>
+											Trabalho Registrado(CLT)
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao-publico"
+											value="Funcionário(a) Público"
+											checked={formData.ocupacao.includes(
+												"Funcionário(a) Público"
+											)}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao: isChecked
+														? [...formData.ocupacao, "Funcionário(a) Público"]
+														: formData.ocupacao.filter(
+																(item) => item !== "Funcionário(a) Público"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao-publico"
+										>
+											Funcionário(a) Público
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao-aposentado"
+											value="Aposentado(a)"
+											checked={formData.ocupacao.includes("Aposentado(a)")}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao: isChecked
+														? [...formData.ocupacao, "Aposentado(a)"]
+														: formData.ocupacao.filter(
+																(item) => item !== "Aposentado(a)"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao-aposentado"
+										>
+											Aposentado(a)
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao-autonomo"
+											value="Autônomo ou MEI"
+											checked={formData.ocupacao.includes("Autônomo ou MEI")}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao: isChecked
+														? [...formData.ocupacao, "Autônomo ou MEI"]
+														: formData.ocupacao.filter(
+																(item) => item !== "Autônomo ou MEI"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao-autonomo"
+										>
+											Autônomo ou MEI
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div className="d-flex justify-content-between mt-4">
+								<button
+									onClick={voltarEtapa}
+									className="btn btn-outline-secondary px-4"
+								>
+									Voltar
+								</button>
+								<button onClick={advanceStep} className="btn btn-primary px-4">
+									Próximo
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Etapa 4: Ocupação Secundária */}
+					{currentStep === 4 && (
+						<div>
+							<div className="section-title text-center mb-3">
+								<h5 className="mb-0">
+									Qual é a Ocupação de Trabalho da Outra Pessoa
+								</h5>
+								<small className="text-muted mx-auto">
+									(se necessário pode selecionar mais de 1 opção)
+								</small>
+							</div>
+
+							<div className="row justify-content-center">
+								<div className="col-md-8">
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao2-clt"
+											value="Trabalho Registrado(CLT)"
+											checked={formData.ocupacao2.includes(
+												"Trabalho Registrado(CLT)"
+											)}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao2: isChecked
+														? [
+																...formData.ocupacao2,
+																"Trabalho Registrado(CLT)",
+														  ]
+														: formData.ocupacao2.filter(
+																(item) => item !== "Trabalho Registrado(CLT)"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao2-clt"
+										>
+											Trabalho Registrado(CLT)
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao2-publico"
+											value="Funcionário(a) Público"
+											checked={formData.ocupacao2.includes(
+												"Funcionário(a) Público"
+											)}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao2: isChecked
+														? [...formData.ocupacao2, "Funcionário(a) Público"]
+														: formData.ocupacao2.filter(
+																(item) => item !== "Funcionário(a) Público"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao2-publico"
+										>
+											Funcionário(a) Público
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao2-aposentado"
+											value="Aposentado(a)"
+											checked={formData.ocupacao2.includes("Aposentado(a)")}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao2: isChecked
+														? [...formData.ocupacao2, "Aposentado(a)"]
+														: formData.ocupacao2.filter(
+																(item) => item !== "Aposentado(a)"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao2-aposentado"
+										>
+											Aposentado(a)
+										</label>
+									</div>
+
+									<div className="mb-3 form-check">
+										<input
+											type="checkbox"
+											className="form-check-input"
+											id="ocupacao2-autonomo"
+											value="Autônomo ou MEI"
+											checked={formData.ocupacao2.includes("Autônomo ou MEI")}
+											onChange={(e) => {
+												const isChecked = e.target.checked;
+												setFormData({
+													...formData,
+													ocupacao2: isChecked
+														? [...formData.ocupacao2, "Autônomo ou MEI"]
+														: formData.ocupacao2.filter(
+																(item) => item !== "Autônomo ou MEI"
+														  ),
+												});
+											}}
+										/>
+										<label
+											className="form-check-label fw-bold"
+											htmlFor="ocupacao2-autonomo"
+										>
+											Autônomo ou MEI
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div className="d-flex justify-content-between mt-4">
+								<button
+									onClick={voltarEtapa}
+									className="btn btn-outline-secondary px-4"
+								>
+									Voltar
+								</button>
+								<button onClick={advanceStep} className="btn btn-primary px-4">
+									Próximo
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Etapa 5: Informações de Contato */}
+					{currentStep === 5 && (
+						<div>
+							<div className="section-title text-center mb-3">
+								<h5 className="mb-0">
+									Seu Potencial de Financiamento, valor de Parcelas de acordo
+									com seu perfil aparecerá aqui automaticamente
+								</h5>
+								<small className="text-muted mx-auto">
+									Informe seu nome, e-mail e numero WhatsApp para saber o
+									resultado!
+								</small>
+							</div>
+
+							<div className="mb-3">
+								<label htmlFor="nome" className="form-label">
+									Qual é o Seu Nome?
+								</label>
+								<input
+									type="text"
+									className="form-control"
+									id="nome"
+									name="nome"
+									value={formData.nome}
+									onChange={handleInputChange}
+									onKeyUp={onlyNumbers}
+									placeholder="Seu Nome Completo"
+									required
+								/>
+							</div>
+
+							<div className="mb-3">
+								<label htmlFor="numero" className="form-label">
+									Seu Número (WhatsApp):
+								</label>
+								<input
+									type="text"
+									className="form-control"
+									id="numero"
+									name="numero"
+									value={formData.numero}
+									onChange={handleInputChange}
+									onBlur={formatPhone}
+									placeholder="Insira o número com o DDD"
+									required
+								/>
+							</div>
+
+							<div className="mb-3">
+								<label htmlFor="email" className="form-label">
+									Qual é o Seu E-mail?
+								</label>
+								<input
+									type="email"
+									className="form-control"
+									id="email"
+									name="email"
+									value={formData.email}
+									onChange={handleInputChange}
+									onKeyUp={onlyNumbers}
+									placeholder="Seu e-mail"
+									required
+								/>
+							</div>
+
+							<div className="d-flex justify-content-between mt-4">
+								<button
+									onClick={voltarEtapa}
+									className="btn btn-outline-secondary px-4"
+								>
+									Voltar
+								</button>
+								<button onClick={advanceStep} className="btn btn-primary px-4">
+									Próximo
+								</button>
+							</div>
+						</div>
+					)}
+
+					{/* Tela de Loading */}
+					{loading && (
+						<div className="card-body p-5 text-center">
+							<div
+								className="spinner-border text-primary"
+								role="status"
+								style={{ width: "3rem", height: "3rem" }}
+							>
+								<span className="visually-hidden">Loading...</span>
+							</div>
+							<p className="mt-3">
+								Calculando seu potencial de financiamento...
+							</p>
+						</div>
+					)}
+
+					{/* Tela de Resultado */}
+					{currentStep === 6 && resultData && (
+						<div>
+							<button
+								className="btn btn-sm btn-outline-secondary position-absolute top-0 start-0 m-3"
+								onClick={clearForm}
+							>
+								<i className="mdi mdi-arrow-left"></i> Voltar
+							</button>
+
+							<div className="text-center py-4">
+								<h3 className="fw-bold text-primary mb-4">
+									Resultado da Simulação
+								</h3>
+
+								<div className="p-3 mb-4 bg-light rounded-3">
+									<h4 className="fw-bold text-primary">Renda Total</h4>
+									<h3 className="display-6">
+										{formatCurrency(resultData.totalRenda)}
+									</h3>
+								</div>
+
+								<div className="row mb-4">
+									<div className="col-md-6 mb-3">
+										<div className="p-3 h-100 bg-light rounded-3">
+											<p className="fw-bold">Dependentes:</p>
+											<p>{formData.filhos === "sim" ? "Sim" : "Não"}</p>
+										</div>
+									</div>
+									<div className="col-md-6 mb-3">
+										<div className="p-3 h-100 bg-light rounded-3">
+											<p className="fw-bold">Compor Renda:</p>
+											<p>{formData.compor === "sim" ? "Sim" : "Não"}</p>
+										</div>
+									</div>
+								</div>
+
+								<div className="p-3 mb-4 bg-light rounded-3">
+									<p className="fw-bold">Ocupações:</p>
+									<p>{formData.ocupacao.join(", ")}</p>
+									{formData.compor === "sim" && (
+										<p>{formData.ocupacao2.join(", ")}</p>
+									)}
+								</div>
+
+								<div className="alert alert-success">
+									<h5 className="fw-bold">
+										Recebemos suas informações, iremos fazer a simulação e
+										retornaremos pelo WhatsApp
+									</h5>
+								</div>
+
+								<button
+									className="btn btn-lg btn-primary mt-4 d-flex align-items-center mx-auto"
+									onClick={openWhatsapp}
+								>
+									<i className="mdi mdi-whatsapp me-2"></i> Falar com o Corretor
+								</button>
+							</div>
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+}

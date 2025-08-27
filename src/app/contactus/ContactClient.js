@@ -23,7 +23,7 @@ import {
 } from "../assets/icons/vander";
 
 import { formatPhone } from "../helper/Formatter";
-import { getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/Utils";
 
 import Swal from "sweetalert2";
 

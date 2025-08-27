@@ -50,11 +50,7 @@ const settings = {
 
 export default function RelatedPropertySlider({ propertyData }) {
 	return (
-		<div
-			className="row"
-			imageTitle={currentImage.title}
-			imageCaption={`Imagem ${currentImageIndex + 1} de ${images.length}`}
-		>
+		<div className="row">
 			<meta itemProp="name" content="Imóveis Relacionados" />
 			<meta itemProp="numberOfItems" content={propertyData.length} />
 			<meta itemProp="itemListOrder" content="Unordered" />
@@ -63,6 +59,8 @@ export default function RelatedPropertySlider({ propertyData }) {
 				<div className="tiny-slide-three">
 					<TinySlider settings={settings}>
 						{propertyData.map((item, index) => {
+							const thumbnail = item.images?.[0] || null;
+
 							return (
 								<div
 									className="tiny-slide"
@@ -84,38 +82,41 @@ export default function RelatedPropertySlider({ propertyData }) {
 											content={`${getBaseUrl()}/imovel/${item.slug}`}
 										/>
 
-										<div className="property-image position-relative overflow-hidden shadow">
-											<Image
-												src={item.image}
-												width={0}
-												height={0}
-												sizes="100vw"
-												style={{ width: "100%", height: "auto" }}
-												className="img-fluid"
-												alt={item.address}
-												itemProp="image"
-											/>
-											<ul className="list-unstyled property-icon">
-												<li>
-													<Link
-														href={`/imovel/${item.slug}`}
-														className="btn btn-sm btn-icon btn-pills btn-primary"
-														aria-label="Ver detalhes do imóvel"
-													>
-														<FiHome className="icons" />
-													</Link>
-												</li>
-												<li className="mt-1">
-													<Link
-														href={`/imovel/${item.slug}?openGallery=true`}
-														className="btn btn-sm btn-icon btn-pills btn-primary"
-														aria-label="Ver galeria de fotos"
-													>
-														<FiCamera className="icons" />
-													</Link>
-												</li>
-											</ul>
-										</div>
+										{thumbnail && (
+											<div className="property-image position-relative overflow-hidden shadow">
+												<Image
+													src={thumbnail.src}
+													width={0}
+													height={0}
+													sizes="100vw"
+													style={{ width: "100%", height: "auto" }}
+													className="img-fluid"
+													alt={thumbnail.alt}
+													itemProp="image"
+												/>
+												<ul className="list-unstyled property-icon">
+													<li>
+														<Link
+															href={`/imovel/${item.slug}`}
+															className="btn btn-sm btn-icon btn-pills btn-primary"
+															aria-label="Ver detalhes do imóvel"
+														>
+															<FiHome className="icons" />
+														</Link>
+													</li>
+													<li className="mt-1">
+														<Link
+															href={`/imovel/${item.slug}?openGallery=true`}
+															className="btn btn-sm btn-icon btn-pills btn-primary"
+															aria-label="Ver galeria de fotos"
+														>
+															<FiCamera className="icons" />
+														</Link>
+													</li>
+												</ul>
+											</div>
+										)}
+
 										<div className="card-body content p-4">
 											<Link
 												href={`/imovel/${item.slug}`}
@@ -134,7 +135,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 													<li className="col-6 d-flex align-items-center m-0">
 														<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
 														<small className="text-muted" itemProp="value">
-															{item.preview.area}
+															{item.preview?.area}
 														</small>
 														<meta itemProp="unitText" content="m²" />
 													</li>
@@ -142,7 +143,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 													<li className="col-6 d-flex align-items-center m-0">
 														<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
 														<small className="text-muted">
-															{item.preview.bedroom}
+															{item.preview?.bedroom}
 														</small>
 														<meta itemProp="unitText" content="bedroom" />
 													</li>
@@ -151,7 +152,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 													<li className="col-6 d-flex align-items-center m-0">
 														<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
 														<small className="text-muted">
-															{item.preview.suite}
+															{item.preview?.suite}
 														</small>
 														<meta itemProp="unitText" content="bathroom" />
 													</li>
@@ -159,7 +160,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 													<li className="col-6 d-flex align-items-center m-0">
 														<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
 														<small className="text-muted">
-															{item.preview.parking}
+															{item.preview?.parking}
 														</small>
 														<meta itemProp="unitText" content="parkingSpace" />
 													</li>

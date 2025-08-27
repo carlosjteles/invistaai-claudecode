@@ -68,11 +68,15 @@ export const metadata = {
 		maximumScale: 1,
 	},
 	icons: {
-		icon: [
-			{ url: "/favicon.ico" },
-			{ url: "/images/icon.png", sizes: "32x32" },
-		],
-		apple: [{ url: "/images/apple-icon.png" }],
+		icon: "/images/favicon.ico",
+		shortcut: "/images/favicon-16x16.png",
+		apple: "/images/apple-touch-icon.png",
+		other: {
+			rel: "icon",
+			url: "/images/favicon-32x32.png",
+			type: "image/png",
+			sizes: "32x32",
+		},
 	},
 	themeColor: "#09acf4",
 };
@@ -82,7 +86,7 @@ export const jsonLd = {
 	"@type": "RealEstateAgent",
 	name: getSiteName(),
 	url: getBaseUrl(),
-	logo: `${getBaseUrl()}/logo.png`,
+	logo: `${getBaseUrl()}/images/logo.png`,
 	image: `${getBaseUrl()}/images/og-image.jpg`,
 	description:
 		"Encontre apartamentos, studios e imóveis em São Paulo com potencial de valorização. Curadoria especializada e suporte completo para investidores e compradores.",
@@ -135,6 +139,7 @@ export default function RootLayout({ children }) {
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 				/>
+				<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 			</head>
 			<body className={league.variable}>
 				<Providers>{children}</Providers>

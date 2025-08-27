@@ -2,22 +2,21 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { blogData } from "../storage/data";
+import prisma from "../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../helper/Utils";
-import { formatDateISO, formatDateUS } from "../helper/Formatter";
+import { formatDateISO } from "../helper/Formatter";
 
-export default function Blog() {
-	const recentData = React.useMemo(() => {
-		return [...blogData]
-			.map((item) => ({
-				...item,
-				parsedDate: (() => formatDateUS(item.date))(),
-			}))
-			.sort((a, b) => b.parsedDate - a.parsedDate)
-			.slice(0, 3)
-			.map(({ parsedDate, ...item }) => item);
-	}, []);
+export default async function Blog() {
+	const recentData = await prisma.blog.findMany({
+		where: {
+			OR: [{ thumbnail: { not: "" } }, { image: { not: "" } }],
+		},
+		orderBy: { createdAt: "desc" },
+		take: 3,
+	});
+
+	if (recentData.length === 0) return null;
 
 	return (
 		<>
@@ -52,6 +51,8 @@ export default function Blog() {
 				<meta itemProp="itemListOrder" content="Unordered" />
 
 				{recentData.map((item, index) => {
+					const imageSrc = item.thumbnail || item.image;
+
 					return (
 						<div
 							className="col-lg-4 col-md-6"
@@ -68,10 +69,10 @@ export default function Blog() {
 								itemType="https://schema.org/BlogPosting"
 							>
 								<meta itemProp="headline" content={item.title} />
-								<meta itemProp="description" content={item.desc} />
+								<meta itemProp="description" content={item.description} />
 								<meta
 									itemProp="datePublished"
-									content={formatDateISO(item.date)}
+									content={formatDateISO(item.createdAt)}
 								/>
 								<meta
 									itemProp="author"
@@ -89,14 +90,11 @@ export default function Blog() {
 									itemScope
 									itemType="https://schema.org/ImageObject"
 								>
-									<meta
-										itemProp="url"
-										content={`${getBaseUrl()}${item.image}`}
-									/>
+									<meta itemProp="url" content={`${getBaseUrl()}${imageSrc}`} />
 
 									<div className="position-relative overflow-hidden">
 										<Image
-											src={item.image}
+											src={imageSrc}
 											width={0}
 											height={0}
 											sizes="100vw"
@@ -127,7 +125,7 @@ export default function Blog() {
 											<span itemProp="name">{item.title}</span>
 										</Link>
 										<p className="text-muted mt-2" itemProp="abstract">
-											{item.desc}
+											{item.description}
 										</p>
 
 										<Link

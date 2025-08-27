@@ -3,11 +3,40 @@ import Image from "next/image";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
-import { propertyData } from "../storage/data";
-
 import { formatPrice } from "../helper/Formatter";
 
-export default function FeaturedProperties() {
+import prisma from "../../db/prisma";
+
+export default async function FeaturedProperties() {
+	const propertyData = await prisma.property.findMany({
+		where: {
+			images: {
+				some: {},
+			},
+		},
+		take: 6,
+		include: {
+			images: {
+				select: {
+					id: true,
+					src: true,
+					alt: true,
+				},
+				where: {
+					thumbnail: true,
+				},
+				take: 1,
+			},
+		},
+		orderBy: {
+			id: "desc",
+		},
+	});
+
+	if (!propertyData || propertyData.length === 0) {
+		return null;
+	}
+
 	return (
 		<>
 			<div className="row justify-content-center">
@@ -28,12 +57,11 @@ export default function FeaturedProperties() {
 			>
 				<meta itemProp="name" content="Imóveis em destaque" />
 				<meta itemProp="itemListOrder" content="Unordered" />
-				<meta
-					itemProp="numberOfItems"
-					content={propertyData.slice(0, 6).length}
-				/>
+				<meta itemProp="numberOfItems" content={propertyData.length} />
 
-				{propertyData.slice(0, 6).map((item, index) => {
+				{propertyData.map((item, index) => {
+					const thumbnail = item.images?.[0] || null;
+
 					return (
 						<div
 							className="col-lg-4 col-md-6 col-12"
@@ -52,36 +80,39 @@ export default function FeaturedProperties() {
 								<meta itemProp="identifier" content={item.id} />
 								<meta itemProp="url" content={`/imovel/${item.slug}`} />
 
-								<div className="property-image position-relative overflow-hidden shadow">
-									<Image
-										src={item.image}
-										width={0}
-										height={0}
-										sizes="100vw"
-										style={{ width: "100%", height: "auto" }}
-										className="img-fluid"
-										alt={item.address}
-										itemProp="image"
-									/>
-									<ul className="list-unstyled property-icon">
-										<li>
-											<Link
-												href={`/imovel/${item.slug}`}
-												className="btn btn-sm btn-icon btn-pills btn-primary"
-											>
-												<FiHome className="icons" />
-											</Link>
-										</li>
-										<li className="mt-1">
-											<Link
-												href={`/imovel/${item.slug}?openGallery=true`}
-												className="btn btn-sm btn-icon btn-pills btn-primary"
-											>
-												<FiCamera className="icons" />
-											</Link>
-										</li>
-									</ul>
-								</div>
+								{thumbnail && (
+									<div className="property-image position-relative overflow-hidden shadow">
+										<Image
+											src={thumbnail.src}
+											width={0}
+											height={0}
+											sizes="100vw"
+											style={{ width: "100%", height: "auto" }}
+											className="img-fluid"
+											alt={thumbnail.alt}
+											itemProp="image"
+										/>
+										<ul className="list-unstyled property-icon">
+											<li>
+												<Link
+													href={`/imovel/${item.slug}`}
+													className="btn btn-sm btn-icon btn-pills btn-primary"
+												>
+													<FiHome className="icons" />
+												</Link>
+											</li>
+											<li className="mt-1">
+												<Link
+													href={`/imovel/${item.slug}?openGallery=true`}
+													className="btn btn-sm btn-icon btn-pills btn-primary"
+												>
+													<FiCamera className="icons" />
+												</Link>
+											</li>
+										</ul>
+									</div>
+								)}
+
 								<div className="card-body content p-4">
 									<Link
 										href={`/imovel/${item.slug}`}

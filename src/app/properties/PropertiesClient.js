@@ -10,8 +10,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ScrollTop from "../components/ScrollTop";
 
-import { propertyData as data } from "../storage/data";
-
 import {
 	bedrooms,
 	categories,
@@ -26,133 +24,81 @@ import { getBaseUrl } from "../helper/Utils";
 
 import Pagination from "../components/Pagination";
 
-export default function PropertiesClient() {
-	const searchParams = useSearchParams();
+export default function PropertiesClient({
+	initialProperties,
+	initialCategory,
+	totalPages,
+	totalCount,
+	currentPage,
+}) {
 	const pathname = usePathname();
 	const router = useRouter();
+	const queryParams = useSearchParams();
 
-	const [currentPage, setCurrentPage] = React.useState(1);
-	const [searchTerm, setSearchTerm] = React.useState("");
-	const [category, setCategory] = React.useState("all");
-	const [bedroom, setBedroom] = React.useState("all");
-	const [parking, setParking] = React.useState("all");
-	const [suite, setSuite] = React.useState("all");
-	const [minPrice, setMinPrice] = React.useState(0);
-	const [maxPrice, setMaxPrice] = React.useState(9999999999);
-	const [propertyData, setPropertyData] = React.useState(data);
-
-	const itemsPerPage = 8;
-	const totalPages = Math.ceil(propertyData.length / itemsPerPage);
-	const paginatedData = propertyData.slice(
-		itemsPerPage * (currentPage - 1),
-		itemsPerPage * currentPage
+	/** Filters */
+	const [searchTerm, setSearchTerm] = React.useState(
+		queryParams.get("q") || ""
+	);
+	const [category, setCategory] = React.useState(initialCategory);
+	const [bedroom, setBedroom] = React.useState(
+		queryParams.get("quartos") || "all"
+	);
+	const [parking, setParking] = React.useState(
+		queryParams.get("vagas") || "all"
+	);
+	const [suite, setSuite] = React.useState(queryParams.get("suites") || "all");
+	const [minPrice, setMinPrice] = React.useState(
+		queryParams.get("preco-min") || 0
+	);
+	const [maxPrice, setMaxPrice] = React.useState(
+		queryParams.get("preco-max") || 9999999999
 	);
 
-	const isAnyFilterActive =
-		searchTerm !== "" ||
-		category !== "all" ||
-		bedroom !== "all" ||
-		parking !== "all" ||
-		suite !== "all";
+	const activeFilters =
+		[...queryParams.keys()].some((key) => key !== "page") ||
+		initialCategory !== 0;
+	const propertyData = initialProperties;
 
-	const clearFilters = React.useCallback(() => {
-		const isReleases = pathname === "/lancamentos";
-
-		if (searchParams.size > 0 || isReleases) {
-			router.push("/imoveis");
+	const clearFilters = () => {
+		if (queryParams.size > 0) {
+			setSearchTerm("");
+			setCategory(0);
+			setBedroom("all");
+			setParking("all");
+			setSuite("all");
 		}
 
-		console.log("Limpar filtros");
-
-		setSearchTerm("");
-		setCategory("all");
-		setBedroom("all");
-		setParking("all");
-		setSuite("all");
-		setPropertyData(data);
-
-		if (currentPage > 1) {
-			setCurrentPage(1);
-		}
-	}, [currentPage, pathname, searchParams, router]);
-
-	const getPropertyFiltered = React.useCallback(() => {
-		return data.filter((item) => {
-			return (
-				(!searchTerm ||
-					item.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					item.neighborhood.toLowerCase().includes(searchTerm.toLowerCase())) &&
-				(category === "all" || item.category === Number(category)) &&
-				(bedroom === "all" || item.bed === bedroom) &&
-				(parking === "all" || item.parking === parking) &&
-				(suite === "all" || item.suite === suite) &&
-				item.price >= minPrice &&
-				item.price <= maxPrice
-			);
-		});
-	}, [searchTerm, category, bedroom, parking, suite, minPrice, maxPrice]);
-
-	React.useEffect(() => {
-		const release = categories.find((item) => item.label === "Lançamento");
-		const isReleases = pathname === "/lancamentos";
-		const isProperties = pathname === "/imoveis";
-
-		// Clear filters, when was in "lancamentos" and changed to "imoveis"
-		if (searchParams.size === 0 && isProperties && category === release.id) {
-			clearFilters();
-		}
-
-		// If no search params and not in "lancamentos", return
-		if (searchParams.size === 0 && !isReleases) {
-			return;
-		}
-
-		const searchParam = searchParams.get("q");
-		const minPriceParam = searchParams.get("preco-min");
-		const maxPriceParam = searchParams.get("preco-max");
-		let categoryParam = searchParams.get("categoria");
-
-		// If in "lancamentos", set categoryParam to release.id
-		if (isReleases) {
-			categoryParam = release.id;
-		}
-
-		if (searchParam) {
-			setSearchTerm(searchParam);
-		}
-
-		if (categoryParam) {
-			setCategory(categoryParam);
-		}
-
-		if (minPriceParam) {
-			setMinPrice(minPriceParam);
-		}
-
-		if (maxPriceParam) {
-			setMaxPrice(maxPriceParam);
-		}
-
-		console.log("filtrando");
-
-		setPropertyData(getPropertyFiltered());
-
-		if (currentPage > 1) {
-			setCurrentPage(1);
-		}
-	}, [
-		currentPage,
-		searchParams,
-		pathname,
-		category,
-		clearFilters,
-		getPropertyFiltered,
-	]);
+		router.push("/imoveis");
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setPropertyData(getPropertyFiltered());
-		setCurrentPage(1);
+
+		const params = new URLSearchParams();
+
+		if (searchTerm) params.set("q", searchTerm);
+		if (category !== 0) params.set("categoria", category);
+		if (bedroom !== "all") params.set("quartos", bedroom);
+		if (parking !== "all") params.set("vagas", parking);
+		if (suite !== "all") params.set("suites", suite);
+		if (minPrice > 0) params.set("preco-min", minPrice);
+		if (maxPrice < 9999999999) params.set("preco-max", maxPrice);
+
+		params.delete("page");
+
+		router.push(`${pathname}?${params.toString()}`);
+	};
+
+	const handlePageChange = (page) => {
+		const params = new URLSearchParams(queryParams);
+
+		if (page > 1) {
+			params.set("page", page);
+		} else {
+			params.delete("page");
+		}
+
+		router.push(`${pathname}?${params.toString()}`);
 	};
 
 	const propertiesJsonLd = {
@@ -164,13 +110,13 @@ export default function PropertiesClient() {
 		url: `${getBaseUrl()}/imoveis`,
 		mainEntity: {
 			"@type": "ItemList",
-			itemListElement: paginatedData.map((property, index) => ({
+			itemListElement: propertyData.map((property, index) => ({
 				"@type": "ListItem",
-				position: itemsPerPage * (currentPage - 1) + index + 1,
+				position: (currentPage - 1) * 8 + index + 1,
 				item: {
 					"@type": "RealEstateListing",
 					name: property.address,
-					image: `${getBaseUrl()}${property.image}`,
+					image: property.images?.[0]?.src || "",
 					url: `${getBaseUrl()}/imovel/${property.slug}`,
 					offers: {
 						"@type": "Offer",
@@ -179,7 +125,7 @@ export default function PropertiesClient() {
 					},
 				},
 			})),
-			numberOfItems: propertyData.length,
+			numberOfItems: totalCount,
 		},
 		breadcrumb: {
 			"@type": "BreadcrumbList",
@@ -342,10 +288,11 @@ export default function PropertiesClient() {
 									<select
 										className="form-select form-control border mt-2"
 										aria-label="Filtrar por Categorias"
+										name="categoria"
 										value={category}
-										onChange={(e) => setCategory(e.target.value)}
+										onChange={(e) => setCategory(Number(e.target.value))}
 									>
-										<option value="all">Selecione ...</option>
+										<option value="">Selecione ...</option>
 										{categories.map((item) => (
 											<option key={item.id} value={item.id}>
 												{item.label}
@@ -358,6 +305,7 @@ export default function PropertiesClient() {
 									<select
 										className="form-select form-control border mt-2"
 										aria-label="Filtrar por Quartos"
+										name="quartos"
 										value={bedroom}
 										onChange={(e) => setBedroom(e.target.value)}
 									>
@@ -374,6 +322,7 @@ export default function PropertiesClient() {
 									<select
 										className="form-select form-control border mt-2"
 										aria-label="Filtrar por Suítes"
+										name="suites"
 										value={suite}
 										onChange={(e) => setSuite(e.target.value)}
 									>
@@ -391,6 +340,7 @@ export default function PropertiesClient() {
 									<select
 										className="form-select form-control border mt-2"
 										aria-label="Filtrar por Vagas de Estacionamento"
+										name="vagas"
 										value={parking}
 										onChange={(e) => setParking(e.target.value)}
 									>
@@ -407,7 +357,7 @@ export default function PropertiesClient() {
 									<button className="btn btn-primary w-100">
 										Aplicar Filtros
 									</button>
-									{isAnyFilterActive && (
+									{activeFilters && (
 										<button
 											type="button"
 											className="btn btn-link btn-sm ms-2 p-0"
@@ -419,18 +369,20 @@ export default function PropertiesClient() {
 								</div>
 							</form>
 						</div>
-						{paginatedData.length > 0 ? (
+						{propertyData.length > 0 ? (
 							<div
 								className="col-lg-8 col-md-6 col-12"
 								itemScope
 								itemType="https://schema.org/ItemList"
 							>
-								<meta itemProp="numberOfItems" content={propertyData.length} />
+								<meta itemProp="numberOfItems" content={totalCount} />
 								<meta itemProp="itemListOrder" content="Unordered" />
 								<meta itemProp="name" content="Imóveis à Venda" />
 
 								<div className="row g-4">
-									{paginatedData.map((item, index) => {
+									{propertyData.map((item, index) => {
+										const thumbnail = item.images?.[0] || null;
+
 										return (
 											<div
 												className="col-lg-6 col-12"
@@ -441,7 +393,7 @@ export default function PropertiesClient() {
 											>
 												<meta
 													itemProp="position"
-													content={itemsPerPage * (currentPage - 1) + index + 1}
+													content={(currentPage - 1) * 8 + index + 1}
 												/>
 
 												<div
@@ -455,37 +407,40 @@ export default function PropertiesClient() {
 														content={`${getBaseUrl()}/imovel/${item.slug}`}
 													/>
 
-													<div className="property-image position-relative overflow-hidden shadow">
-														<Image
-															src={item.image}
-															width={0}
-															height={0}
-															sizes="100vw"
-															style={{ width: "100%", height: "auto" }}
-															className="img-fluid"
-															alt={item.address}
-															itemProp="image"
-														/>
-														<ul className="list-unstyled property-icon">
-															<li>
-																<Link
-																	href={`/imovel/${item.slug}`}
-																	className="btn btn-sm btn-icon btn-pills btn-primary"
-																	itemProp="name"
-																>
-																	<FiHome className="icons" />
-																</Link>
-															</li>
-															<li className="mt-1">
-																<Link
-																	href={`/imovel/${item.slug}?openGallery=true`}
-																	className="btn btn-sm btn-icon btn-pills btn-primary"
-																>
-																	<FiCamera className="icons" />
-																</Link>
-															</li>
-														</ul>
-													</div>
+													{thumbnail && (
+														<div className="property-image position-relative overflow-hidden shadow">
+															<Image
+																src={thumbnail.src}
+																width={0}
+																height={0}
+																sizes="100vw"
+																style={{ width: "100%", height: "auto" }}
+																className="img-fluid"
+																alt={thumbnail.alt}
+																itemProp="image"
+															/>
+															<ul className="list-unstyled property-icon">
+																<li>
+																	<Link
+																		href={`/imovel/${item.slug}`}
+																		className="btn btn-sm btn-icon btn-pills btn-primary"
+																		itemProp="name"
+																	>
+																		<FiHome className="icons" />
+																	</Link>
+																</li>
+																<li className="mt-1">
+																	<Link
+																		href={`/imovel/${item.slug}?openGallery=true`}
+																		className="btn btn-sm btn-icon btn-pills btn-primary"
+																	>
+																		<FiCamera className="icons" />
+																	</Link>
+																</li>
+															</ul>
+														</div>
+													)}
+
 													<div className="card-body content p-4">
 														<Link
 															href={`/imovel/${item.slug}`}
@@ -600,7 +555,7 @@ export default function PropertiesClient() {
 
 								<Pagination
 									currentPage={currentPage}
-									setCurrentPage={setCurrentPage}
+									setCurrentPage={handlePageChange}
 									totalPages={totalPages}
 								/>
 							</div>
@@ -608,7 +563,7 @@ export default function PropertiesClient() {
 							<div className="col-lg-8 col-md-6 col-12">
 								<div className="text-center p-5">
 									<h4>Nenhum imóvel encontrado com os filtros selecionados</h4>
-									{isAnyFilterActive && (
+									{activeFilters && (
 										<button
 											className="btn btn-primary mt-3"
 											onClick={clearFilters}

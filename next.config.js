@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+
 const nextConfig = {
 	reactStrictMode: false,
 	sassOptions: {
@@ -29,12 +30,12 @@ const nextConfig = {
 				destination: "/properties",
 			},
 			{
-				source: "/imovel/:slug",
-				destination: "/property-detail/:slug",
+				source: "/lancamentos",
+				destination: "/releases",
 			},
 			{
-				source: "/lancamentos",
-				destination: "/properties",
+				source: "/imovel/:slug",
+				destination: "/property-detail/:slug",
 			},
 			{
 				source: "/blog/:slug",

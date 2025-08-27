@@ -6,22 +6,15 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
-// localhost (SQLite):
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-// Para produção (PostgreSQL):
-//datasource db {
-//  provider = "postgresql"
-//  url      = env("DATABASE_URL")
-//}
 
 model Blog {
   id           Int      @id @default(autoincrement())
   slug         String   @unique
-  thumb        String
+  thumbnail    String
   image        String
   tag          String
   author       String
@@ -53,7 +46,7 @@ model Property {
   slug              String   @unique
   address           String
   neighborhood      String
-  bedroom           Int[]
+  bedroom           Json
   suite             Int[]
   parking           Int[]
   min_area          Float
@@ -66,33 +59,20 @@ model Property {
   description       String[]
   description_embed String?
   preview           Json
+  seo               Json
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt  
 
-  // Relationship with PropertyImage and PropertySeo
+  // Relationship with PropertyImage
   images            PropertyImage[]
-  seo               PropertySeo?
-}
 
-model PropertySeo {
-  id           Int     @id @default(autoincrement())
-  title        String
-  description  String
-  keywords     String[]
-  city         String
-  state        String
-  zip          String
-  street       String
-  
-  // Relationship with Property
-  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  propertyId   Int      @unique
 }
 
 model PropertyImage {
   id          Int      @id @default(autoincrement())
   src         String
   alt         String?
+  thumbnail   Boolean @default(false)
   
   // Relationship with Property
   property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)

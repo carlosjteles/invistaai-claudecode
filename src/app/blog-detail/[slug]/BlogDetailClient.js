@@ -2,16 +2,18 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
-import { blogData as data } from "../../storage/data";
-
-import { formatDateISO, formatDateUS } from "../../helper/Formatter";
+import {
+	formatDate,
+	formatDateISO,
+	formatDateUS,
+} from "../../helper/Formatter";
 import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
 import Swal from "sweetalert2";
@@ -21,37 +23,30 @@ export default function BlogDetailClient(props) {
 
 	const [search, setSearch] = React.useState("");
 
-	const recentData = React.useMemo(() => {
-		return [...data]
-			.map((item) => ({
-				...item,
-				parsedDate: (() => formatDateUS(item.date))(),
-			}))
-			.sort((a, b) => b.parsedDate - a.parsedDate)
-			.slice(0, 3)
-			.map(({ parsedDate, ...item }) => item);
-	}, []);
+	const content = React.useMemo(() => {
+		if (!blogPost.content) return [];
 
-	const blogData = data.find((item) => item.slug === props.params.slug);
+		try {
+			if (typeof blogPost.content === "string") {
+				const parsed = JSON.parse(blogPost.content);
+				return Array.isArray(parsed)
+					? parsed
+					: [{ type: "text", value: parsed }];
+			}
 
-	const relatedPosts = React.useMemo(() => {
-		if (!blogData) return [];
+			if (Array.isArray(blogPost.content)) {
+				return blogPost.content;
+			}
 
-		return data
-			.filter(
-				(item) => item.tag === blogData.tag && item.slug !== blogData.slug
-			)
-			.slice(0, 2);
-	}, [blogData]);
+			if (typeof blogPost.content === "object") {
+				return [blogPost.content];
+			}
 
-	const tags = React.useMemo(
-		() => [...new Set(data.map((item) => item.tag))],
-		[]
-	);
-
-	if (!blogData) {
-		notFound();
-	}
+			return [{ type: "text", value: String(blogPost.content) }];
+		} catch (e) {
+			return [{ type: "text", value: blogPost.content }];
+		}
+	}, [blogPost.content]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -71,17 +66,27 @@ export default function BlogDetailClient(props) {
 		setSearch("");
 	};
 
+	const articleBody = React.useMemo(() => {
+		if (Array.isArray(blogPost.content)) {
+			return blogPost.content
+				.filter((item) => item.type === "text")
+				.map((item) => item.value)
+				.join(" ");
+		}
+		return blogPost.description;
+	}, [blogPost.content]);
+
 	const blogSchema = {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
-		headline: blogData.title,
-		description: blogData.desc,
-		image: `${getBaseUrl()}${blogData.image}`,
-		datePublished: formatDateISO(blogData.date),
-		dateModified: formatDateISO(blogData.date), // Data de modificação
+		headline: blogPost.title,
+		description: blogPost.description,
+		image: `${getBaseUrl()}${blogPost.image}`,
+		datePublished: formatDateISO(blogPost.createdAt),
+		dateModified: formatDateISO(blogPost.updatedAt),
 		author: {
 			"@type": "Person",
-			name: blogData.author,
+			name: blogPost.author,
 		},
 		publisher: {
 			"@type": "Organization",
@@ -91,10 +96,10 @@ export default function BlogDetailClient(props) {
 				url: `${getBaseUrl()}/logo.png`,
 			},
 		},
-		keywords: blogData.keywords,
+		keywords: blogPost.keywords,
 		mainEntityOfPage: {
 			"@type": "WebPage",
-			"@id": `${getBaseUrl()}/blog/${blogData.slug}`,
+			"@id": `${getBaseUrl()}/blog/${blogPost.slug}`,
 		},
 		breadcrumb: {
 			"@type": "BreadcrumbList",
@@ -114,16 +119,12 @@ export default function BlogDetailClient(props) {
 				{
 					"@type": "ListItem",
 					position: 3,
-					name: blogData.title,
-					item: `${getBaseUrl()}/blog/${blogData.slug}`,
+					name: blogPost.title,
+					item: `${getBaseUrl()}/blog/${blogPost.slug}`,
 				},
 			],
 		},
-		// Extrair o conteúdo do texto para facilitar a indexação
-		articleBody: blogData.content
-			.filter((item) => item.type === "text")
-			.map((item) => item.value)
-			.join(" "),
+		articleBody: articleBody,
 	};
 
 	return (
@@ -148,23 +149,23 @@ export default function BlogDetailClient(props) {
 					<div className="row mt-5 justify-content-center">
 						<div className="col-12">
 							<div className="title-heading text-center">
-								<span className="badge bg-primary">{blogData.tag}</span>
+								<span className="badge bg-primary">{blogPost.tag}</span>
 								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark mt-4">
-									{blogData.title}
+									{blogPost.title}
 								</h5>
 
 								<ul className="list-inline text-center mb-0">
 									<li className="list-inline-item mx-4 mt-4">
 										<span className="text-white-50 d-block">Autor</span>
 										<Link href="#" className="text-white title-dark">
-											{blogData.author}
+											{blogPost.author}
 										</Link>
 									</li>
 
 									<li className="list-inline-item mx-4 mt-4">
 										<span className="text-white-50 d-block">Data</span>
 										<span className="text-white title-dark">
-											{blogData.date}
+											{formatDate(blogPost.createdAt)}
 										</span>
 									</li>
 								</ul>
@@ -209,11 +210,11 @@ export default function BlogDetailClient(props) {
 									itemScope
 									itemType="https://schema.org/ListItem"
 								>
-									<span itemProp="name">{blogData.title}</span>
+									<span itemProp="name">{blogPost.title}</span>
 									<meta itemProp="position" content="3" />
 									<meta
 										itemProp="item"
-										content={`${getBaseUrl()}/blog/${blogData.slug}`}
+										content={`${getBaseUrl()}/blog/${blogPost.slug}`}
 									/>
 								</li>
 							</ul>
@@ -244,28 +245,30 @@ export default function BlogDetailClient(props) {
 								itemType="https://schema.org/BlogPosting"
 								className="card border-0 shadow rounded-3 overflow-hidden"
 							>
-								<meta itemProp="headline" content={blogData.title} />
+								<meta itemProp="headline" content={blogPost.title} />
 								<meta
 									itemProp="datePublished"
-									content={formatDateISO(blogData.date)}
+									content={formatDateISO(blogPost.createdAt)}
 								/>
-								<meta itemProp="author" content={blogData.author} />
+								<meta itemProp="author" content={blogPost.author} />
 
-								<figure>
-									<Image
-										src={blogData.image}
-										width={0}
-										height={0}
-										sizes="100vw"
-										style={{ width: "100%", height: "auto" }}
-										className="img-fluid"
-										alt={blogData.title}
-										itemProp="image"
-									/>
-								</figure>
+								{blogPost.image && (
+									<figure>
+										<Image
+											src={blogPost.image}
+											width={0}
+											height={0}
+											sizes="100vw"
+											style={{ width: "100%", height: "auto" }}
+											className="img-fluid"
+											alt={blogPost.title}
+											itemProp="image"
+										/>
+									</figure>
+								)}
 
 								<div className="card-body" itemProp="articleBody">
-									{blogData.content.map((item, idx) => {
+									{blogPost.content.map((item, idx) => {
 										if (item.type === "text") {
 											return (
 												<p className="text-muted" key={idx}>
@@ -319,109 +322,121 @@ export default function BlogDetailClient(props) {
 								</div>
 							</article>
 
-							<div
-								className="card shadow rounded-3 mt-4"
-								itemScope
-								itemType="https://schema.org/ItemList"
-							>
-								<meta itemProp="name" content="Notícias Relacionadas" />
-								<meta itemProp="numberOfItems" content={relatedPosts.length} />
+							{relatedPosts.length > 0 && (
+								<div
+									className="card shadow rounded-3 mt-4"
+									itemScope
+									itemType="https://schema.org/ItemList"
+								>
+									<meta itemProp="name" content="Notícias Relacionadas" />
+									<meta
+										itemProp="numberOfItems"
+										content={relatedPosts.length}
+									/>
 
-								<div className="card-body">
-									<h5 className="card-title mb-0">Notícias Relacionadas :</h5>
+									<div className="card-body">
+										<h5 className="card-title mb-0">Notícias Relacionadas :</h5>
 
-									<div className="row g-4 mt-0">
-										{relatedPosts.map((item, index) => {
-											return (
-												<div
-													className="col-lg-6"
-													key={index}
-													itemProp="itemListElement"
-													itemScope
-													itemType="https://schema.org/ListItem"
-												>
-													<meta itemProp="position" content={index + 1} />
+										<div className="row g-4 mt-0">
+											{relatedPosts.map((item, index) => {
+												const imgSrc = item.thumbnail || item.image;
 
+												return (
 													<div
-														className="card blog blog-primary shadow rounded-3 overflow-hidden border-0"
+														className="col-lg-6"
+														key={index}
+														itemProp="itemListElement"
 														itemScope
-														itemType="https://schema.org/BlogPosting"
+														itemType="https://schema.org/ListItem"
 													>
-														<meta itemProp="headline" content={item.title} />
-														<meta itemProp="description" content={item.desc} />
-														<meta
-															itemProp="datePublished"
-															content={formatDateISO(item.date)}
-														/>
-														<meta
-															itemProp="url"
-															content={`${getBaseUrl()}/blog/${item.slug}`}
-														/>
-														{item.author && (
-															<meta itemProp="author" content={item.author} />
-														)}
+														<meta itemProp="position" content={index + 1} />
 
-														<div className="card-img blog-image position-relative overflow-hidden rounded-0">
-															<div className="position-relative overflow-hidden">
-																<Image
-																	src={item.image}
-																	width={0}
-																	height={0}
-																	sizes="100vw"
-																	style={{ width: "100%", height: "auto" }}
-																	className="img-fluid"
-																	alt={item.title}
-																	itemProp="image"
-																/>
-																<div className="card-overlay"></div>
+														<div
+															className="card blog blog-primary shadow rounded-3 overflow-hidden border-0"
+															itemScope
+															itemType="https://schema.org/BlogPosting"
+														>
+															<meta itemProp="headline" content={item.title} />
+															<meta
+																itemProp="description"
+																content={item.description}
+															/>
+															<meta
+																itemProp="datePublished"
+																content={formatDateISO(item.createdAt)}
+															/>
+															<meta
+																itemProp="url"
+																content={`${getBaseUrl()}/blog/${item.slug}`}
+															/>
+															{item.author && (
+																<meta itemProp="author" content={item.author} />
+															)}
+
+															<div className="card-img blog-image position-relative overflow-hidden rounded-0">
+																<div className="position-relative overflow-hidden">
+																	<Image
+																		src={imgSrc}
+																		width={0}
+																		height={0}
+																		sizes="100vw"
+																		style={{ width: "100%", height: "auto" }}
+																		className="img-fluid"
+																		alt={item.title}
+																		itemProp="image"
+																	/>
+																	<div className="card-overlay"></div>
+																</div>
+
+																<div className="blog-tag p-3">
+																	<Link
+																		href={`/blogs?tag=${encodeURIComponent(
+																			item.tag
+																		)}`}
+																		className="badge bg-primary"
+																	>
+																		{item.tag}
+																	</Link>
+																</div>
 															</div>
 
-															<div className="blog-tag p-3">
-																<Link
-																	href={`/blogs?tag=${encodeURIComponent(
-																		item.tag
-																	)}`}
-																	className="badge bg-primary"
-																>
-																	{item.tag}
-																</Link>
-															</div>
-														</div>
+															<div className="card-body content p-0">
+																<div className="p-4">
+																	<Link
+																		href={`/blog/${item.slug}`}
+																		className="title fw-medium fs-5 text-dark"
+																		itemProp="url"
+																	>
+																		<span itemProp="headline">
+																			{item.title}
+																		</span>
+																	</Link>
 
-														<div className="card-body content p-0">
-															<div className="p-4">
-																<Link
-																	href={`/blog/${item.slug}`}
-																	className="title fw-medium fs-5 text-dark"
-																	itemProp="url"
-																>
-																	<span itemProp="headline">{item.title}</span>
-																</Link>
+																	<p
+																		className="text-muted mt-2"
+																		itemProp="description"
+																	>
+																		{item.description}
+																	</p>
 
-																<p
-																	className="text-muted mt-2"
-																	itemProp="description"
-																>
-																	{item.desc}
-																</p>
-
-																<Link
-																	href={`/blog/${item.slug}`}
-																	className="text-dark read-more"
-																	aria-label={`Ler mais sobre ${item.title}`}
-																>
-																	Leia Mais{" "}
-																	<i className="mdi mdi-chevron-right align-middle"></i>
-																</Link>
+																	<Link
+																		href={`/blog/${item.slug}`}
+																		className="text-dark read-more"
+																		aria-label={`Ler mais sobre ${item.title}`}
+																	>
+																		Leia Mais{" "}
+																		<i className="mdi mdi-chevron-right align-middle"></i>
+																	</Link>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											);
-										})}
+												);
+											})}
+										</div>
 									</div>
 								</div>
-							</div>
+							)}
 						</div>
 
 						<div className="col-lg-4 col-md-6 col-12">
@@ -473,22 +488,92 @@ export default function BlogDetailClient(props) {
 										</div>
 									</div>
 								</div>
-								<div
-									className="mt-4 pt-2"
-									itemScope
-									itemType="https://schema.org/ItemList"
-								>
-									<meta itemProp="name" content="Notícias Recentes" />
-									<meta itemProp="numberOfItems" content={recentData.length} />
+								{recentPosts && recentPosts.length > 0 && (
+									<div
+										className="mt-4 pt-2"
+										itemScope
+										itemType="https://schema.org/ItemList"
+									>
+										<meta itemProp="name" content="Notícias Recentes" />
+										<meta
+											itemProp="numberOfItems"
+											content={recentData.length}
+										/>
 
-									<h6 className="pt-2 pb-2 bg-light rounded-3 text-center">
-										Notícias Recentes
-									</h6>
-									<div className="mt-4">
-										{recentData.map((item, index) => {
-											return (
-												<div
-													className="blog blog-primary d-flex align-items-center mt-3"
+										<h6 className="pt-2 pb-2 bg-light rounded-3 text-center">
+											Notícias Recentes
+										</h6>
+										<div className="mt-4">
+											{recentData.map((item, index) => {
+												const imgSrc = item.thumbnail || item.image;
+
+												return (
+													<div
+														className="blog blog-primary d-flex align-items-center mt-3"
+														key={index}
+														itemProp="itemListElement"
+														itemScope
+														itemType="https://schema.org/ListItem"
+													>
+														<meta itemProp="position" content={index + 1} />
+
+														<div
+															itemScope
+															itemType="https://schema.org/BlogPosting"
+														>
+															<meta itemProp="headline" content={item.title} />
+															<meta
+																itemProp="datePublished"
+																content={formatDateISO(item.createdAt)}
+															/>
+															<meta
+																itemProp="url"
+																content={`${getBaseUrl()}/blog/${item.slug}`}
+															/>
+
+															<Image
+																src={imgSrc}
+																width={105}
+																height={65}
+																className="avatar avatar-small rounded-3"
+																style={{ width: "auto" }}
+																alt={item.title}
+																itemProp="image"
+															/>
+															<div className="flex-1 ms-3">
+																<Link
+																	href={`/blog/${item.slug}`}
+																	className="d-block title text-dark fw-medium"
+																	itemProp="url"
+																>
+																	<span itemProp="headline">{item.title}</span>
+																</Link>
+																<span className="text-muted small">
+																	{formatDate(item.createdAt)}
+																</span>
+															</div>
+														</div>
+													</div>
+												);
+											})}
+										</div>
+									</div>
+								)}
+
+								{tags && tags.length > 0 && (
+									<div
+										className="mt-4 pt-2 text-center"
+										itemScope
+										itemType="https://schema.org/ItemList"
+									>
+										<meta itemProp="name" content="Assuntos" />
+										<meta itemProp="numberOfItems" content={tags.length} />
+
+										<h6 className="pt-2 pb-2 bg-light rounded-3">Assuntos</h6>
+										<ul className="tagcloud list-unstyled mt-4">
+											{tags.map((tag, index) => (
+												<li
+													className="list-inline-item m-1"
 													key={index}
 													itemProp="itemListElement"
 													itemScope
@@ -496,79 +581,18 @@ export default function BlogDetailClient(props) {
 												>
 													<meta itemProp="position" content={index + 1} />
 
-													<div
-														itemScope
-														itemType="https://schema.org/BlogPosting"
+													<Link
+														href={`/blogs?tag=${encodeURIComponent(tag)}`}
+														className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
+														itemProp="url"
 													>
-														<meta itemProp="headline" content={item.title} />
-														<meta
-															itemProp="datePublished"
-															content={formatDateISO(item.date)}
-														/>
-														<meta
-															itemProp="url"
-															content={`${getBaseUrl()}/blog/${item.slug}`}
-														/>
-
-														<Image
-															src={item.image}
-															width={105}
-															height={65}
-															className="avatar avatar-small rounded-3"
-															style={{ width: "auto" }}
-															alt={item.title}
-															itemProp="image"
-														/>
-														<div className="flex-1 ms-3">
-															<Link
-																href={`/blog/${item.slug}`}
-																className="d-block title text-dark fw-medium"
-																itemProp="url"
-															>
-																<span itemProp="headline">{item.title}</span>
-															</Link>
-															<span className="text-muted small">
-																{item.date}
-															</span>
-														</div>
-													</div>
-												</div>
-											);
-										})}
+														<span itemProp="name">{tag}</span>
+													</Link>
+												</li>
+											))}
+										</ul>
 									</div>
-								</div>
-
-								<div
-									className="mt-4 pt-2 text-center"
-									itemScope
-									itemType="https://schema.org/ItemList"
-								>
-									<meta itemProp="name" content="Assuntos" />
-									<meta itemProp="numberOfItems" content={tags.length} />
-
-									<h6 className="pt-2 pb-2 bg-light rounded-3">Assuntos</h6>
-									<ul className="tagcloud list-unstyled mt-4">
-										{tags.map((tag, index) => (
-											<li
-												className="list-inline-item m-1"
-												key={index}
-												itemProp="itemListElement"
-												itemScope
-												itemType="https://schema.org/ListItem"
-											>
-												<meta itemProp="position" content={index + 1} />
-
-												<Link
-													href={`/blogs?tag=${encodeURIComponent(tag)}`}
-													className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
-													itemProp="url"
-												>
-													<span itemProp="name">{tag}</span>
-												</Link>
-											</li>
-										))}
-									</ul>
-								</div>
+								)}
 							</div>
 						</div>
 					</div>
