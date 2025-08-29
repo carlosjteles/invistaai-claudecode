@@ -235,11 +235,12 @@ export default function Footer({ showImage = false }) {
 											className="text-reset"
 											aria-label="Desenvolvido por DAMC"
 										>
-											<img
+											<Image
 												src="/images/damc.png"
 												alt="DAMC Developer"
 												className="img-fluid"
-												style={{ maxHeight: "30px" }}
+												height={30}
+												width={101}
 											/>
 										</Link>
 										.

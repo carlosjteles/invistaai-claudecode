@@ -1,10 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+
+import { NumericFormat } from "react-number-format";
+
+import Swal from "sweetalert2";
 
 export default function FinancingSimulation() {
-	const [currentStep, setCurrentStep] = useState(1);
-	const [loading, setLoading] = useState(false);
-	const [formData, setFormData] = useState({
+	const [currentStep, setCurrentStep] = React.useState(1);
+	const [loading, setLoading] = React.useState(false);
+	const [formData, setFormData] = React.useState({
 		renda: "",
 		compor: "",
 		comporValor: "",
@@ -19,7 +23,7 @@ export default function FinancingSimulation() {
 		numero: "",
 		email: "",
 	});
-	const [resultData, setResultData] = useState(null);
+	const [resultData, setResultData] = React.useState(null);
 
 	// Tabela de valores do cálculo de financiamento
 	const tableOfValues = {
@@ -57,10 +61,6 @@ export default function FinancingSimulation() {
 	};
 
 	const handleInputChange = (e) => {
-		if (e.target.value.startsWith("0") && e.target.value.length > 1) {
-			e.target.value = e.target.value.slice(1);
-		}
-
 		const { name, value } = e.target;
 		setFormData({
 			...formData,
@@ -125,35 +125,6 @@ export default function FinancingSimulation() {
 		}
 	};
 
-	const formatToBrl = (e) => {
-		if (e.target.value === "0") {
-			e.target.value = "";
-		}
-
-		let value = e.target.value.replace(/\D/g, "");
-		let formattedValue = "";
-
-		if (value.length > 2) {
-			formattedValue =
-				value.slice(0, value.length - 2) + "," + value.slice(value.length - 2);
-		} else if (value.length === 2) {
-			formattedValue = "0," + value;
-		} else if (value.length === 1) {
-			formattedValue = "0,0" + value;
-		} else {
-			formattedValue = "0,00";
-		}
-
-		formattedValue =
-			"R$ " + formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-		const { name } = e.target;
-		setFormData({
-			...formData,
-			[name]: formattedValue,
-		});
-	};
-
 	const formatPhone = (e) => {
 		let value = e.target.value.replace(/\D/g, "");
 
@@ -186,37 +157,52 @@ export default function FinancingSimulation() {
 	};
 
 	const parseNumber = (str) => {
+		if (typeof str === "number") return str;
 		if (!str) return 0;
 		return parseFloat(
 			str.replace(/\./g, "").replace(",", ".").replace("R$", "").trim()
 		);
 	};
 
-	const onlyNumbers = (e) => {
-		if (!/^\d*$/.test(e.target.value)) {
-			e.target.value = e.target.value.replace(/\D/g, "");
-		}
-	};
-
-	// Validações e navegação entre etapas
+	// Steps validation
 	const validateStep1 = () => {
 		if (!formData.renda) {
-			alert("Por favor, informe sua renda mensal.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe sua renda mensal.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (!formData.compor) {
-			alert("Por favor, selecione se vai juntar renda com alguém.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, selecione se vai juntar renda com alguém.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (formData.compor === "sim" && !formData.comporValor) {
-			alert("Por favor, informe a renda da outra pessoa.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe a renda da outra pessoa.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (!formData.filhos) {
-			alert("Por favor, selecione se possui dependentes.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, selecione se possui dependentes.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
@@ -225,23 +211,43 @@ export default function FinancingSimulation() {
 
 	const validateStep2 = () => {
 		if (!formData.fgts) {
-			alert("Por favor, selecione se possui FGTS.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, selecione se possui FGTS.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (formData.fgts === "sim" && !formData.fgtsValor) {
-			alert("Por favor, informe o valor do FGTS.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe o valor do FGTS.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (formData.compor === "sim") {
 			if (!formData.comporFgts) {
-				alert("Por favor, selecione se a outra pessoa possui FGTS.");
+				Swal.fire({
+					icon: "error",
+					title: "Por favor, selecione se a outra pessoa possui FGTS.",
+					showConfirmButton: false,
+					timer: 2500,
+				});
 				return false;
 			}
 
 			if (formData.comporFgts === "sim" && !formData.comporFgtsValor) {
-				alert("Por favor, informe o valor do FGTS da outra pessoa.");
+				Swal.fire({
+					icon: "error",
+					title: "Por favor, informe o valor do FGTS da outra pessoa.",
+					showConfirmButton: false,
+					timer: 2500,
+				});
 				return false;
 			}
 		}
@@ -251,7 +257,12 @@ export default function FinancingSimulation() {
 
 	const validateStep3 = () => {
 		if (formData.ocupacao.length === 0) {
-			alert("Por favor, selecione pelo menos uma ocupação.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, selecione pelo menos uma ocupação.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
@@ -260,9 +271,13 @@ export default function FinancingSimulation() {
 
 	const validateStep4 = () => {
 		if (formData.ocupacao2.length === 0) {
-			alert(
-				"Por favor, selecione pelo menos uma ocupação para a outra pessoa."
-			);
+			Swal.fire({
+				icon: "error",
+				title:
+					"Por favor, selecione pelo menos uma ocupação para a outra pessoa.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
@@ -271,29 +286,55 @@ export default function FinancingSimulation() {
 
 	const validateStep5 = () => {
 		if (!formData.nome) {
-			alert("Por favor, informe seu nome.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe seu nome.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (!formData.numero) {
-			alert("Por favor, informe seu número de telefone.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe seu número de telefone.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		const numeroTelefone = formData.numero.replace(/\D/g, "");
 		if (numeroTelefone.length !== 11) {
-			alert("Por favor, informe um número de telefone válido com DDD.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe um número de telefone válido com DDD.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		if (!formData.email) {
-			alert("Por favor, informe seu e-mail.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe seu e-mail.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 		if (!emailRegex.test(formData.email)) {
-			alert("Por favor, informe um e-mail válido.");
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, informe um e-mail válido.",
+				showConfirmButton: false,
+				timer: 2500,
+			});
 			return false;
 		}
 
@@ -437,10 +478,7 @@ export default function FinancingSimulation() {
 	};
 
 	const openWhatsapp = () => {
-		window.open(
-			"https://api.whatsapp.com/send/?phone=5511951260713&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20Cidade%20Villa-Lobos%20Maestro",
-			"_blank"
-		);
+		window.open("https://api.whatsapp.com/send/?phone=5511978777584", "_blank");
 	};
 
 	const clearForm = () => {
@@ -480,16 +518,22 @@ export default function FinancingSimulation() {
 								<label htmlFor="renda" className="form-label text-dark">
 									Informe sua renda mensal
 								</label>
-								<input
-									type="text"
+								<NumericFormat
 									className="form-control"
 									id="renda"
 									name="renda"
 									value={formData.renda}
-									onChange={handleInputChange}
-									onBlur={formatToBrl}
-									onKeyUp={onlyNumbers}
-									placeholder="Ex: 1.000,00"
+									onValueChange={(values) => {
+										setFormData({
+											...formData,
+											renda: values.floatValue || "",
+										});
+									}}
+									thousandSeparator="."
+									decimalSeparator=","
+									prefix="R$ "
+									decimalScale={2}
+									placeholder="R$ 1.000,00"
 									required
 								/>
 							</div>
@@ -534,16 +578,23 @@ export default function FinancingSimulation() {
 									<label htmlFor="comporValor" className="form-label">
 										Qual a Renda Comprovada da Outra Pessoa:
 									</label>
-									<input
-										type="text"
+									<NumericFormat
 										className="form-control"
 										id="comporValor"
 										name="comporValor"
 										value={formData.comporValor}
-										onChange={handleInputChange}
-										onBlur={formatToBrl}
-										onKeyUp={onlyNumbers}
-										placeholder="Ex: 1.000,00"
+										onValueChange={(values) => {
+											setFormData({
+												...formData,
+												comporValor: values.floatValue || "",
+											});
+										}}
+										thousandSeparator="."
+										decimalSeparator=","
+										prefix="R$ "
+										decimalScale={2}
+										placeholder="R$ 1.000,00"
+										required
 									/>
 								</div>
 							)}
@@ -628,16 +679,23 @@ export default function FinancingSimulation() {
 									<label htmlFor="fgtsValor" className="form-label">
 										Qual o valor do seu FGTS?
 									</label>
-									<input
-										type="text"
+									<NumericFormat
 										className="form-control"
 										id="fgtsValor"
 										name="fgtsValor"
 										value={formData.fgtsValor}
-										onChange={handleInputChange}
-										onBlur={formatToBrl}
-										onKeyUp={onlyNumbers}
-										placeholder="Ex: 1.000,00"
+										onValueChange={(values) => {
+											setFormData({
+												...formData,
+												fgtsValor: values.floatValue || "",
+											});
+										}}
+										thousandSeparator="."
+										decimalSeparator=","
+										prefix="R$ "
+										decimalScale={2}
+										placeholder="R$ 1.000,00"
+										required
 									/>
 								</div>
 							)}
@@ -679,16 +737,23 @@ export default function FinancingSimulation() {
 											<label htmlFor="comporFgtsValor" className="form-label">
 												Qual o valor do FGTS da outra pessoa?
 											</label>
-											<input
-												type="text"
+											<NumericFormat
 												className="form-control"
 												id="comporFgtsValor"
 												name="comporFgtsValor"
 												value={formData.comporFgtsValor}
-												onChange={handleInputChange}
-												onBlur={formatToBrl}
-												onKeyUp={onlyNumbers}
-												placeholder="Ex: 1.000,00"
+												onValueChange={(values) => {
+													setFormData({
+														...formData,
+														comporFgtsValor: values.floatValue || "",
+													});
+												}}
+												thousandSeparator="."
+												decimalSeparator=","
+												prefix="R$ "
+												decimalScale={2}
+												placeholder="R$ 1.000,00"
+												required
 											/>
 										</div>
 									)}
@@ -1019,7 +1084,6 @@ export default function FinancingSimulation() {
 									name="nome"
 									value={formData.nome}
 									onChange={handleInputChange}
-									onKeyUp={onlyNumbers}
 									placeholder="Seu Nome Completo"
 									required
 								/>
@@ -1053,7 +1117,6 @@ export default function FinancingSimulation() {
 									name="email"
 									value={formData.email}
 									onChange={handleInputChange}
-									onKeyUp={onlyNumbers}
 									placeholder="Seu e-mail"
 									required
 								/>
@@ -1099,47 +1162,49 @@ export default function FinancingSimulation() {
 								<i className="mdi mdi-arrow-left"></i> Voltar
 							</button>
 
-							<div className="text-center py-4">
-								<h3 className="fw-bold text-primary mb-4">
+							<div className="text-center py-4 mt-5">
+								<h4 className="fw-bold text-primary mb-4">
 									Resultado da Simulação
-								</h3>
+								</h4>
 
 								<div className="p-3 mb-4 bg-light rounded-3">
-									<h4 className="fw-bold text-primary">Renda Total</h4>
-									<h3 className="display-6">
+									<p className="fw-bold text-primary">Renda Total</p>
+									<h5 className="display-6">
 										{formatCurrency(resultData.totalRenda)}
-									</h3>
-								</div>
-
-								<div className="row mb-4">
-									<div className="col-md-6 mb-3">
-										<div className="p-3 h-100 bg-light rounded-3">
-											<p className="fw-bold">Dependentes:</p>
-											<p>{formData.filhos === "sim" ? "Sim" : "Não"}</p>
-										</div>
-									</div>
-									<div className="col-md-6 mb-3">
-										<div className="p-3 h-100 bg-light rounded-3">
-											<p className="fw-bold">Compor Renda:</p>
-											<p>{formData.compor === "sim" ? "Sim" : "Não"}</p>
-										</div>
-									</div>
-								</div>
-
-								<div className="p-3 mb-4 bg-light rounded-3">
-									<p className="fw-bold">Ocupações:</p>
-									<p>{formData.ocupacao.join(", ")}</p>
-									{formData.compor === "sim" && (
-										<p>{formData.ocupacao2.join(", ")}</p>
-									)}
-								</div>
-
-								<div className="alert alert-success">
-									<h5 className="fw-bold">
-										Recebemos suas informações, iremos fazer a simulação e
-										retornaremos pelo WhatsApp
 									</h5>
 								</div>
+
+								<div className="row mb-3">
+									<div className="col-12 mb-2">
+										<div className="p-3 h-100 rounded-3">
+											<p className="mb-0">
+												<strong>Dependentes:</strong>{" "}
+												{formData.filhos === "sim" ? "Sim" : "Não"}
+											</p>
+										</div>
+									</div>
+									<div className="col-12 mb-0">
+										<div className="p-3 h-100 rounded-3">
+											<p className="mb-0">
+												<strong>Compor Renda:</strong>{" "}
+												{formData.compor === "sim" ? "Sim" : "Não"}
+											</p>
+										</div>
+									</div>
+
+									<div className="col-12 p-3 mb-0 rounded-3">
+										<p className="fw-bold">Ocupações:</p>
+										<p>{formData.ocupacao.join(", ")}</p>
+										{formData.compor === "sim" && (
+											<p>{formData.ocupacao2.join(", ")}</p>
+										)}
+									</div>
+								</div>
+
+								<p className="alert alert-success">
+									Recebemos suas informações, iremos fazer a simulação e
+									retornaremos pelo WhatsApp
+								</p>
 
 								<button
 									className="btn btn-lg btn-primary mt-4 d-flex align-items-center mx-auto"

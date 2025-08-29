@@ -51,10 +51,10 @@ const PropertySchema = validate.object({
 	category: validate.number().int().positive("A categoria é obrigatória"),
 	delivery_in: validate.string().min(1, "A data de entrega é obrigatória"),
 	book: validate.string().url("A URL do book é inválida").optional().nullable(),
-	description: z
+	description: validate
 		.array(validate.string())
 		.min(1, "É necessário pelo menos um parágrafo de descrição"),
-	description_embed: z
+	description_embed: validate
 		.string()
 		.url("A URL do embed é inválida")
 		.optional()

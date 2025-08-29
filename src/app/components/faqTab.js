@@ -48,6 +48,7 @@ export default function FaqTab() {
 										offset={-100}
 										duration={500}
 										className="h6 text-dark navbar-link"
+										role="button"
 										itemProp="url"
 									>
 										<span itemProp="name">{title}</span>

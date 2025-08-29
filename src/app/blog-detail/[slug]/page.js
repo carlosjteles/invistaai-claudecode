@@ -60,6 +60,9 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogDetail({ params }) {
 	const blogPost = await prisma.blog.findUnique({
+		include: {
+			content: true,
+		},
 		where: {
 			slug: params.slug,
 			OR: [{ thumbnail: { not: "" } }, { image: { not: "" } }],
@@ -70,8 +73,8 @@ export default async function BlogDetail({ params }) {
 		notFound();
 	}
 
-	/** Recent blogs */
-	const recentBlogs = await prisma.blog.findMany({
+	/** Recent Posts */
+	const recentPosts = await prisma.blog.findMany({
 		where: {
 			OR: [{ thumbnail: { not: "" } }, { image: { not: "" } }],
 		},

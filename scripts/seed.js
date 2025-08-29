@@ -35,6 +35,7 @@ async function main() {
 	for (const property of propertyData) {
 		await prisma.property.create({
 			data: {
+				external_id: property.external_id,
 				slug: property.slug,
 				address: property.address,
 				neighborhood: property.neighborhood,

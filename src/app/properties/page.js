@@ -77,6 +77,8 @@ export default async function Properties({ searchParams, params }) {
 	const bedroom = searchParams.quartos || "all";
 	const parking = searchParams.vagas || "all";
 	const suite = searchParams.suites || "all";
+	const minPrice = searchParams["preco-min"] || 0;
+	const maxPrice = searchParams["preco-max"] || 0;
 
 	/** Set filters prisma */
 	const filterWhere = {};
@@ -154,6 +156,22 @@ export default async function Properties({ searchParams, params }) {
 				},
 			});
 		}
+	}
+
+	if (minPrice) {
+		filterAnd.push({
+			price: {
+				gte: Number(minPrice),
+			},
+		});
+	}
+
+	if (maxPrice) {
+		filterAnd.push({
+			price: {
+				lte: Number(maxPrice),
+			},
+		});
 	}
 
 	if (filterAnd.length > 0) {

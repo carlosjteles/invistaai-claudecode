@@ -62,6 +62,10 @@ export default function BlogsClient({
 	};
 
 	const clearFilters = (type) => {
+		if (currentPage > 1) {
+			setCurrentPage(1);
+		}
+
 		if (type === "all" || type === "search") {
 			setInputValue("");
 		}
@@ -274,7 +278,11 @@ export default function BlogsClient({
 															<Link
 																href={`/blogs?tag=${encodeURIComponent(
 																	item.tag
-																)}`}
+																)}${
+																	searchParam
+																		? `&q=${encodeURIComponent(searchParam)}`
+																		: ""
+																}`}
 																className="badge bg-primary"
 															>
 																{item.tag}
@@ -322,7 +330,12 @@ export default function BlogsClient({
 						) : (
 							<div className="col-lg-8 col-md-6 col-12">
 								<div className="text-center p-5">
-									<h4>Nenhum post encontrado com os filtros selecionados</h4>
+									<h4>
+										Nenhum post encontrado
+										{searchParam &&
+											searchParam.length > 3 &&
+											" com os filtros selecionados"}
+									</h4>
 									{searchParam && searchParam.length > 3 && (
 										<button
 											className="btn btn-primary mt-3"
@@ -469,7 +482,11 @@ export default function BlogsClient({
 													<meta itemProp="position" content={index + 1} />
 
 													<Link
-														href={`/blogs?tag=${encodeURIComponent(tag)}`}
+														href={`/blogs?tag=${encodeURIComponent(tag)}${
+															searchParam
+																? `&q=${encodeURIComponent(searchParam)}`
+																: ""
+														}`}
 														className="rounded-3 fw-medium text-dark inline-block py-2 px-3"
 														itemProp="url"
 													>

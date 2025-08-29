@@ -1,6 +1,7 @@
 module.exports = [
 	{
 		id: 1,
+		external_id: "94815",
 		slug: "imovel-1",
 		image: "/images/property/1.jpg",
 		address: "Rua das Palmeiras, 1243 - Campinas, SP",
@@ -48,6 +49,7 @@ module.exports = [
 	},
 	{
 		id: 2,
+		external_id: "94816",
 		slug: "imovel-2",
 		image: "/images/property/2.jpg",
 		address: "Avenida das Rosas, 908 - Belo Horizonte, MG",
@@ -95,6 +97,7 @@ module.exports = [
 	},
 	{
 		id: 3,
+		external_id: "94817",
 		slug: "imovel-3",
 		image: "/images/property/3.jpg",
 		address: "Rua Porto Seguro dos Açores, 77 - Curitiba, PR",
@@ -142,6 +145,7 @@ module.exports = [
 	},
 	{
 		id: 4,
+		external_id: "94819",
 		slug: "imovel-4",
 		image: "/images/property/4.jpg",
 		address: "Alameda Harmonia, 333 - São Paulo, SP",
@@ -189,6 +193,7 @@ module.exports = [
 	},
 	{
 		id: 5,
+		external_id: "94820",
 		slug: "imovel-5",
 		image: "/images/property/5.jpg",
 		address: "Rua do Cedro, 1010 - Florianópolis, SC",
@@ -236,6 +241,7 @@ module.exports = [
 	},
 	{
 		id: 6,
+		external_id: "94325",
 		slug: "imovel-6",
 		image: "/images/property/6.jpg",
 		address: "Estrada do Sol Alegre, 215 - Salvador, BA",
@@ -283,6 +289,7 @@ module.exports = [
 	},
 	{
 		id: 7,
+		external_id: "94326",
 		slug: "imovel-7",
 		image: "/images/property/7.jpg",
 		address: "Rua Bela Vista, 312 - Porto Alegre, RS",
@@ -321,7 +328,7 @@ module.exports = [
 		],
 		description_embed:
 			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
-		price: 8700000,
+		price: 870000000,
 		rating: 5.0,
 		quantity_reviews: 51,
 		category: 4,
@@ -330,6 +337,7 @@ module.exports = [
 	},
 	{
 		id: 8,
+		external_id: "94218",
 		slug: "imovel-8",
 		image: "/images/property/8.jpg",
 		address: "Rua do Ipê, 480 - Vitória, ES",
@@ -368,7 +376,7 @@ module.exports = [
 		],
 		description_embed:
 			"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4336.500751314584!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1755301657917!5m2!1spt-BR!2sbr",
-		price: 1650000,
+		price: 165000,
 		rating: 4.4,
 		quantity_reviews: 18,
 		category: 4,
@@ -377,6 +385,7 @@ module.exports = [
 	},
 	{
 		id: 9,
+		external_id: "94231",
 		slug: "imovel-9",
 		image: "/images/property/9.jpg",
 		address: "Avenida Atlântica, 1200 - Rio de Janeiro, RJ",
@@ -414,7 +423,7 @@ module.exports = [
 			"O condomínio conta com infraestrutura completa, incluindo piscina, academia, salão de festas e segurança 24 horas. Além disso, a localização privilegiada garante fácil acesso a escolas, supermercados e áreas de lazer, tornando este imóvel uma oportunidade única.",
 		],
 		description_embed: null,
-		price: 9999999,
+		price: 99999999,
 		rating: 5.0,
 		quantity_reviews: 60,
 		category: 4,

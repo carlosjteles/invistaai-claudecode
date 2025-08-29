@@ -562,7 +562,10 @@ export default function PropertiesClient({
 						) : (
 							<div className="col-lg-8 col-md-6 col-12">
 								<div className="text-center p-5">
-									<h4>Nenhum imóvel encontrado com os filtros selecionados</h4>
+									<h4>
+										Nenhum imóvel encontrado
+										{activeFilters && " com os filtros selecionados"}
+									</h4>
 									{activeFilters && (
 										<button
 											className="btn btn-primary mt-3"

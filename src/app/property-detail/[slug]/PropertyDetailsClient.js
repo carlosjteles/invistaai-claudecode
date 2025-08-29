@@ -3,13 +3,22 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 
 import PropertyDetailImg from "../../components/PropertyDetailImg";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
-import RelatedPropertySlider from "../../components/RelatedPropertySlider";
-import FinancingSimulation from "../../components/FinancingSimulation";
+
+const FinancingSimulation = dynamic(
+	() => import("../../components/FinancingSimulation"),
+	{ ssr: false }
+);
+
+const RelatedPropertySlider = dynamic(
+	() => import("../../components/RelatedPropertySlider"),
+	{ ssr: false }
+);
 
 import { categories } from "../../storage/filters";
 import { contact } from "../../storage/about";
@@ -376,7 +385,7 @@ export default function PropertyDetailsClient({
 									</Link>
 								</div>
 
-								<FinancingSimulation />
+								{propertyData.price < 600000 && <FinancingSimulation />}
 							</div>
 						</div>
 					</div>

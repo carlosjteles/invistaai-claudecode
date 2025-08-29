@@ -43,6 +43,7 @@ model BlogContent {
 
 model Property {
   id                Int      @id @default(autoincrement())
+  external_id       String
   slug              String   @unique
   address           String
   neighborhood      String

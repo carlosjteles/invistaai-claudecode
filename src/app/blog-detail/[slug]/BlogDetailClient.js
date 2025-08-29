@@ -9,16 +9,17 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
-import {
-	formatDate,
-	formatDateISO,
-	formatDateUS,
-} from "../../helper/Formatter";
+import { formatDate, formatDateISO } from "../../helper/Formatter";
 import { getBaseUrl, getSiteName } from "../../helper/Utils";
 
 import Swal from "sweetalert2";
 
-export default function BlogDetailClient(props) {
+export default function BlogDetailClient({
+	blogPost,
+	recentPosts,
+	relatedPosts,
+	tags,
+}) {
 	const router = useRouter();
 
 	const [search, setSearch] = React.useState("");
@@ -74,7 +75,7 @@ export default function BlogDetailClient(props) {
 				.join(" ");
 		}
 		return blogPost.description;
-	}, [blogPost.content]);
+	}, [blogPost.content, blogPost.description]);
 
 	const blogSchema = {
 		"@context": "https://schema.org",
@@ -268,7 +269,7 @@ export default function BlogDetailClient(props) {
 								)}
 
 								<div className="card-body" itemProp="articleBody">
-									{blogPost.content.map((item, idx) => {
+									{content.map((item, idx) => {
 										if (item.type === "text") {
 											return (
 												<p className="text-muted" key={idx}>
@@ -497,19 +498,18 @@ export default function BlogDetailClient(props) {
 										<meta itemProp="name" content="Notícias Recentes" />
 										<meta
 											itemProp="numberOfItems"
-											content={recentData.length}
+											content={recentPosts.length}
 										/>
 
 										<h6 className="pt-2 pb-2 bg-light rounded-3 text-center">
 											Notícias Recentes
 										</h6>
 										<div className="mt-4">
-											{recentData.map((item, index) => {
+											{recentPosts.map((item, index) => {
 												const imgSrc = item.thumbnail || item.image;
 
 												return (
 													<div
-														className="blog blog-primary d-flex align-items-center mt-3"
 														key={index}
 														itemProp="itemListElement"
 														itemScope
@@ -518,6 +518,7 @@ export default function BlogDetailClient(props) {
 														<meta itemProp="position" content={index + 1} />
 
 														<div
+															className="blog blog-primary d-flex align-items-center mt-3"
 															itemScope
 															itemType="https://schema.org/BlogPosting"
 														>
