@@ -115,7 +115,7 @@ export default function PropertiesClient({
 				position: (currentPage - 1) * 8 + index + 1,
 				item: {
 					"@type": "RealEstateListing",
-					name: property.address,
+					name: property.name || property.address,
 					image: property.images?.[0]?.src || "",
 					url: `${getBaseUrl()}/imovel/${property.slug}`,
 					offers: {
@@ -446,7 +446,7 @@ export default function PropertiesClient({
 															href={`/imovel/${item.slug}`}
 															className="title fs-5 text-dark fw-medium"
 														>
-															{item.address}
+															{item.name || item.address}
 														</Link>
 
 														<div

@@ -37,6 +37,7 @@ async function main() {
 			data: {
 				external_id: property.external_id,
 				slug: property.slug,
+				name: property.name,
 				address: property.address,
 				neighborhood: property.neighborhood,
 				bedroom: property.bedroom,
@@ -48,32 +49,28 @@ async function main() {
 				quantity_reviews: property.quantity_reviews,
 				category: property.category,
 				delivery_in: property.delivery_in,
+				release_in: property.release_in,
 				book: property.book,
+				video: property.video,
 				description: property.description,
+				attributes: property.attributes,
 				description_embed: property.description_embed,
 				preview: property.preview,
-				seo: {
-					create: {
-						title: property.seo.title,
-						description: property.seo.description,
-						keywords: property.seo.keywords,
-						city: property.seo.city,
-						state: property.seo.state,
-						zip: property.seo.zip,
-						street: property.seo.street,
-					},
-				},
+				seo: property.seo,
+				typelogies: property.typelogies,
 				images: {
 					create: [
 						{
 							src: property.image,
 							title: "Imagem de capa",
+							type: "perspectives",
 							thumbnail: true,
 						},
 						...property.images,
 					].map((img, index) => ({
 						src: img.src,
 						alt: img.title,
+						type: img.type || "perspectives",
 						order: index,
 						thumbnail: img.thumbnail || false,
 					})),

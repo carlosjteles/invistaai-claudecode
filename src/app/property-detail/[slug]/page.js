@@ -35,7 +35,8 @@ export async function generateMetadata({ params }) {
 
 	return {
 		title:
-			propertyData.seo?.title || `${propertyData.address} | ${getSiteName()}`,
+			propertyData.seo?.title ||
+			`${propertyData.name || propertyData.address} | ${getSiteName()}`,
 		description:
 			propertyData.seo?.description ||
 			`${propertyData.preview?.area} com ${propertyData.preview?.bedroom} em ${propertyData.neighborhood}`,
@@ -43,7 +44,8 @@ export async function generateMetadata({ params }) {
 			propertyData.seo?.keywords ||
 			`imóvel, ${category}, ${propertyData.neighborhood}`,
 		openGraph: {
-			title: propertyData.seo?.title || propertyData.address,
+			title:
+				propertyData.seo?.title || propertyData.name || propertyData.address,
 			description: propertyData.seo?.description,
 			type: "article",
 			url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
@@ -53,14 +55,15 @@ export async function generateMetadata({ params }) {
 							url: mainImage,
 							width: 1200,
 							height: 630,
-							alt: propertyData.address,
+							alt: propertyData.name || propertyData.address,
 						},
 				  ]
 				: [],
 		},
 		twitter: {
 			card: "summary_large_image",
-			title: propertyData.seo?.title || propertyData.address,
+			title:
+				propertyData.seo?.title || propertyData.name || propertyData.address,
 			description: propertyData.seo?.description,
 			images: mainImage ? [mainImage] : [],
 		},

@@ -33,15 +33,28 @@ export default function PropertyDetailsClient({
 	const searchParams = useSearchParams();
 	const openGallery = searchParams.get("openGallery");
 
-	const whatsappMessage = (property) => {
-		const text = `Olá, quero agendar uma visita para o imóvel ${property} que vi no site.`;
+	const typelogiesByType = React.useMemo(() => {
+		if (!propertyData.typelogies) return {};
+		return propertyData.typelogies.reduce((type, item) => {
+			if (!type[item.type]) {
+				type[item.type] = [];
+			}
+
+			type[item.type].push(item);
+
+			return type;
+		}, {});
+	}, [propertyData.typelogies]);
+
+	const whatsappMessage = (propertyName) => {
+		const text = `Olá, quero agendar uma visita para o imóvel ${propertyName} que vi no site.`;
 		return `https://wa.me/${contact.phone}?text=${encodeURIComponent(text)}`;
 	};
 
 	const propertySchema = {
 		"@context": "https://schema.org",
 		"@type": "RealEstateListing",
-		name: propertyData.address,
+		name: propertyData.name || propertyData.address,
 		description: propertyData.description
 			? Array.isArray(propertyData.description)
 				? propertyData.description.join(" ")
@@ -122,7 +135,7 @@ export default function PropertyDetailsClient({
 				{
 					"@type": "ListItem",
 					position: 3,
-					name: propertyData.address,
+					name: propertyData.name || propertyData.address,
 					item: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 				},
 			],
@@ -145,7 +158,7 @@ export default function PropertyDetailsClient({
 				<div className="container-fluid mt-2">
 					<PropertyDetailImg
 						images={propertyData.images}
-						address={propertyData.address}
+						title={propertyData.name || propertyData.address}
 						openGallery={openGallery}
 					/>
 				</div>
@@ -186,7 +199,9 @@ export default function PropertyDetailsClient({
 								itemScope
 								itemType="https://schema.org/ListItem"
 							>
-								<span itemProp="name">{propertyData.address}</span>
+								<span itemProp="name">
+									{propertyData.name || propertyData.address}
+								</span>
 								<meta itemProp="position" content="3" />
 								<meta
 									itemProp="item"
@@ -205,7 +220,10 @@ export default function PropertyDetailsClient({
 								itemScope
 								itemType="https://schema.org/Product"
 							>
-								<meta itemProp="name" content={propertyData.address} />
+								<meta
+									itemProp="name"
+									content={propertyData.name || propertyData.address}
+								/>
 								<meta
 									itemProp="description"
 									content={
@@ -224,9 +242,9 @@ export default function PropertyDetailsClient({
 											: ""
 									}
 								/>
-
-								<h4 className="title mb-0">{propertyData.address}</h4>
-
+								<h4 className="title mb-0">
+									{propertyData.name || propertyData.address}
+								</h4>
 								<ul className="list-unstyled d-flex flex-wrap gap-3 align-items-center justify-content-between mb-0 py-3">
 									<li className="list-inline-item">
 										<span className="d-flex align-items-center">
@@ -308,8 +326,81 @@ export default function PropertyDetailsClient({
 										<p className="text-muted">{propertyData.description}</p>
 									))}
 
+								{propertyData.attributes &&
+									propertyData.attributes.length > 0 && (
+										<>
+											<h5 className="mb-3 text-dark">Características</h5>
+											<ul className="row list-unstyled">
+												{propertyData.attributes.map((attr, index) => (
+													<li
+														key={index}
+														className="col-6 mb-2 mx-0 align-items-center"
+													>
+														<span className="text-muted">{attr}</span>
+													</li>
+												))}
+											</ul>
+										</>
+									)}
+
+								{typelogiesByType &&
+									Object.keys(typelogiesByType).length > 0 && (
+										<div className="mb-4">
+											<h5 className="mb-3 text-dark">Tipologias Disponíveis</h5>
+											{Object.entries(typelogiesByType).map(([type, items]) => (
+												<table
+													className="table table-hover caption-top mb-4"
+													key={type}
+												>
+													<caption
+														className="text-dark fs-6 ms-2"
+														style={{
+															borderBottom: "1px solid rgb(223 223 223 / 75%)",
+														}}
+													>
+														{type}
+													</caption>
+													<thead>
+														<tr>
+															<th scope="col" className="text-muted">
+																A partir de
+															</th>
+															<th scope="col" className="text-muted">
+																m2
+															</th>
+															<th scope="col">
+																<i className="mdi mdi-bed fs-5 me-2 text-muted"></i>
+															</th>
+															<th scope="col">
+																<i className="mdi mdi-shower fs-5 me-2 text-muted"></i>
+															</th>
+															<th scope="col">
+																<i className="mdi mdi-car fs-5 me-2 text-muted"></i>
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														{items.map((item, idx) => (
+															<tr key={idx}>
+																<td className="text-muted">
+																	{formatPrice(item.price)}
+																</td>
+																<td className="text-muted">
+																	{item.private_area}
+																</td>
+																<td className="text-muted">{item.bedrooms}</td>
+																<td className="text-muted">{item.suites}</td>
+																<td className="text-muted">{item.parking}</td>
+															</tr>
+														))}
+													</tbody>
+												</table>
+											))}
+										</div>
+									)}
+
 								{propertyData.description_embed && (
-									<div className="card map border-0">
+									<div className="card map border-0 mt-2">
 										<div className="card-body p-0">
 											<iframe
 												src={propertyData.description_embed}
@@ -370,14 +461,26 @@ export default function PropertyDetailsClient({
 											<span className="small">{propertyData.delivery_in}</span>
 										</div>
 									)}
+									{propertyData.release_in && (
+										<div className="d-flex align-items-center justify-content-between mt-2">
+											<span className="small text-muted">Lançamento</span>
+											<span className="small">{propertyData.release_in}</span>
+										</div>
+									)}
 								</div>
 
 								<div className="d-flex mt-3">
-									<Link href="#" className="btn btn-primary w-100 small me-2">
-										Download Book
-									</Link>
+									{propertyData.book && (
+										<Link
+											href={propertyData.book}
+											className="btn btn-primary w-100 small me-2"
+										>
+											Download Book
+										</Link>
+									)}
+
 									<Link
-										href={whatsappMessage(propertyData.id)}
+										href={whatsappMessage(propertyData.name)}
 										className="btn btn-primary w-100 small"
 										aria-label="Agendar visita por WhatsApp"
 									>

@@ -73,22 +73,31 @@ export default async function Properties({ searchParams, params }) {
 	const itemsPerPage = 8;
 
 	/** Set filter parameters */
-	const searchTerm = searchParams.q || "";
 	const bedroom = searchParams.quartos || "all";
 	const parking = searchParams.vagas || "all";
 	const suite = searchParams.suites || "all";
 	const minPrice = searchParams["preco-min"] || 0;
 	const maxPrice = searchParams["preco-max"] || 0;
+	let searchTerm = searchParams.q || "";
 
 	/** Set filters prisma */
 	const filterWhere = {};
 	const filterAnd = [];
 
 	if (searchTerm) {
+		if (searchTerm.startsWith("R. ") || searchTerm.startsWith("R ")) {
+			searchTerm = searchTerm.replace("R. ", "Rua ").replace("R ", "Rua ");
+		} else if (searchTerm.startsWith("Av. ") || searchTerm.startsWith("Av ")) {
+			searchTerm = searchTerm
+				.replace("Av. ", "Avenida ")
+				.replace("Av ", "Avenida ");
+		}
+
 		filterAnd.push({
 			OR: [
 				{ address: { contains: searchTerm, mode: "insensitive" } },
 				{ neighborhood: { contains: searchTerm, mode: "insensitive" } },
+				{ name: { contains: searchTerm, mode: "insensitive" } },
 			],
 		});
 	}

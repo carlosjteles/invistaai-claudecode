@@ -119,7 +119,7 @@ export default async function FeaturedProperties() {
 										className="title fs-5 text-dark fw-medium"
 										itemProp="name"
 									>
-										{item.address}
+										{item.name}
 									</Link>
 
 									<div

@@ -123,7 +123,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 												className="title fs-5 text-dark fw-medium"
 												itemProp="name"
 											>
-												{item.address}
+												{item.name}
 											</Link>
 
 											<div

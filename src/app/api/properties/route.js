@@ -10,6 +10,7 @@ const ImageSchema = validate.object({
 	src: validate.string(),
 	title: validate.string().optional(),
 	thumbnail: validate.boolean().optional(),
+	type: validate.enum(["perspectives", "building_documents"]),
 });
 
 const SeoSchema = validate.object({
@@ -42,6 +43,7 @@ const PropertySchema = validate.object({
 			/^[a-z0-9-]+$/,
 			"Slug deve conter apenas letras minúsculas, números e hífens"
 		),
+	name: validate.string().min(1, "O nome é obrigatório"),
 	address: validate.string().min(1, "O endereço é obrigatório"),
 	neighborhood: validate.string().min(1, "O bairro é obrigatório"),
 	bedroom: validate
@@ -59,7 +61,15 @@ const PropertySchema = validate.object({
 	quantity_reviews: validate.number().int().nonnegative().optional(),
 	category: validate.number().int().positive("A categoria é obrigatória"),
 	delivery_in: validate.string().min(1, "A data de entrega é obrigatória"),
+	release_in: validate.string().min(1, "A data de lançamento é obrigatória"),
+	video: validate
+		.string()
+		.url("A URL do vídeo é inválida")
+		.optional()
+		.nullable(),
 	book: validate.string().url("A URL do book é inválida").optional().nullable(),
+	attributes: validate.array(validate.string()).optional(),
+	typelogies: validate.array(validate.string()).optional(),
 	description: validate
 		.array(validate.string())
 		.min(1, "É necessário pelo menos um parágrafo de descrição"),
@@ -185,6 +195,7 @@ export async function POST(request) {
 						src: img.src,
 						alt: img.title,
 						order: index,
+						type: img.type,
 						thumbnail: img.thumbnail || false,
 					})),
 				},
@@ -323,6 +334,7 @@ export async function PUT(request) {
 						src: img.src,
 						alt: img.title,
 						order: index,
+						type: img.type,
 						thumbnail: img.thumbnail || false,
 					})),
 				});

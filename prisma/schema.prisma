@@ -45,6 +45,7 @@ model Property {
   id                Int      @id @default(autoincrement())
   external_id       String
   slug              String   @unique
+  name              String
   address           String
   neighborhood      String
   bedroom           Json
@@ -56,11 +57,15 @@ model Property {
   quantity_reviews  Int?
   category          Int
   delivery_in       String
+  release_in        String
   book              String?
+  video             String?
   description       String[]
+  attributes        String[]
   description_embed String?
   preview           Json
   seo               Json
+  typelogies        Json
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt  
 
@@ -72,7 +77,8 @@ model Property {
 model PropertyImage {
   id          Int      @id @default(autoincrement())
   src         String
-  alt         String?
+  alt         String
+  type        String
   thumbnail   Boolean @default(false)
   
   // Relationship with Property

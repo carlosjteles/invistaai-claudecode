@@ -8,7 +8,7 @@ import "../../../node_modules/react-18-image-lightbox/style.css";
 
 export default function PropertyDetailImg({
 	images,
-	address,
+	title,
 	openGallery = false,
 }) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -38,7 +38,7 @@ export default function PropertyDetailImg({
 			itemScope
 			itemType="https://schema.org/ImageGallery"
 		>
-			<meta itemProp="about" content={address || "Detalhes do imóvel"} />
+			<meta itemProp="about" content={title || "Detalhes do imóvel"} />
 			<meta itemProp="numberOfItems" content={images.length} />
 
 			<div className="col-md-6">
