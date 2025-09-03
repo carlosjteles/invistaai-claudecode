@@ -2,8 +2,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
-import Lightbox from "react-18-image-lightbox";
+const Lightbox = dynamic(() => import("react-18-image-lightbox"), {
+	ssr: false,
+});
+
 import "../../../node_modules/react-18-image-lightbox/style.css";
 
 export default function PropertyDetailImg({

@@ -1,3 +1,5 @@
+import prisma from "../db/prisma";
+
 import { getBaseUrl } from "./helper/Utils";
 
 export default async function sitemap() {

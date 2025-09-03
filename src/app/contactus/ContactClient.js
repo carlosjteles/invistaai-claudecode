@@ -2,9 +2,13 @@
 import React from "react";
 import Link from "next/link";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 
 import { useDispatch, useSelector } from "react-redux";
-import ReCAPTCHA from "react-google-recaptcha";
+
+const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
+	ssr: false,
+});
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -67,9 +71,8 @@ export default function ContactClient() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		//const recaptchaToken = await recaptchaRef.current.executeAsync();
-		//recaptchaRef.current.reset();
-		const recaptchaToken = "remover depois";
+		const recaptchaToken = await recaptchaRef.current.executeAsync();
+		recaptchaRef.current.reset();
 
 		setAlertShow(false);
 
