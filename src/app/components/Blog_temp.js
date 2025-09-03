@@ -4,8 +4,8 @@ import Image from "next/image";
 
 import prisma from "../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
-import { formatDateISO } from "../helper/Formatter";
+import { getBaseUrl, getSiteName } from "../helper/utils";
+import { formatDateISO } from "../helper/formatter";
 
 export default async function Blog() {
 	const recentData = await prisma.blog.findMany({

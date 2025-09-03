@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-import { getSiteName } from "@/app/helper/Utils";
+import { getSiteName } from "@/app/helper/utils";
 
 async function validateRecaptcha(recaptchaResponse) {
 	try {

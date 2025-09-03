@@ -26,8 +26,8 @@ import {
 	AiOutlineWhatsApp,
 } from "../assets/icons/vander";
 
-import { formatPhone } from "../helper/Formatter";
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { formatPhone } from "../helper/formatter";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 import Swal from "sweetalert2";
 

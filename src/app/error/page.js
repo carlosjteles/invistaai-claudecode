@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { getSiteName } from "../helper/Utils";
+import { getSiteName } from "../helper/utils";
 
 export default function Error() {
 	return (

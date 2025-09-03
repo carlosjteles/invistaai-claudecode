@@ -9,7 +9,7 @@ import { contact } from "../storage/about";
 
 import { FiArrowRight } from "../assets/icons/vander";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const metadata = {
 	title: `Política de Privacidade | ${getSiteName()}`,

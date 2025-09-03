@@ -9,8 +9,8 @@ import { FiHome, FiCamera } from "../assets/icons/vander";
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
 
-import { formatPrice } from "../helper/Formatter";
-import { getBaseUrl } from "../helper/Utils";
+import { formatPrice } from "../helper/formatter";
+import { getBaseUrl } from "../helper/utils";
 
 const settings = {
 	container: ".tiny-slide-three",

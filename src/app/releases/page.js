@@ -1,6 +1,6 @@
 import Properties from "../properties/page";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const dynamic = "force-dynamic";
 

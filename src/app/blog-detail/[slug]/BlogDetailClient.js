@@ -9,8 +9,8 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
-import { formatDate, formatDateISO } from "../../helper/Formatter";
-import { getBaseUrl, getSiteName } from "../../helper/Utils";
+import { formatDate, formatDateISO } from "../../helper/formatter";
+import { getBaseUrl, getSiteName } from "../../helper/utils";
 
 import Swal from "sweetalert2";
 

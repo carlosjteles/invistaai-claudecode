@@ -10,8 +10,8 @@ import Footer from "../components/Footer";
 import ScrollTop from "../components/ScrollTop";
 import Pagination from "../components/Pagination";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
-import { formatDate, formatDateISO } from "../helper/Formatter";
+import { getBaseUrl, getSiteName } from "../helper/utils";
+import { formatDate, formatDateISO } from "../helper/formatter";
 
 export default function BlogsClient({
 	blogs,

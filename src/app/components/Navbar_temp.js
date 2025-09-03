@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { FiSearch } from "../assets/icons/vander";
 
 import Swal from "sweetalert2";
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export default function Navbar({
 	navClass,

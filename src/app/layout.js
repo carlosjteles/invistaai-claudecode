@@ -6,7 +6,7 @@ import "../app/assets/css/materialdesignicons.min.css";
 
 import { Providers } from "./providers";
 
-import { getBaseUrl, getSiteName } from "./helper/Utils";
+import { getBaseUrl, getSiteName } from "./helper/utils";
 
 import { contact } from "./storage/about";
 

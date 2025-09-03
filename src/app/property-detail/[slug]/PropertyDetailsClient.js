@@ -23,8 +23,8 @@ const RelatedPropertySlider = dynamic(
 import { categories } from "../../storage/filters";
 import { contact } from "../../storage/about";
 
-import { formatPrice } from "../../helper/Formatter";
-import { getBaseUrl, getSiteName } from "../../helper/Utils";
+import { formatPrice } from "../../helper/formatter";
+import { getBaseUrl, getSiteName } from "../../helper/utils";
 
 export default function PropertyDetailsClient({
 	propertyData,

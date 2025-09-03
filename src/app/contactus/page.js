@@ -1,6 +1,6 @@
 import ContactClient from "./ContactClient";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const metadata = {
 	title: `Entre em Contato | ${getSiteName()}`,

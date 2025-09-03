@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 import { categories, prices } from "../storage/filters";
 
-import { getBaseUrl } from "../helper/Utils";
+import { getBaseUrl } from "../helper/utils";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 

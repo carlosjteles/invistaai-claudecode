@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 import ScrollTop from "./components/ScrollTop";
 import TextAnimation from "./components/TextAnimation";
 
-import { getBaseUrl, getSiteName } from "./helper/Utils";
+import { getBaseUrl, getSiteName } from "./helper/utils";
 
 export default function Home() {
 	const homeJsonLd = {

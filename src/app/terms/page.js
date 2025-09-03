@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ScrollTop from "../components/ScrollTop";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const metadata = {
 	title: `Termos e Condições | ${getSiteName()}`,

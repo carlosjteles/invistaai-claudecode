@@ -8,7 +8,7 @@ import ScrollTop from "../components/ScrollTop";
 
 import { data } from "../storage/faqs";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const metadata = {
 	title: `Perguntas Frequentes | ${getSiteName()}`,

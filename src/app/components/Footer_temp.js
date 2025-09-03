@@ -14,8 +14,8 @@ import {
 
 import { contact } from "../storage/about";
 
-import { formatPhone } from "../helper/Formatter";
-import { getSiteName } from "../helper/Utils";
+import { formatPhone } from "../helper/formatter";
+import { getSiteName } from "../helper/utils";
 
 export default function Footer({ showImage = false }) {
 	const hasSocial = contact.social && Object.keys(contact.social).length > 0;

@@ -4,8 +4,8 @@ import BlogDetailClient from "./BlogDetailClient";
 
 import prisma from "../../../db/prisma";
 
-import { formatDateISO } from "../../helper/Formatter";
-import { getBaseUrl, getSiteName } from "../../helper/Utils";
+import { formatDateISO } from "../../helper/formatter";
+import { getBaseUrl, getSiteName } from "../../helper/utils";
 
 export async function generateMetadata({ params }) {
 	const blogPost = await prisma.blog.findUnique({

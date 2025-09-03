@@ -16,7 +16,7 @@ import { FiArrowRight } from "react-icons/fi";
 
 import { contact } from "../storage/about";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 export const metadata = {
 	title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,

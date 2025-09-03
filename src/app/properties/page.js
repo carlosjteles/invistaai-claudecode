@@ -2,7 +2,7 @@ import PropertiesClient from "./PropertiesClient";
 
 import prisma from "../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../helper/Utils";
+import { getBaseUrl, getSiteName } from "../helper/utils";
 
 import { categories } from "../storage/filters";
 

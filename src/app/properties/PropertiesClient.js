@@ -19,8 +19,8 @@ import {
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
-import { formatPrice } from "../helper/Formatter";
-import { getBaseUrl } from "../helper/Utils";
+import { formatPrice } from "../helper/formatter";
+import { getBaseUrl } from "../helper/utils";
 
 import Pagination from "../components/Pagination";
 

@@ -6,7 +6,7 @@ import { categories } from "../../storage/filters";
 
 import prisma from "../../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../../helper/Utils";
+import { getBaseUrl, getSiteName } from "../../helper/utils";
 
 export async function generateMetadata({ params }) {
 	const propertyData = await prisma.property.findUnique({

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
-import { formatPrice } from "../helper/Formatter";
+import { formatPrice } from "../helper/formatter";
 
 import prisma from "../../db/prisma";
 
