@@ -42,17 +42,17 @@ module.exports = [
 			{
 				type: "link",
 				value: "#MercadoImobiliário",
-				href: "#",
+				href: "https://link-externo.com.br",
 			},
 			{
 				type: "link",
 				value: "#HabilidadesProfissionais",
-				href: "#",
+				href: "https://link-externo.com.br",
 			},
 			{
 				type: "link",
 				value: "#SucessoNosImóveis",
-				href: "#",
+				href: "https://link-externo.com.br",
 			},
 		],
 	},
@@ -99,7 +99,7 @@ module.exports = [
 			{
 				type: "link",
 				value: "#SucessoNosImóveis",
-				href: "#",
+				href: "https://link-externo.com.br",
 			},
 		],
 	},

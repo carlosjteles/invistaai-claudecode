@@ -83,7 +83,11 @@ export default async function PropertyDetails({ params }) {
 	const propertyData = await prisma.property.findUnique({
 		where: { slug: params.slug, images: { some: {} } },
 		include: {
-			images: true,
+			images: {
+				where: {
+					thumbnail: false,
+				},
+			},
 		},
 	});
 
