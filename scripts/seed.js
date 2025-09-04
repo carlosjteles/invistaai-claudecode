@@ -59,15 +59,7 @@ async function main() {
 				seo: property.seo,
 				typelogies: property.typelogies,
 				images: {
-					create: [
-						{
-							src: property.image,
-							title: "Imagem de capa",
-							type: "perspectives",
-							thumbnail: true,
-						},
-						...property.images,
-					].map((img, index) => ({
+					create: property.images.map((img, index) => ({
 						src: img.src,
 						alt: img.title,
 						type: img.type || "perspectives",

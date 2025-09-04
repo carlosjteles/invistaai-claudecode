@@ -6,6 +6,9 @@ const nextConfig = {
 	sassOptions: {
 		includePaths: [path.join(__dirname, "styles")],
 	},
+	images: {
+		domains: ["deolsoahklnyjahujmdh.supabase.co"],
+	},
 	webpack(config) {
 		config.module.rules.forEach((rule) => {
 			const { oneOf } = rule;

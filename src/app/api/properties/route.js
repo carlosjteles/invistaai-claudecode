@@ -90,16 +90,13 @@ const PropertySchema = validate.object({
 		.nullable(),
 	seo: SeoSchema,
 	preview: PreviewSchema,
+	typelogies: validate.array(TypologySchema).optional(),
 	images: validate
 		.array(ImageSchema)
 		.min(1, "É necessário pelo menos uma imagem"),
 });
 
 const PropertyUpdateSchema = validate.object({
-	external_id: validate
-		.string()
-		.min(1, "O ID externo é obrigatório")
-		.optional(),
 	slug: validate
 		.string()
 		.min(1, "O slug é obrigatório")
@@ -108,6 +105,7 @@ const PropertyUpdateSchema = validate.object({
 			"Slug deve conter apenas letras minúsculas, números e hífens"
 		)
 		.optional(),
+	name: validate.string().min(1, "O nome é obrigatório").optional(),
 	address: validate.string().min(1, "O endereço é obrigatório").optional(),
 	neighborhood: validate.string().min(1, "O bairro é obrigatório").optional(),
 	bedroom: validate
@@ -138,7 +136,12 @@ const PropertyUpdateSchema = validate.object({
 		.string()
 		.min(1, "A data de entrega é obrigatória")
 		.optional(),
+	release_in: validate
+		.string()
+		.min(1, "A data de lançamento é obrigatória")
+		.optional(),
 	book: validate.string().url("A URL do book é inválida").optional().nullable(),
+	attributes: validate.array(validate.string()).optional(),
 	description: validate
 		.array(validate.string())
 		.min(1, "É necessário pelo menos um parágrafo de descrição")
@@ -148,8 +151,14 @@ const PropertyUpdateSchema = validate.object({
 		.url("A URL do embed é inválida")
 		.optional()
 		.nullable(),
+	video: validate
+		.string()
+		.url("A URL do vídeo é inválida")
+		.optional()
+		.nullable(),
 	seo: SeoSchema.optional(),
 	preview: PreviewSchema.optional(),
+	typelogies: validate.array(TypologySchema).optional(),
 	images: validate
 		.array(ImageSchema)
 		.min(1, "É necessário pelo menos uma imagem")
@@ -174,6 +183,7 @@ export async function POST(request) {
 			data: {
 				external_id: validatedData.external_id,
 				slug: validatedData.slug,
+				name: validatedData.name,
 				address: validatedData.address,
 				neighborhood: validatedData.neighborhood,
 				bedroom: validatedData.bedroom,
@@ -185,21 +195,15 @@ export async function POST(request) {
 				quantity_reviews: validatedData.quantity_reviews,
 				category: validatedData.category,
 				delivery_in: validatedData.delivery_in,
+				release_in: validatedData.release_in,
+				video: validatedData.video,
 				book: validatedData.book,
+				attributes: validatedData.attributes,
 				description: validatedData.description,
 				description_embed: validatedData.description_embed,
 				preview: validatedData.preview,
-				seo: {
-					create: {
-						title: validatedData.seo.title,
-						description: validatedData.seo.description,
-						keywords: validatedData.seo.keywords,
-						city: validatedData.seo.city,
-						state: validatedData.seo.state,
-						zip: validatedData.seo.zip,
-						street: validatedData.seo.street,
-					},
-				},
+				seo: validatedData.seo,
+				typelogies: validatedData.typelogies,
 				images: {
 					create: validatedData.images.map((img, index) => ({
 						src: img.src,
