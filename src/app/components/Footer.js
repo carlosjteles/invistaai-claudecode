@@ -39,7 +39,7 @@ export default function Footer({ showImage = false }) {
 											<Image
 												src="/images/logo-light.png"
 												width={132}
-												height={32}
+												height={40}
 												alt="Logo"
 											/>
 										</Link>

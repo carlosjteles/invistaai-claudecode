@@ -186,9 +186,9 @@ export default function Home() {
 
 						<div className="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
 							<div className="section-title ms-lg-5">
-								<h6 className="text-primary fw-medium mb-2">
+								<p className="h6 text-primary fw-medium mb-2 mt-0 mx-0">
 									Por que escolher a {getSiteName()}
-								</h6>
+								</p>
 								<h4 className="title mb-3">
 									Investimento imobiliário com foco em valorização
 								</h4>

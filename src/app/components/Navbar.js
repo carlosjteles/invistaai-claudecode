@@ -178,7 +178,6 @@ export default function Navbar({
 			<header
 				id="topnav"
 				className={`${scroll ? "nav-sticky" : ""} ${navClass}`}
-				role="navigation"
 				aria-label="Navegação principal"
 			>
 				<div
@@ -200,7 +199,7 @@ export default function Navbar({
 								<Image
 									src="/images/logo-dark.png"
 									width={132}
-									height={32}
+									height={40}
 									className="l-dark"
 									alt={`Logo escuro ${getSiteName()}`}
 									itemProp="logo"
@@ -208,7 +207,7 @@ export default function Navbar({
 								<Image
 									src="/images/logo-light.png"
 									width={132}
-									height={32}
+									height={40}
 									className="l-light"
 									alt={`Logo claro ${getSiteName()}`}
 									itemProp="logo"
@@ -217,7 +216,7 @@ export default function Navbar({
 							<Image
 								src="/images/logo-light.png"
 								width={132}
-								height={32}
+								height={40}
 								className="logo-dark-mode"
 								alt={`Logo escuro 2 ${getSiteName()}`}
 								itemProp="logo"
@@ -236,7 +235,7 @@ export default function Navbar({
 							<Image
 								src="/images/logo-dark.png"
 								width={132}
-								height={32}
+								height={40}
 								className="logo-light-mode"
 								alt={`Logo claro ${getSiteName()}`}
 								itemProp="logo"
@@ -244,7 +243,7 @@ export default function Navbar({
 							<Image
 								src="/images/logo-light.png"
 								width={132}
-								height={32}
+								height={40}
 								className="logo-dark-mode"
 								alt={`Logo escuro ${getSiteName()}`}
 								itemProp="logo"
