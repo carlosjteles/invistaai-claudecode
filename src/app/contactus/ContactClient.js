@@ -32,7 +32,7 @@ import { getBaseUrl, getSiteName } from "../helper/utils";
 import Swal from "sweetalert2";
 
 export default function ContactClient() {
-	console.log("key", process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY);
+	console.log("key:", process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY);
 	const [name, setName] = React.useState("");
 	const [email, setEmail] = React.useState("");
 	const [subject, setSubject] = React.useState("");
