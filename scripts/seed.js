@@ -10,12 +10,12 @@ async function main() {
 		await prisma.blog.create({
 			data: {
 				slug: blog.slug,
-				thumbnail: blog.image,
 				image: blog.image,
+				thumbnail: blog.thumbnail,
 				tag: blog.tag,
 				author: blog.author,
 				title: blog.title,
-				description: blog.desc,
+				description: blog.description,
 				keywords: blog.keywords || [],
 				content: {
 					create: blog.content.map((item, index) => ({

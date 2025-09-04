@@ -13,6 +13,15 @@ const ImageSchema = validate.object({
 	type: validate.enum(["perspectives", "building_documents"]),
 });
 
+const PreviewSchema = validate.object({
+	area: validate.string().min(1, "A área é obrigatória"),
+	bedroom: validate
+		.string()
+		.min(1, "Informação sobre dormitórios é obrigatória"),
+	suite: validate.string().min(1, "Informação sobre suítes é obrigatória"),
+	parking: validate.string().min(1, "Informação sobre vagas é obrigatória"),
+});
+
 const SeoSchema = validate.object({
 	title: validate.string().min(1, "O título SEO é obrigatório"),
 	description: validate.string().min(1, "A descrição SEO é obrigatória"),
@@ -25,13 +34,14 @@ const SeoSchema = validate.object({
 	street: validate.string().min(1, "O endereço é obrigatório"),
 });
 
-const PreviewSchema = validate.object({
-	area: validate.string().min(1, "A área é obrigatória"),
-	bedroom: validate
-		.string()
-		.min(1, "Informação sobre dormitórios é obrigatória"),
-	suite: validate.string().min(1, "Informação sobre suítes é obrigatória"),
-	parking: validate.string().min(1, "Informação sobre vagas é obrigatória"),
+const TypologySchema = validate.object({
+	type: validate.string(),
+	private_area: validate.number(),
+	bedrooms: validate.number(),
+	bathrooms: validate.number(),
+	suites: validate.number(),
+	parking: validate.number(),
+	price: validate.number(),
 });
 
 const PropertySchema = validate.object({
@@ -69,7 +79,7 @@ const PropertySchema = validate.object({
 		.nullable(),
 	book: validate.string().url("A URL do book é inválida").optional().nullable(),
 	attributes: validate.array(validate.string()).optional(),
-	typelogies: validate.array(validate.string()).optional(),
+	typelogies: validate.array(TypologySchema).optional(),
 	description: validate
 		.array(validate.string())
 		.min(1, "É necessário pelo menos um parágrafo de descrição"),
