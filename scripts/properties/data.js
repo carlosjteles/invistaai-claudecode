@@ -51,6 +51,12 @@ module.exports = [
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999996/01.jpg",
 				title: "Imagem 1",
 				type: "perspectives",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999996/01.jpg",
+				title: "Imagem 1",
+				type: "perspectives",
 			},
 			{
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999996/02.jpg",
@@ -105,7 +111,8 @@ module.exports = [
 		delivery_in: "01/01/2023",
 		release_in: "01/01/2023",
 		book: "https://www.example.com/book-images.pdf",
-		video: "/videos/94815/1.mp4",
+		video:
+			"https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/videos/94815/1.mp4",
 	},
 	{
 		id: 2,
@@ -155,6 +162,12 @@ module.exports = [
 			},
 		],
 		images: [
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999997/01.jpg",
+				title: "Imagem 1",
+				type: "perspectives",
+				thumbnail: true,
+			},
 			{
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999997/01.jpg",
 				title: "Imagem 1",
@@ -213,7 +226,8 @@ module.exports = [
 		delivery_in: "01/05/2023",
 		release_in: "01/05/2023",
 		book: "https://www.example.com/book-images.pdf",
-		video: "/videos/94816/1.mp4",
+		video:
+			"https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/videos/94816/1.mp4",
 	},
 	{
 		id: 3,
@@ -267,6 +281,12 @@ module.exports = [
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999998/01.jpg",
 				title: "Imagem 1",
 				type: "perspectives",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999998/01.jpg",
+				title: "Imagem 1",
+				type: "perspectives",
 			},
 			{
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999998/02.jpg",
@@ -316,7 +336,8 @@ module.exports = [
 		delivery_in: "01/08/2023",
 		release_in: "01/08/2023",
 		book: "https://www.example.com/book-images.pdf",
-		video: "/videos/94817/1.mp4",
+		video:
+			"https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/videos/94817/1.mp4",
 	},
 	{
 		id: 4,
@@ -370,6 +391,12 @@ module.exports = [
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/01.jpg",
 				title: "Imagem 1",
 				type: "perspectives",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/01.jpg",
+				title: "Imagem 1",
+				type: "perspectives",
 			},
 			{
 				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/02.jpg",
@@ -419,6 +446,7 @@ module.exports = [
 		delivery_in: "15/02/2024",
 		release_in: "15/02/2024",
 		book: "https://www.example.com/book-images.pdf",
-		video: "/videos/94819/1.mp4",
+		video:
+			"https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/videos/94819/1.mp4",
 	},
 ];
