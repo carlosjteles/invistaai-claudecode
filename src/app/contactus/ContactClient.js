@@ -6,9 +6,7 @@ import dynamic from "next/dynamic";
 
 import { useDispatch, useSelector } from "react-redux";
 
-const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
-	ssr: false,
-});
+import ReCAPTCHA from "react-google-recaptcha";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -37,8 +35,6 @@ export default function ContactClient() {
 	const [subject, setSubject] = React.useState("");
 	const [message, setMessage] = React.useState("");
 
-	const [alertShow, setAlertShow] = React.useState(null);
-
 	const recaptchaRef = React.useRef(null);
 
 	const { data, error, loading } = useSelector((state) => state.contact);
@@ -58,32 +54,41 @@ export default function ContactClient() {
 				icon: error ? "error" : "success",
 				title: error ? error : data.message,
 				showConfirmButton: false,
-				timer: 3500,
+				timer: 2500,
 			});
-			setAlertShow(true);
 		}
 
 		if (data && data.message) {
 			formReset();
 		}
-	}, [data, error, alertShow]);
+	}, [data, error]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const recaptchaToken = await recaptchaRef.current.executeAsync();
-		recaptchaRef.current.reset();
+		const recaptchaToken = recaptchaRef.current.getValue();
 
-		setAlertShow(false);
+		if (!recaptchaToken) {
+			Swal.fire({
+				icon: "error",
+				title: "Por favor, marque o captcha antes de enviar.",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+			return;
+		}
 
 		const formData = {
 			name,
 			email,
 			subject,
 			message,
+			recaptcha: recaptchaToken,
 		};
 
-		dispatch(sendEmail(formData, recaptchaToken));
+		dispatch(sendEmail(formData));
+
+		recaptchaRef.current.reset();
 	};
 
 	const contactJsonLd = {
@@ -309,13 +314,15 @@ export default function ContactClient() {
 												</div>
 											</div>
 
-											<ReCAPTCHA
-												ref={recaptchaRef}
-												size="invisible"
-												sitekey={
-													process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
-												}
-											/>
+											<div className="col-12 mb-3">
+												<ReCAPTCHA
+													ref={recaptchaRef}
+													size="normal"
+													sitekey={
+														process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
+													}
+												/>
+											</div>
 										</div>
 										<div className="row">
 											<div className="col-12">

@@ -24,8 +24,7 @@ const validateEmail = (email) => {
 export async function POST(request) {
 	const { name, email, subject, message, recaptcha } = await request.json();
 
-	//if (!name || !email || !subject || !message || !recaptcha) {
-	if (!name || !email || !subject || !message) {
+	if (!name || !email || !subject || !message || !recaptcha) {
 		return NextResponse.json(
 			{ message: "Todos os campos são obrigatórios!" },
 			{ status: 400 }
@@ -36,14 +35,14 @@ export async function POST(request) {
 		return NextResponse.json({ error: "Email inválido" }, { status: 400 });
 	}
 
-	/*const isRecaptchaValid = await validateRecaptcha(recaptcha);
+	const isRecaptchaValid = await validateRecaptcha(recaptcha);
 
 	if (!isRecaptchaValid) {
 		return NextResponse.json(
 			{ error: "Falha na validação do reCAPTCHA" },
 			{ status: 400 }
 		);
-	}*/
+	}
 
 	const transporter = nodemailer.createTransport({
 		service: "gmail",

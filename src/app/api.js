@@ -1,4 +1,4 @@
-export const SEND_EMAIL_POST = (data, recaptcha) => {
+export const SEND_EMAIL_POST = (data) => {
 	return {
 		url: "/api/send-email",
 		options: {
@@ -6,7 +6,7 @@ export const SEND_EMAIL_POST = (data, recaptcha) => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(data, recaptcha),
+			body: JSON.stringify(data),
 		},
 	};
 };
