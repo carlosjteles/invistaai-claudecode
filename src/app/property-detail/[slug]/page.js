@@ -28,9 +28,7 @@ export async function generateMetadata({ params }) {
 
 	const mainImage =
 		propertyData.images && propertyData.images.length > 0
-			? `${getBaseUrl()}${propertyData.images[0].src}`
-			: propertyData.image
-			? `${getBaseUrl()}${propertyData.image}`
+			? propertyData.images[0].src
 			: undefined;
 
 	return {

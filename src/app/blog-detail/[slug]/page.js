@@ -39,7 +39,7 @@ export async function generateMetadata({ params }) {
 			},
 			images: [
 				{
-					url: `${getBaseUrl()}${blogPost.image}`,
+					url: blogPost.image,
 					width: 1200,
 					height: 630,
 					alt: blogPost.title,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
 			card: "summary_large_image",
 			title: blogPost.title,
 			description: blogPost.description,
-			images: [`${getBaseUrl()}${blogPost.image}`],
+			images: [blogPost.image],
 		},
 		alternates: {
 			canonical: `${getBaseUrl()}/blog/${blogPost.slug}`,

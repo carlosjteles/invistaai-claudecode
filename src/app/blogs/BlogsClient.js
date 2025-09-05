@@ -95,7 +95,7 @@ export default function BlogsClient({
 					"@type": "BlogPosting",
 					headline: post.title,
 					description: post.desc,
-					image: `${getBaseUrl()}${post.image || post.thumbnail}`,
+					image: post.image || post.thumbnail,
 					url: `${getBaseUrl()}/blog/${post.slug}`,
 					datePublished: formatDateISO(post.createdAt),
 					author: {
@@ -107,7 +107,7 @@ export default function BlogsClient({
 						name: getSiteName(),
 						logo: {
 							"@type": "ImageObject",
-							url: `${getBaseUrl()}/logo.png`,
+							url: `${getBaseUrl()}/images/logo-dark.png`,
 						},
 					},
 					keywords: post.tag,

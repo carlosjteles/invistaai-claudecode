@@ -63,7 +63,7 @@ export default function Privacy() {
 				name: getSiteName(),
 				logo: {
 					"@type": "ImageObject",
-					url: `${getBaseUrl()}/logo.png`,
+					url: `${getBaseUrl()}/images/logo-dark.png`,
 				},
 			},
 		},

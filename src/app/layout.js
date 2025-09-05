@@ -86,7 +86,7 @@ export const jsonLd = {
 	"@type": "RealEstateAgent",
 	name: getSiteName(),
 	url: getBaseUrl(),
-	logo: `${getBaseUrl()}/images/logo.png`,
+	logo: `${getBaseUrl()}/images/logo-dark.png`,
 	image: `${getBaseUrl()}/images/og-image.jpg`,
 	description:
 		"Encontre apartamentos, studios e imóveis em São Paulo com potencial de valorização. Curadoria especializada e suporte completo para investidores e compradores.",

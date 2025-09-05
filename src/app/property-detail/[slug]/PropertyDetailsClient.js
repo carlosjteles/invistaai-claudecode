@@ -60,7 +60,7 @@ export default function PropertyDetailsClient({
 				? propertyData.description.join(" ")
 				: propertyData.description
 			: "",
-		image: propertyData.images?.map((img) => `${getBaseUrl()}${img.src}`) || [],
+		image: propertyData.images?.map((img) => img.src) || [],
 		url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 		address: {
 			"@type": "PostalAddress",
@@ -237,8 +237,8 @@ export default function PropertyDetailsClient({
 								<meta
 									itemProp="image"
 									content={
-										propertyData.images?.[0]
-											? `${getBaseUrl()}${propertyData.images[0].src}`
+										propertyData.images.length > 0
+											? propertyData.images[0].src
 											: ""
 									}
 								/>

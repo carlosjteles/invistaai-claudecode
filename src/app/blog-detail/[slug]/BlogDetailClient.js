@@ -82,7 +82,7 @@ export default function BlogDetailClient({
 		"@type": "BlogPosting",
 		headline: blogPost.title,
 		description: blogPost.description,
-		image: `${getBaseUrl()}${blogPost.image}`,
+		image: blogPost.image,
 		datePublished: formatDateISO(blogPost.createdAt),
 		dateModified: formatDateISO(blogPost.updatedAt),
 		author: {
@@ -94,7 +94,7 @@ export default function BlogDetailClient({
 			name: getSiteName(),
 			logo: {
 				"@type": "ImageObject",
-				url: `${getBaseUrl()}/logo.png`,
+				url: `${getBaseUrl()}/images/logo-dark.png`,
 			},
 		},
 		keywords: blogPost.keywords,

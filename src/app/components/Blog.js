@@ -90,7 +90,7 @@ export default async function Blog() {
 									itemScope
 									itemType="https://schema.org/ImageObject"
 								>
-									<meta itemProp="url" content={`${getBaseUrl()}${imageSrc}`} />
+									<meta itemProp="url" content={imageSrc} />
 
 									<div className="position-relative overflow-hidden">
 										<Image
@@ -151,7 +151,7 @@ export default async function Blog() {
 											>
 												<meta
 													itemProp="url"
-													content={`${getBaseUrl()}/logo.png`}
+													content={`${getBaseUrl()}/images/logo-dark.png`}
 												/>
 											</div>
 										</div>
