@@ -67,7 +67,7 @@ export default function HomeFilter() {
 		<div className="row justify-content-center">
 			<div className="col-12 mt-sm-0 pt-sm-0">
 				<div className="features-absolute">
-					<div className="tab-content bg-white rounded-3 sm-rounded-0 shadow">
+					<div className="tab-content bg-white rounded-3 shadow">
 						<div className="card border-0 active">
 							<form
 								onSubmit={handleSubmit}

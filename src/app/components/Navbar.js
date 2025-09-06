@@ -111,7 +111,9 @@ export default function Navbar({
 		window.scrollTo(0, 0);
 	}, [currentPath]);
 
-	const toggleMenu = () => {
+	const toggleMenu = (e) => {
+		e.preventDefault();
+
 		setisMenu(!isMenu);
 		if (document.getElementById("navigation")) {
 			const anchorArray = Array.from(
@@ -257,7 +259,7 @@ export default function Navbar({
 								href="#"
 								className={`navbar-toggle ${isMenu ? "open" : ""}`}
 								id="isToggle"
-								onClick={() => toggleMenu()}
+								onClick={toggleMenu}
 								aria-label="Alternar menu de navegação"
 								aria-expanded={isMenu}
 							>

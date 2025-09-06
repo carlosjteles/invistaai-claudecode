@@ -45,7 +45,7 @@ export default function Error() {
 								</div>
 							</div>
 							<div className="text-center">
-								<p className="mb-0 text-muted d-flex justify-content-center align-items-end gap-2">
+								<p className="mb-0 text-muted d-flex flex-wrap justify-content-center align-items-end gap-2">
 									© {new Date().getFullYear()} {getSiteName()}. Desenvolvido por{" "}
 									<Link
 										href="https://www.damcdeveloper.com/"

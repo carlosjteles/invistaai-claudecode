@@ -226,7 +226,7 @@ export default function Footer({ showImage = false }) {
 						<div className="row">
 							<div className="col">
 								<div className="text-center">
-									<p className="mb-0 d-flex justify-content-center align-items-end gap-2">
+									<p className="mb-0 d-flex flex-wrap justify-content-center align-items-end gap-2">
 										© {new Date().getFullYear()} {getSiteName()}. Desenvolvido
 										por{" "}
 										<Link

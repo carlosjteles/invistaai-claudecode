@@ -295,7 +295,6 @@ export async function PUT(request) {
 		const existingProperty = await prisma.property.findUnique({
 			where: { id: Number(id) },
 			include: {
-				seo: true,
 				images: true,
 			},
 		});
@@ -313,7 +312,7 @@ export async function PUT(request) {
 		const updateData = {};
 
 		Object.keys(validatedData).forEach((key) => {
-			if (key !== "seo" && key !== "images") {
+			if (key !== "images") {
 				updateData[key] = validatedData[key];
 			}
 		});
@@ -323,19 +322,6 @@ export async function PUT(request) {
 				where: { id: Number(id) },
 				data: updateData,
 			});
-
-			if (validatedData.seo) {
-				await tx.propertyMeta.upsert({
-					where: {
-						property_id: Number(id),
-					},
-					update: validatedData.seo,
-					create: {
-						property_id: Number(id),
-						...validatedData.seo,
-					},
-				});
-			}
 
 			if (validatedData.images) {
 				await tx.propertyImage.deleteMany({
