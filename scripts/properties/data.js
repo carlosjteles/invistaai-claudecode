@@ -418,6 +418,94 @@ module.exports = [
 				title: "Imagem 5",
 				type: "perspectives",
 			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_1_thumbnail.webp",
+				title: "Thumbnail da planta 1",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_1.webp",
+				title: "Planta 1",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_2_thumbnail.webp",
+				title: "Thumbnail da planta 2",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_2.webp",
+				title: "Planta 2",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_3_thumbnail.webp",
+				title: "Thumbnail da planta 3",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_3.webp",
+				title: "Planta 3",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_4_thumbnail.webp",
+				title: "Thumbnail da planta 4",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_4.webp",
+				title: "Planta 4",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_5_thumbnail.webp",
+				title: "Thumbnail da planta 5",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_5.webp",
+				title: "Planta 5",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_6_thumbnail.webp",
+				title: "Thumbnail da planta 6",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_6.webp",
+				title: "Planta 6",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_7_thumbnail.webp",
+				title: "Thumbnail da planta 7",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_7.webp",
+				title: "Planta 7",
+				type: "building_documents",
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_8_thumbnail.webp",
+				title: "Thumbnail da planta 8",
+				type: "building_documents",
+				thumbnail: true,
+			},
+			{
+				src: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/999999/building_documents/planta_8.webp",
+				title: "Planta 8",
+				type: "building_documents",
+			},
 		],
 		description: [
 			"Localizado em uma das regiões mais valorizadas da cidade, este apartamento de 120 m² oferece conforto e praticidade para toda a família. Com três quartos, sendo uma suíte, ele combina acabamentos modernos com um layout funcional que aproveita ao máximo cada espaço.",
@@ -446,7 +534,6 @@ module.exports = [
 		delivery_in: "15/02/2024",
 		release_in: "15/02/2024",
 		book: "https://www.example.com/book-images.pdf",
-		video:
-			"https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/videos/94819/1.mp4",
+		video: "https://www.youtube.com/watch?v=ncCSetMcTPE",
 	},
 ];

@@ -97,7 +97,7 @@ export default function Home() {
 
 			<Navbar
 				navClass="defaultscroll sticky"
-				menuClass="navigation-menu nav-left"
+				menuClass="navigation-menu nav-center"
 			/>
 			<section className="position-relative mt-5 pt-4">
 				<div className="container-fluid px-md-4 px-2 mt-2 overflow-hidden">

@@ -83,7 +83,10 @@ export default async function PropertyDetails({ params }) {
 		include: {
 			images: {
 				where: {
-					thumbnail: false,
+					OR: [
+						{ type: "perspectives", thumbnail: false },
+						{ NOT: { type: "perspectives" } },
+					],
 				},
 			},
 		},

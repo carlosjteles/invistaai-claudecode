@@ -78,7 +78,7 @@ export default function Faqs() {
 			<Navbar
 				navClass="defaultscroll sticky"
 				logolight={true}
-				menuClass="navigation-menu nav-left nav-light"
+				menuClass="navigation-menu nav-center nav-light"
 			/>
 
 			<section

@@ -10,6 +10,11 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
+const BuildingDocumentsSlider = dynamic(
+	() => import("../../components/BuildingDocumentsSlider"),
+	{ ssr: false }
+);
+
 const FinancingSimulation = dynamic(
 	() => import("../../components/FinancingSimulation"),
 	{ ssr: false }
@@ -20,11 +25,15 @@ const RelatedPropertySlider = dynamic(
 	{ ssr: false }
 );
 
+const YoutubeEmbed = dynamic(() => import("../../components/YoutubeEmbed"), {
+	ssr: false,
+});
+
 import { categories } from "../../storage/filters";
 import { contact } from "../../storage/about";
 
 import { formatPrice } from "../../helper/formatter";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
 
 export default function PropertyDetailsClient({
 	propertyData,
@@ -32,6 +41,21 @@ export default function PropertyDetailsClient({
 }) {
 	const searchParams = useSearchParams();
 	const openGallery = searchParams.get("openGallery");
+
+	const [activeTab, setActiveTab] = React.useState("plantas");
+
+	const hasValidYoutubeVideo = React.useMemo(() => {
+		if (!propertyData.video) return false;
+		const videoId = getVideoId(propertyData.video);
+		return videoId !== null;
+	}, [propertyData.video]);
+
+	const buildingDocumentsImages = React.useMemo(() => {
+		if (!propertyData.images) return [];
+		return propertyData.images.filter(
+			(img) => img.type === "building_documents"
+		);
+	}, [propertyData.images]);
 
 	const typelogiesByType = React.useMemo(() => {
 		if (!propertyData.typelogies) return {};
@@ -152,7 +176,7 @@ export default function PropertyDetailsClient({
 
 			<Navbar
 				navClass="defaultscroll sticky"
-				menuClass="navigation-menu nav-left"
+				menuClass="navigation-menu nav-center"
 			/>
 			<section className="section mt-5 pt-4">
 				<div className="container-fluid mt-2">
@@ -398,6 +422,61 @@ export default function PropertyDetailsClient({
 											))}
 										</div>
 									)}
+
+								{(buildingDocumentsImages.length > 0 ||
+									hasValidYoutubeVideo) && (
+									<div className="mb-4">
+										{buildingDocumentsImages.length > 0 &&
+											hasValidYoutubeVideo && (
+												<ul className="nav nav-pills nav-justified mb-0">
+													<li className="nav-item">
+														<a
+															className={`nav-link ${
+																activeTab === "plantas" ? "active" : ""
+															}`}
+															aria-current="page"
+															href="#"
+															onClick={(e) => {
+																e.preventDefault();
+																setActiveTab("plantas");
+															}}
+														>
+															Plantas
+														</a>
+													</li>
+													<li className="nav-item">
+														<a
+															className={`nav-link ${
+																activeTab === "video" ? "active" : ""
+															}`}
+															href="#"
+															onClick={(e) => {
+																e.preventDefault();
+																setActiveTab("video");
+															}}
+														>
+															Video
+														</a>
+													</li>
+												</ul>
+											)}
+										<div className="tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom">
+											{activeTab === "plantas" &&
+												buildingDocumentsImages.length > 0 && (
+													<div className="tab-pane fade show active">
+														<BuildingDocumentsSlider
+															images={buildingDocumentsImages}
+														/>
+													</div>
+												)}
+											{activeTab === "video" && hasValidYoutubeVideo && (
+												<div className="tab-pane fade show active">
+													<YoutubeEmbed video={propertyData.video} />
+												</div>
+											)}
+										</div>
+									</div>
+								)}
 
 								{propertyData.description_embed && (
 									<div className="card map border-0 mt-2">
