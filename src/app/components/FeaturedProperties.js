@@ -34,15 +34,6 @@ export default async function FeaturedProperties() {
 		return null;
 	}
 
-	const handleCardClick = (slug) => {
-		router.push(`/imovel/${slug}`);
-	};
-
-	const handleIconClick = (e, path) => {
-		e.stopPropagation();
-		router.push(path);
-	};
-
 	return (
 		<>
 			<div className="row justify-content-center">

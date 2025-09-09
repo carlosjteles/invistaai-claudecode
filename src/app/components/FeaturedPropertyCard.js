@@ -1,12 +1,19 @@
 "use client";
-
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
 import { FiHome, FiCamera } from "../assets/icons/vander";
+
 import { formatPrice } from "../helper/formatter";
 
-export default function FeaturedPropertyCard({ item, thumbnail }) {
+export default function FeaturedPropertyCard({
+	item,
+	thumbnail,
+	cardCss = "",
+}) {
 	const router = useRouter();
+	const cardRef = React.useRef(null);
 
 	const handleCardClick = () => {
 		router.push(`/imovel/${item.slug}`);
@@ -17,15 +24,35 @@ export default function FeaturedPropertyCard({ item, thumbnail }) {
 		router.push(path);
 	};
 
+	React.useEffect(() => {
+		if (!cardRef.current) return;
+
+		const card = cardRef.current;
+
+		function handleTouch(e) {
+			if (!e.target.closest(".property-icon")) {
+				router.push(`/imovel/${item.slug}`);
+			}
+		}
+
+		if ("ontouchstart" in window) {
+			card.addEventListener("touchstart", handleTouch);
+
+			return () => {
+				card.removeEventListener("touchstart", handleTouch);
+			};
+		}
+	}, [item.slug, router]);
+
 	return (
 		<div
-			className="card property border-0 shadow position-relative overflow-hidden rounded-3"
+			ref={cardRef}
+			className={`card property border-0 shadow position-relative overflow-hidden rounded-3 ${cardCss}`}
 			itemScope
 			itemType="https://schema.org/RealEstateListing"
 			onClick={handleCardClick}
 			style={{ cursor: "pointer" }}
 		>
-			<meta itemProp="identifier" content={item.id} />
 			<meta itemProp="url" content={`/imovel/${item.slug}`} />
 
 			{thumbnail && (
@@ -133,21 +160,11 @@ export default function FeaturedPropertyCard({ item, thumbnail }) {
 							<meta itemProp="bestRating" content="5" />
 
 							<ul className="fw-medium text-warning list-unstyled mb-0">
-								<li className="list-inline-item mb-0">
-									<i className="mdi mdi-star"></i>
-								</li>
-								<li className="list-inline-item mb-0">
-									<i className="mdi mdi-star"></i>
-								</li>
-								<li className="list-inline-item mb-0">
-									<i className="mdi mdi-star"></i>
-								</li>
-								<li className="list-inline-item mb-0">
-									<i className="mdi mdi-star"></i>
-								</li>
-								<li className="list-inline-item mb-0">
-									<i className="mdi mdi-star"></i>
-								</li>
+								{[...Array(5)].map((_, i) => (
+									<li key={i} className="list-inline-item mb-0">
+										<i className="mdi mdi-star"></i>
+									</li>
+								))}
 								<li className="list-inline-item mb-0 text-dark">
 									{item.rating} ({item.quantity_reviews})
 								</li>
