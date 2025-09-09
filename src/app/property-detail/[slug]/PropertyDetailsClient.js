@@ -270,7 +270,7 @@ export default function PropertyDetailsClient({
 									{propertyData.name || propertyData.address}
 								</h4>
 								<ul className="list-unstyled d-flex flex-wrap gap-3 align-items-center justify-content-between mb-0 py-3">
-									<li className="list-inline-item">
+									<li className="list-inline-item ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-arrow-expand-all fs-4 me-2 text-primary"></i>
 											<span
@@ -287,7 +287,7 @@ export default function PropertyDetailsClient({
 										</span>
 									</li>
 
-									<li className="list-inline-item">
+									<li className="list-inline-item ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-bed fs-4 me-2 text-primary"></i>
 											<span
@@ -304,7 +304,7 @@ export default function PropertyDetailsClient({
 										</span>
 									</li>
 
-									<li className="list-inline-item">
+									<li className="list-inline-item ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-shower fs-4 me-2 text-primary"></i>
 											<span
@@ -321,7 +321,7 @@ export default function PropertyDetailsClient({
 										</span>
 									</li>
 
-									<li className="list-inline-item">
+									<li className="list-inline-item ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-car fs-4 me-2 text-primary"></i>
 											<span

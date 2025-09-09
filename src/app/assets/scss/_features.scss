@@ -40,6 +40,12 @@
 			top: 15px;
 			right: 15px;
 			opacity: 0;
+
+			.btn {
+				@media (max-width: 768px) {
+					pointer-events: none !important;
+				}
+			}
 		}
 	}
 	&:hover {

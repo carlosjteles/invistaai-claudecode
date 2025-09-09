@@ -425,6 +425,7 @@ export default function PropertiesClient({
 																		href={`/imovel/${item.slug}`}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
 																		itemProp="name"
+																		tabIndex={-1}
 																	>
 																		<FiHome className="icons" />
 																	</Link>
@@ -432,6 +433,7 @@ export default function PropertiesClient({
 																<li className="mt-1">
 																	<Link
 																		href={`/imovel/${item.slug}?openGallery=true`}
+																		tabIndex={-1}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
 																	>
 																		<FiCamera className="icons" />
