@@ -199,26 +199,26 @@ export default function Navbar({
 
 							<span className="logo-light-mode">
 								<Image
-									src="/images/logo-dark.png"
-									width={132}
-									height={40}
+									src="/images/logo-dark.svg"
+									width={124}
+									height={24}
 									className="l-dark"
 									alt={`Logo escuro ${getSiteName()}`}
 									itemProp="logo"
 								/>
 								<Image
-									src="/images/logo-light.png"
-									width={132}
-									height={40}
+									src="/images/logo-light.svg"
+									width={124}
+									height={24}
 									className="l-light"
 									alt={`Logo claro ${getSiteName()}`}
 									itemProp="logo"
 								/>
 							</span>
 							<Image
-								src="/images/logo-light.png"
-								width={132}
-								height={40}
+								src="/images/logo-light.svg"
+								width={124}
+								height={24}
 								className="logo-dark-mode"
 								alt={`Logo escuro 2 ${getSiteName()}`}
 								itemProp="logo"
@@ -235,17 +235,17 @@ export default function Navbar({
 							<meta itemProp="url" content={getBaseUrl()} />
 
 							<Image
-								src="/images/logo-dark.png"
-								width={132}
-								height={40}
+								src="/images/logo-dark.svg"
+								width={124}
+								height={24}
 								className="logo-light-mode"
 								alt={`Logo claro ${getSiteName()}`}
 								itemProp="logo"
 							/>
 							<Image
-								src="/images/logo-light.png"
-								width={132}
-								height={40}
+								src="/images/logo-light.svg"
+								width={124}
+								height={24}
 								className="logo-dark-mode"
 								alt={`Logo escuro ${getSiteName()}`}
 								itemProp="logo"

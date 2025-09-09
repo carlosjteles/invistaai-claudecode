@@ -101,7 +101,7 @@ export default function ContactClient() {
 		mainEntity: {
 			"@type": "Organization",
 			name: getSiteName(),
-			logo: `${getBaseUrl()}/images/logo-dark.png`,
+			logo: `${getBaseUrl()}/images/logo-dark.svg`,
 			email: contact.email,
 			telephone: `+${contact.phone}`,
 			sameAs: Object.values(contact.social),

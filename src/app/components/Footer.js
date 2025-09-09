@@ -37,9 +37,9 @@ export default function Footer({ showImage = false }) {
 									<div className="col-lg-4 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
 										<Link href="#" className="logo-footer">
 											<Image
-												src="/images/logo-light.png"
-												width={132}
-												height={40}
+												src="/images/logo-light.svg"
+												width={124}
+												height={24}
 												alt="Logo"
 											/>
 										</Link>

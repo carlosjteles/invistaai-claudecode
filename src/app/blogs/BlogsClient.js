@@ -107,7 +107,7 @@ export default function BlogsClient({
 						name: getSiteName(),
 						logo: {
 							"@type": "ImageObject",
-							url: `${getBaseUrl()}/images/logo-dark.png`,
+							url: `${getBaseUrl()}/images/logo-dark.svg`,
 						},
 					},
 					keywords: post.tag,

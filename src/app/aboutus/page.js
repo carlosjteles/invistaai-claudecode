@@ -69,7 +69,7 @@ export default function AboutUs() {
 			name: getSiteName(),
 			description: "Especialistas em investimento imobiliário em São Paulo.",
 			url: getBaseUrl(),
-			logo: `${getBaseUrl()}/images/logo-dark.png`,
+			logo: `${getBaseUrl()}/images/logo-dark.svg`,
 			telephone: `+${contact.phone}`,
 			email: contact.email,
 			foundingDate: "2021",
@@ -251,7 +251,7 @@ export default function AboutUs() {
 							<meta itemProp="url" content={getBaseUrl()} />
 							<meta
 								itemProp="logo"
-								content={`${getBaseUrl()}/images/logo-dark.png`}
+								content={`${getBaseUrl()}/images/logo-dark.svg`}
 							/>
 
 							<div className="section-title ms-lg-5">

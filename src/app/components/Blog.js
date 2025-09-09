@@ -151,7 +151,7 @@ export default async function Blog() {
 											>
 												<meta
 													itemProp="url"
-													content={`${getBaseUrl()}/images/logo-dark.png`}
+													content={`${getBaseUrl()}/images/logo-dark.svg`}
 												/>
 											</div>
 										</div>

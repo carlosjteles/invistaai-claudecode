@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
@@ -49,6 +50,17 @@ const settings = {
 };
 
 export default function RelatedPropertySlider({ propertyData }) {
+	const router = useRouter();
+
+	const handleCardClick = (slug) => {
+		router.push(`/imovel/${slug}`);
+	};
+
+	const handleIconClick = (e, path) => {
+		e.stopPropagation();
+		router.push(path);
+	};
+
 	return (
 		<div className="row">
 			<meta itemProp="name" content="Imóveis Relacionados" />
@@ -75,6 +87,8 @@ export default function RelatedPropertySlider({ propertyData }) {
 										className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2"
 										itemScope
 										itemType="https://schema.org/RealEstateListing"
+										onClick={() => handleCardClick(item.slug)}
+										style={{ cursor: "pointer" }}
 									>
 										<meta itemProp="identifier" content={item.id} />
 										<meta
@@ -96,35 +110,41 @@ export default function RelatedPropertySlider({ propertyData }) {
 												/>
 												<ul className="list-unstyled property-icon">
 													<li>
-														<Link
-															href={`/imovel/${item.slug}`}
+														<button
+															onClick={(e) =>
+																handleIconClick(e, `/imovel/${item.slug}`)
+															}
 															className="btn btn-sm btn-icon btn-pills btn-primary"
 															aria-label="Ver detalhes do imóvel"
 														>
 															<FiHome className="icons" />
-														</Link>
+														</button>
 													</li>
 													<li className="mt-1">
-														<Link
-															href={`/imovel/${item.slug}?openGallery=true`}
+														<button
+															onClick={(e) =>
+																handleIconClick(
+																	e,
+																	`/imovel/${item.slug}?openGallery=true`
+																)
+															}
 															className="btn btn-sm btn-icon btn-pills btn-primary"
 															aria-label="Ver galeria de fotos"
 														>
 															<FiCamera className="icons" />
-														</Link>
+														</button>
 													</li>
 												</ul>
 											</div>
 										)}
 
 										<div className="card-body content p-4">
-											<Link
-												href={`/imovel/${item.slug}`}
+											<span
 												className="title fs-5 text-dark fw-medium"
 												itemProp="name"
 											>
-												{item.name}
-											</Link>
+												{item.name || item.address}
+											</span>
 
 											<div
 												itemProp="accommodationFeature"

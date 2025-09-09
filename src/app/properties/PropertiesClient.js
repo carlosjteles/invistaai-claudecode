@@ -101,6 +101,15 @@ export default function PropertiesClient({
 		router.push(`${pathname}?${params.toString()}`);
 	};
 
+	const handleCardClick = (slug) => {
+		router.push(`/imovel/${slug}`);
+	};
+
+	const handleIconClick = (e, path) => {
+		e.stopPropagation();
+		router.push(path);
+	};
+
 	const propertiesJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
@@ -400,6 +409,8 @@ export default function PropertiesClient({
 													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
 													itemScope
 													itemType="https://schema.org/RealEstateListing"
+													onClick={() => handleCardClick(item.slug)}
+													style={{ cursor: "pointer" }}
 												>
 													<meta itemProp="identifier" content={item.id} />
 													<meta
@@ -421,35 +432,36 @@ export default function PropertiesClient({
 															/>
 															<ul className="list-unstyled property-icon">
 																<li>
-																	<Link
-																		href={`/imovel/${item.slug}`}
+																	<button
+																		onClick={(e) =>
+																			handleIconClick(e, `/imovel/${item.slug}`)
+																		}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		itemProp="name"
-																		tabIndex={-1}
 																	>
 																		<FiHome className="icons" />
-																	</Link>
+																	</button>
 																</li>
 																<li className="mt-1">
-																	<Link
-																		href={`/imovel/${item.slug}?openGallery=true`}
-																		tabIndex={-1}
+																	<button
+																		onClick={(e) =>
+																			handleIconClick(
+																				e,
+																				`/imovel/${item.slug}?openGallery=true`
+																			)
+																		}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
 																	>
 																		<FiCamera className="icons" />
-																	</Link>
+																	</button>
 																</li>
 															</ul>
 														</div>
 													)}
 
 													<div className="card-body content p-4">
-														<Link
-															href={`/imovel/${item.slug}`}
-															className="title fs-5 text-dark fw-medium"
-														>
+														<span className="title fs-5 text-dark fw-medium">
 															{item.name || item.address}
-														</Link>
+														</span>
 
 														<div
 															itemProp="accommodationFeature"

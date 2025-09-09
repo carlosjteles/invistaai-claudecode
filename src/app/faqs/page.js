@@ -62,7 +62,7 @@ export default function Faqs() {
 			name: getSiteName(),
 			logo: {
 				"@type": "ImageObject",
-				url: `${getBaseUrl()}/images/logo-dark.png`,
+				url: `${getBaseUrl()}/images/logo-dark.svg`,
 			},
 		},
 	};

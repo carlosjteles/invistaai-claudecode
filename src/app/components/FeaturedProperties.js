@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
@@ -8,6 +9,8 @@ import { formatPrice } from "../helper/formatter";
 import prisma from "../../db/prisma";
 
 export default async function FeaturedProperties() {
+	const router = useRouter();
+
 	const propertyData = await prisma.property.findMany({
 		where: {
 			images: {
@@ -36,6 +39,15 @@ export default async function FeaturedProperties() {
 	if (!propertyData || propertyData.length === 0) {
 		return null;
 	}
+
+	const handleCardClick = (slug) => {
+		router.push(`/imovel/${slug}`);
+	};
+
+	const handleIconClick = (e, path) => {
+		e.stopPropagation();
+		router.push(path);
+	};
 
 	return (
 		<>
@@ -76,6 +88,8 @@ export default async function FeaturedProperties() {
 								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
 								itemScope
 								itemType="https://schema.org/RealEstateListing"
+								onClick={() => handleCardClick(item.slug)}
+								style={{ cursor: "pointer" }}
 							>
 								<meta itemProp="identifier" content={item.id} />
 								<meta itemProp="url" content={`/imovel/${item.slug}`} />
@@ -94,33 +108,36 @@ export default async function FeaturedProperties() {
 										/>
 										<ul className="list-unstyled property-icon">
 											<li>
-												<Link
-													href={`/imovel/${item.slug}`}
+												<button
+													onClick={(e) =>
+														handleIconClick(e, `/imovel/${item.slug}`)
+													}
 													className="btn btn-sm btn-icon btn-pills btn-primary"
 												>
 													<FiHome className="icons" />
-												</Link>
+												</button>
 											</li>
 											<li className="mt-1">
-												<Link
-													href={`/imovel/${item.slug}?openGallery=true`}
+												<button
+													onClick={(e) =>
+														handleIconClick(
+															e,
+															`/imovel/${item.slug}?openGallery=true`
+														)
+													}
 													className="btn btn-sm btn-icon btn-pills btn-primary"
 												>
 													<FiCamera className="icons" />
-												</Link>
+												</button>
 											</li>
 										</ul>
 									</div>
 								)}
 
 								<div className="card-body content p-4">
-									<Link
-										href={`/imovel/${item.slug}`}
-										className="title fs-5 text-dark fw-medium"
-										itemProp="name"
-									>
-										{item.name}
-									</Link>
+									<span className="title fs-5 text-dark fw-medium">
+										{item.name || item.address}
+									</span>
 
 									<div
 										itemProp="accommodationFeature"
