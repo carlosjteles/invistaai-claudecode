@@ -1064,8 +1064,8 @@ export default function FinancingSimulation() {
 						<div>
 							<div className="section-title text-center mb-3">
 								<h5 className="mb-0">
-									Seu Potencial de Financiamento, valor de Parcelas de acordo
-									com seu perfil aparecerá aqui automaticamente
+									Seu Potencial de Financiamento, valor de Parcelas será
+									processado logo após o envio.
 								</h5>
 								<small className="text-muted mx-auto">
 									Informe seu nome, e-mail e numero WhatsApp para saber o
