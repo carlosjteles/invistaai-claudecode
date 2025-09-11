@@ -29,7 +29,7 @@ export default function AboutCounter() {
 	return (
 		<div className="row">
 			{data.map((counter, idx) => (
-				<div className="col-3 py-3" key={idx}>
+				<div className="col-6 col-md-3 py-3" key={idx}>
 					<div className="counter-box text-center">
 						<h1 className="mb-0 fw-semibold">
 							<CountUp

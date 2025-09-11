@@ -2,14 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Script from "next/script";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ScrollTop from "../components/ScrollTop";
-import FeaturedPropertyCard from "../components/FeaturedPropertyCard";
-import Pagination from "../components/Pagination";
 
 import {
 	bedrooms,
@@ -18,7 +17,12 @@ import {
 	suites,
 } from "../storage/filters";
 
+import { FiHome, FiCamera } from "../assets/icons/vander";
+
+import { formatPrice } from "../helper/formatter";
 import { getBaseUrl } from "../helper/utils";
+
+import Pagination from "../components/Pagination";
 
 export default function PropertiesClient({
 	initialProperties,
@@ -392,10 +396,158 @@ export default function PropertiesClient({
 													content={(currentPage - 1) * 8 + index + 1}
 												/>
 
-												<FeaturedPropertyCard
-													item={item}
-													thumbnail={thumbnail}
-												/>
+												<div
+													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
+													itemScope
+													itemType="https://schema.org/RealEstateListing"
+												>
+													<meta itemProp="identifier" content={item.id} />
+													<meta
+														itemProp="url"
+														content={`${getBaseUrl()}/imovel/${item.slug}`}
+													/>
+
+													{thumbnail && (
+														<div className="property-image position-relative overflow-hidden shadow">
+															<Image
+																src={thumbnail.src}
+																width={0}
+																height={0}
+																sizes="100vw"
+																style={{ width: "100%", height: "auto" }}
+																className="img-fluid"
+																alt={thumbnail.alt}
+																itemProp="image"
+															/>
+															<ul className="list-unstyled property-icon">
+																<li>
+																	<Link
+																		href={`/imovel/${item.slug}`}
+																		className="btn btn-sm btn-icon btn-pills btn-primary"
+																		itemProp="name"
+																	>
+																		<FiHome className="icons" />
+																	</Link>
+																</li>
+																<li className="mt-1">
+																	<Link
+																		href={`/imovel/${item.slug}?openGallery=true`}
+																		className="btn btn-sm btn-icon btn-pills btn-primary"
+																	>
+																		<FiCamera className="icons" />
+																	</Link>
+																</li>
+															</ul>
+														</div>
+													)}
+
+													<div className="card-body content p-4">
+														<Link
+															href={`/imovel/${item.slug}`}
+															className="title fs-5 text-dark fw-medium"
+														>
+															{item.name || item.address}
+														</Link>
+
+														<div
+															itemProp="accommodationFeature"
+															itemScope
+															itemType="https://schema.org/QuantitativeValue"
+														>
+															<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
+																<li className="col-6 d-flex align-items-center m-0">
+																	<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
+																	<span className="text-muted">
+																		{item.preview.area}
+																	</span>
+																</li>
+
+																<li className="col-6 d-flex align-items-center m-0">
+																	<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
+																	<span className="text-muted">
+																		{item.preview.bedroom}
+																	</span>
+																</li>
+															</ul>
+															<ul className="list-unstyled pb-3 pt-0 border-bottom row">
+																<li className="col-6 d-flex align-items-center m-0">
+																	<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
+																	<span className="text-muted">
+																		{item.preview.suite}
+																	</span>
+																</li>
+
+																<li className="col-6 d-flex align-items-center m-0">
+																	<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
+																	<span className="text-muted">
+																		{item.preview.parking}
+																	</span>
+																</li>
+															</ul>
+														</div>
+
+														<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
+															<li className="list-inline-item mb-0">
+																<span className="text-muted">Preço</span>
+																<p
+																	className="fw-medium mb-0"
+																	itemProp="offers"
+																	itemScope
+																	itemType="https://schema.org/Offer"
+																>
+																	<meta
+																		itemProp="priceCurrency"
+																		content="BRL"
+																	/>
+																	<meta itemProp="price" content={item.price} />
+																	<span
+																		itemProp="availability"
+																		content="https://schema.org/InStock"
+																	></span>
+																	{formatPrice(item.price)}
+																</p>
+															</li>
+															<li className="list-inline-item mb-0 text-muted">
+																<span className="text-muted">Avaliação</span>
+																<div
+																	itemProp="aggregateRating"
+																	itemScope
+																	itemType="https://schema.org/AggregateRating"
+																>
+																	<meta
+																		itemProp="ratingValue"
+																		content={item.rating}
+																	/>
+																	<meta
+																		itemProp="reviewCount"
+																		content={item.quantity_reviews}
+																	/>
+																	<meta itemProp="bestRating" content="5" />
+																	<ul className="fw-medium text-warning list-unstyled mb-0">
+																		<li className="list-inline-item mb-0">
+																			<i className="mdi mdi-star"></i>
+																		</li>
+																		<li className="list-inline-item mb-0">
+																			<i className="mdi mdi-star"></i>
+																		</li>
+																		<li className="list-inline-item mb-0">
+																			<i className="mdi mdi-star"></i>
+																		</li>
+																		<li className="list-inline-item mb-0">
+																			<i className="mdi mdi-star"></i>
+																		</li>
+																		<li className="list-inline-item mb-0">
+																			<i className="mdi mdi-star"></i>
+																		</li>
+																		<li className="list-inline-item mb-0 text-dark">
+																			{item.rating} ({item.quantity_reviews})
+																		</li>
+																	</ul>
+																</div>
+															</li>
+														</ul>
+													</div>
+												</div>
 											</div>
 										);
 									})}

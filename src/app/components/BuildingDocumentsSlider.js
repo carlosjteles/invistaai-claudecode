@@ -110,7 +110,7 @@ export default function BuildingDocumentsSlider({ images }) {
 										itemScope
 										itemType="https://schema.org/RealEstateListing"
 										style={{
-											height: "220px",
+											height: "260px",
 										}}
 									>
 										<div
@@ -133,9 +133,8 @@ export default function BuildingDocumentsSlider({ images }) {
 												sizes="100vw"
 												style={{
 													maxWidth: "90%",
-													maxHeight: "90%",
 													width: "auto",
-													height: "auto",
+													height: "100%",
 													objectFit: "contain",
 												}}
 												className="img-fluid"

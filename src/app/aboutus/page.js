@@ -224,7 +224,7 @@ export default function AboutUs() {
 									</div>
 								</div>
 
-								<div className="img-two shadow rounded-3 overflow-hidden p-2 mb-2 bg-white">
+								<div className="img-two shadow rounded-3 overflow-hidden p-2 mb-5 mb-md-2 bg-white">
 									<Image
 										src="/images/plate.webp"
 										width={0}
@@ -236,7 +236,7 @@ export default function AboutUs() {
 									/>
 								</div>
 
-								<span className="badge bg-info mt-4">
+								<span className="badge bg-info text-wrap mt-4">
 									Eficiência. Transparência. Controle. Invista com inteligência.
 								</span>
 							</div>
