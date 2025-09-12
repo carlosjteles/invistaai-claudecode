@@ -59,6 +59,7 @@ export const metadata = {
 };
 
 export default async function Properties({ searchParams, params }) {
+	
 	/** Set category manually for "lancamentos" or param */
 	const pathname = params?.pathname || "";
 	let category = Number(searchParams.categoria || 0);
