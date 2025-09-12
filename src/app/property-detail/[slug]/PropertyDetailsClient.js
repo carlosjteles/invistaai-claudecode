@@ -270,7 +270,7 @@ export default function PropertyDetailsClient({
 									{propertyData.name || propertyData.address}
 								</h4>
 								<ul className="list-unstyled row align-items-center justify-content-between mb-0 py-3">
-									<li className="col-6 col-md-3 ms-0">
+									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-arrow-expand-all fs-4 me-2 text-primary"></i>
 											<span
@@ -280,14 +280,14 @@ export default function PropertyDetailsClient({
 												itemType="https://schema.org/PropertyValue"
 											>
 												<meta itemProp="name" content="Área" />
-												<span itemProp="value">
+												<small itemProp="value">
 													{propertyData.preview?.area}
-												</span>
+												</small>
 											</span>
 										</span>
 									</li>
 
-									<li className="col-6 col-md-3 ms-0">
+									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-bed fs-4 me-2 text-primary"></i>
 											<span
@@ -297,14 +297,14 @@ export default function PropertyDetailsClient({
 												itemType="https://schema.org/PropertyValue"
 											>
 												<meta itemProp="name" content="Quartos" />
-												<span itemProp="value">
+												<small itemProp="value">
 													{propertyData.preview?.bedroom}
-												</span>
+												</small>
 											</span>
 										</span>
 									</li>
 
-									<li className="col-6 col-md-3 ms-0">
+									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-shower fs-4 me-2 text-primary"></i>
 											<span
@@ -314,14 +314,14 @@ export default function PropertyDetailsClient({
 												itemType="https://schema.org/PropertyValue"
 											>
 												<meta itemProp="name" content="Suítes" />
-												<span itemProp="value">
+												<small itemProp="value">
 													{propertyData.preview?.suite}
-												</span>
+												</small>
 											</span>
 										</span>
 									</li>
 
-									<li className="col-6 col-md-3 ms-0">
+									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
 											<i className="mdi mdi-car fs-4 me-2 text-primary"></i>
 											<span
@@ -331,9 +331,9 @@ export default function PropertyDetailsClient({
 												itemType="https://schema.org/PropertyValue"
 											>
 												<meta itemProp="name" content="Vagas" />
-												<span itemProp="value">
+												<small itemProp="value">
 													{propertyData.preview?.parking}
-												</span>
+												</small>
 											</span>
 										</span>
 									</li>

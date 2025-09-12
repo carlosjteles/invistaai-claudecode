@@ -130,32 +130,34 @@ export default async function FeaturedProperties() {
 										<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 											<li className="col-6 d-flex align-items-center m-0">
 												<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-												<span className="text-muted" itemProp="value">
+												<small className="text-muted" itemProp="value">
 													{item.preview.area}
-												</span>
+												</small>
 												<meta itemProp="unitText" content="m²" />
 											</li>
 
 											<li className="col-6 d-flex align-items-center m-0">
 												<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-												<span className="text-muted">
+												<small className="text-muted">
 													{item.preview.bedroom}
-												</span>
+												</small>
 												<meta itemProp="unitText" content="bedroom" />
 											</li>
 										</ul>
 										<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 											<li className="col-6 d-flex align-items-center m-0">
 												<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-												<span className="text-muted">{item.preview.suite}</span>
+												<small className="text-muted">
+													{item.preview.suite}
+												</small>
 												<meta itemProp="unitText" content="bathroom" />
 											</li>
 
 											<li className="col-6 d-flex align-items-center m-0">
 												<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
-												<span className="text-muted">
+												<small className="text-muted">
 													{item.preview.parking}
-												</span>
+												</small>
 												<meta itemProp="unitText" content="parkingSpace" />
 											</li>
 										</ul>

@@ -457,31 +457,31 @@ export default function PropertiesClient({
 															<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 																<li className="col-6 d-flex align-items-center m-0">
 																	<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-																	<span className="text-muted">
+																	<small className="text-muted">
 																		{item.preview.area}
-																	</span>
+																	</small>
 																</li>
 
 																<li className="col-6 d-flex align-items-center m-0">
 																	<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-																	<span className="text-muted">
+																	<small className="text-muted">
 																		{item.preview.bedroom}
-																	</span>
+																	</small>
 																</li>
 															</ul>
 															<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 																<li className="col-6 d-flex align-items-center m-0">
 																	<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-																	<span className="text-muted">
+																	<small className="text-muted">
 																		{item.preview.suite}
-																	</span>
+																	</small>
 																</li>
 
 																<li className="col-6 d-flex align-items-center m-0">
 																	<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
-																	<span className="text-muted">
+																	<small className="text-muted">
 																		{item.preview.parking}
-																	</span>
+																	</small>
 																</li>
 															</ul>
 														</div>
