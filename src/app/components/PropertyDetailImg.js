@@ -58,7 +58,12 @@ export default function PropertyDetailImg({
 						width={0}
 						height={0}
 						sizes="100vw"
-						style={{ width: "100%", height: "auto" }}
+						style={{
+							width: "100%",
+							height: "auto",
+							maxHeight: "580px",
+							objectFit: "cover",
+						}}
 						className="img-fluid rounded-3 shadow"
 						alt={firstImage.title || `Imóvel: vista principal`}
 						itemProp="image"
@@ -87,7 +92,12 @@ export default function PropertyDetailImg({
 									width={0}
 									height={0}
 									sizes="100vw"
-									style={{ width: "100%", height: "auto" }}
+									style={{
+										width: "100%",
+										height: "auto",
+										maxHeight: "290px",
+										objectFit: "cover",
+									}}
 									className="img-fluid rounded-3 shadow"
 									alt={img.title || `Imóvel: vista ${idx + 2}`}
 									itemProp="contentUrl"

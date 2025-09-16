@@ -89,7 +89,12 @@ export default function RelatedPropertySlider({ propertyData }) {
 													width={0}
 													height={0}
 													sizes="100vw"
-													style={{ width: "100%", height: "auto" }}
+													style={{
+														width: "100%",
+														height: "auto",
+														maxHeight: "220px",
+														objectFit: "cover",
+													}}
 													className="img-fluid"
 													alt={thumbnail.alt}
 													itemProp="image"

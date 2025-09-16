@@ -12,7 +12,7 @@ export default function FaqTabContent({
 			<h2 className="accordion-header">
 				<button
 					className={`accordion-button border-0 bg-white ${
-						activeIndex === id ? "" : "collapsed"
+						activeIndex === id ? "active" : "collapsed"
 					}`}
 					type="button"
 					onClick={() => setActiveIndex(activeIndex === id ? 0 : id)}
