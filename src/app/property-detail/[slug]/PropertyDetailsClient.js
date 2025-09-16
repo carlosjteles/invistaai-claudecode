@@ -57,6 +57,11 @@ export default function PropertyDetailsClient({
 		);
 	}, [propertyData.images]);
 
+	const perspectiveImages = React.useMemo(() => {
+		if (!propertyData.images) return [];
+		return propertyData.images.filter((img) => img.type === "perspectives");
+	}, [propertyData.images]);
+
 	const typelogiesByType = React.useMemo(() => {
 		if (!propertyData.typelogies) return {};
 		return propertyData.typelogies.reduce((type, item) => {
@@ -181,7 +186,7 @@ export default function PropertyDetailsClient({
 			<section className="section mt-5 pt-4">
 				<div className="container-fluid mt-2">
 					<PropertyDetailImg
-						images={propertyData.images}
+						images={perspectiveImages}
 						title={propertyData.name || propertyData.address}
 						openGallery={openGallery}
 					/>
