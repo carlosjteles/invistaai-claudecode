@@ -414,12 +414,6 @@ export default function PropertiesClient({
 																width={0}
 																height={0}
 																sizes="100vw"
-																style={{
-																	width: "100%",
-																	height: "auto",
-																	maxHeight: "220px",
-																	objectFit: "cover",
-																}}
 																className="img-fluid"
 																alt={thumbnail.alt}
 																itemProp="image"

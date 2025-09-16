@@ -114,31 +114,18 @@ export default function BuildingDocumentsSlider({ images }) {
 										}}
 									>
 										<div
-											className="property-image position-relative overflow-hidden d-flex justify-content-center align-items-center"
-											style={{
-												height: "100%",
-												display: "flex",
-												justifyContent: "center",
-												alignItems: "center",
-												padding: "20px",
-											}}
+											className="property-building-document position-relative overflow-hidden d-flex justify-content-center align-items-center"
 											onClick={() => handleImageClick(index)}
-											title={item.title}
-											aria-label={`Ver imagem: ${item.title}`}
+											title={item.alt}
+											aria-label={`Ver imagem: ${item.alt}`}
 										>
 											<Image
 												src={item.src}
 												width={0}
 												height={0}
 												sizes="100vw"
-												style={{
-													maxWidth: "90%",
-													width: "auto",
-													height: "100%",
-													objectFit: "contain",
-												}}
 												className="img-fluid"
-												alt={item.title || `Planta ${index + 1}`}
+												alt={item.alt || `Planta ${index + 1}`}
 												itemProp="image"
 											/>
 										</div>
@@ -161,7 +148,7 @@ export default function BuildingDocumentsSlider({ images }) {
 					onCloseRequest={() => setOpen(false)}
 					onMovePrevRequest={handleMovePrev}
 					onMoveNextRequest={handleMoveNext}
-					imageTitle={largeImages[currentIndex]?.title}
+					imageTitle={largeImages[currentIndex]?.alt}
 				/>
 			)}
 		</div>

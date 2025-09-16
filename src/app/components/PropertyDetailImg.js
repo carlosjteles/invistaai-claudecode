@@ -38,7 +38,7 @@ export default function PropertyDetailImg({
 
 	return (
 		<div
-			className="row g-2"
+			className="row g-2 property-detail"
 			itemScope
 			itemType="https://schema.org/ImageGallery"
 		>
@@ -49,23 +49,17 @@ export default function PropertyDetailImg({
 				<Link
 					href="#"
 					onClick={() => handleImageClick(0)}
-					className="lightbox"
-					title={firstImage.title}
-					aria-label={`Ver imagem: ${firstImage.title}`}
+					className="lightbox property-detail-main"
+					title={firstImage.alt}
+					aria-label={`Ver imagem: ${firstImage.alt}`}
 				>
 					<Image
 						src={firstImage.src}
 						width={0}
 						height={0}
 						sizes="100vw"
-						style={{
-							width: "100%",
-							height: "auto",
-							maxHeight: "580px",
-							objectFit: "cover",
-						}}
 						className="img-fluid rounded-3 shadow"
-						alt={firstImage.title || `Imóvel: vista principal`}
+						alt={firstImage.alt || `Imóvel: vista principal`}
 						itemProp="image"
 					/>
 				</Link>
@@ -83,30 +77,21 @@ export default function PropertyDetailImg({
 							<Link
 								href="#"
 								onClick={() => handleImageClick(idx + 1)}
-								className="lightbox"
-								title={img.title}
-								aria-label={`Ver imagem: ${img.title || `Vista ${idx + 2}`}`}
+								className="lightbox property-detail-sub"
+								title={img.alt}
+								aria-label={`Ver imagem: ${img.alt || `Vista ${idx + 2}`}`}
 							>
 								<Image
 									src={img.src}
 									width={0}
 									height={0}
 									sizes="100vw"
-									style={{
-										width: "100%",
-										height: "auto",
-										maxHeight: "290px",
-										objectFit: "cover",
-									}}
 									className="img-fluid rounded-3 shadow"
-									alt={img.title || `Imóvel: vista ${idx + 2}`}
+									alt={img.alt || `Imóvel: vista ${idx + 2}`}
 									itemProp="contentUrl"
 								/>
 
-								<meta
-									itemProp="name"
-									content={img.title || `Vista ${idx + 2}`}
-								/>
+								<meta itemProp="name" content={img.alt || `Vista ${idx + 2}`} />
 								<meta itemProp="position" content={idx + 2} />
 							</Link>
 						</div>
@@ -123,7 +108,7 @@ export default function PropertyDetailImg({
 					onCloseRequest={() => setIsOpen(false)}
 					onMovePrevRequest={handleMovePrev}
 					onMoveNextRequest={handleMoveNext}
-					imageTitle={currentImage.title}
+					imageTitle={currentImage.alt}
 				/>
 			)}
 		</div>
