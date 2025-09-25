@@ -105,8 +105,8 @@
 		img {
 			object-fit: cover;
 			width: 100%;
-			height: auto;
-			max-height: 580px;
+			height: 100%;
+			max-height: 588px;
 
 			@media (max-width: 1200px) {
 				height: 304px;
@@ -122,7 +122,7 @@
 		img {
 			object-fit: cover;
 			width: 100%;
-			height: auto;
+			height: 100%;
 			max-height: 290px;
 
 			@media (max-width: 1200px) {
