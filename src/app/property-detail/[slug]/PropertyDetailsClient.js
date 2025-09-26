@@ -431,52 +431,61 @@ export default function PropertyDetailsClient({
 								{(buildingDocumentsImages.length > 0 ||
 									hasValidYoutubeVideo) && (
 									<div className="mb-4">
-										{buildingDocumentsImages.length > 0 &&
-											hasValidYoutubeVideo && (
-												<ul className="nav nav-pills nav-justified mb-0">
-													<li className="nav-item">
-														<a
-															className={`nav-link ${
-																activeTab === "plantas" ? "active" : ""
-															}`}
-															aria-current="page"
-															href="#"
-															onClick={(e) => {
-																e.preventDefault();
-																setActiveTab("plantas");
-															}}
-														>
-															Plantas
-														</a>
-													</li>
-													<li className="nav-item">
-														<a
-															className={`nav-link ${
-																activeTab === "video" ? "active" : ""
-															}`}
-															href="#"
-															onClick={(e) => {
-																e.preventDefault();
-																setActiveTab("video");
-															}}
-														>
-															Video
-														</a>
-													</li>
-												</ul>
-											)}
+										<ul className="nav nav-pills nav-justified mb-0">
+											<li className="nav-item">
+												<a
+													className={`nav-link ${
+														activeTab === "plantas" ? "active" : ""
+													}`}
+													aria-current="page"
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														setActiveTab("plantas");
+													}}
+												>
+													Plantas
+												</a>
+											</li>
+											<li className="nav-item">
+												<a
+													className={`nav-link ${
+														activeTab === "video" ? "active" : ""
+													}`}
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														setActiveTab("video");
+													}}
+												>
+													Video
+												</a>
+											</li>
+										</ul>
 										<div className="tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom">
-											{activeTab === "plantas" &&
-												buildingDocumentsImages.length > 0 && (
-													<div className="tab-pane fade show active">
+											{activeTab === "plantas" && (
+												<div className="tab-pane fade show active">
+													{buildingDocumentsImages.length > 0 ? (
 														<BuildingDocumentsSlider
 															images={buildingDocumentsImages}
 														/>
-													</div>
-												)}
-											{activeTab === "video" && hasValidYoutubeVideo && (
+													) : (
+														<div className="text-center py-5">
+															<span className="text-muted">Indisponível</span>
+														</div>
+													)}
+												</div>
+											)}
+
+											{activeTab === "video" && (
 												<div className="tab-pane fade show active">
-													<YoutubeEmbed video={propertyData.video} />
+													{hasValidYoutubeVideo ? (
+														<YoutubeEmbed video={propertyData.video} />
+													) : (
+														<div className="text-center py-5">
+															<span className="text-muted">Indisponível</span>
+														</div>
+													)}
 												</div>
 											)}
 										</div>
