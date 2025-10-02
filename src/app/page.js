@@ -14,6 +14,8 @@ import TextAnimation from "./components/TextAnimation";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
+export const revalidate = 60;
+
 export default function Home() {
 	const homeJsonLd = {
 		"@context": "https://schema.org",

@@ -5,8 +5,6 @@ import { categories } from "../storage/filters";
 
 import prisma from "../../db/prisma";
 
-export const dynamic = "force-dynamic";
-
 export default async function Categories() {
 	const categoryCountsArray = await prisma.property.groupBy({
 		by: ["category"],

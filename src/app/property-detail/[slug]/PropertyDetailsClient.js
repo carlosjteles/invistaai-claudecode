@@ -515,7 +515,9 @@ export default function PropertyDetailsClient({
 
 						<div className="col-lg-4 col-md-5 col-12">
 							<div className="rounded-3 shadow bg-white sticky-bar p-4">
-								<h5 className="mb-3">A partir de:</h5>
+								{propertyData.price > 0 && (
+									<h5 className="mb-3">A partir de:</h5>
+								)}
 
 								<div className="d-flex align-items-center justify-content-between">
 									<h5
@@ -524,7 +526,7 @@ export default function PropertyDetailsClient({
 										itemScope
 										itemType="https://schema.org/Offer"
 									>
-										{item.price === 0 ? (
+										{propertyData.price === 0 ? (
 											"Consulte"
 										) : (
 											<>
@@ -548,7 +550,7 @@ export default function PropertyDetailsClient({
 								</div>
 
 								<div>
-									{propertyData.price && propertyData.min_area && (
+									{propertyData.price > 0 && propertyData.min_area && (
 										<div className="d-flex align-items-center justify-content-between mt-2">
 											<span className="small text-muted">Preço por m²</span>
 											<span className="small">
@@ -588,11 +590,13 @@ export default function PropertyDetailsClient({
 										className="btn btn-primary w-100 small"
 										aria-label="Agendar visita por WhatsApp"
 									>
-										Agendar Agora
+										{propertyData.price > 0 ? "Agendar Agora" : "Consultar"}
 									</Link>
 								</div>
 
-								{propertyData.price < 600000 && <FinancingSimulation />}
+								{propertyData.price > 0 && propertyData.price < 600000 && (
+									<FinancingSimulation />
+								)}
 							</div>
 						</div>
 					</div>

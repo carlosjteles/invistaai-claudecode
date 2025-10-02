@@ -540,7 +540,13 @@ export default function PropertiesClient({
 																		content={item.quantity_reviews}
 																	/>
 																	<meta itemProp="bestRating" content="5" />
-																	<ul className="fw-medium text-warning list-unstyled mb-0">
+																	<ul
+																		className={`fw-medium ${
+																			item.quantity_reviews > 0
+																				? "text-warning"
+																				: ""
+																		} list-unstyled mb-0`}
+																	>
 																		<li className="list-inline-item mb-0">
 																			<i className="mdi mdi-star"></i>
 																		</li>
