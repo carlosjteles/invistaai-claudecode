@@ -99,12 +99,15 @@ export default function PropertyDetailsClient({
 			streetAddress: propertyData.seo?.street,
 			addressCountry: "BR",
 		},
-		offers: {
-			"@type": "Offer",
-			price: propertyData.price,
-			priceCurrency: "BRL",
-			availability: "https://schema.org/InStock",
-		},
+		offers:
+			propertyData.price > 0
+				? {
+						"@type": "Offer",
+						price: propertyData.price,
+						priceCurrency: "BRL",
+						availability: "https://schema.org/InStock",
+				  }
+				: undefined,
 		numberOfRooms: Array.isArray(propertyData.bedroom)
 			? Math.min(...propertyData.bedroom.filter((v) => typeof v === "number"))
 			: propertyData.bedroom,
@@ -412,7 +415,9 @@ export default function PropertyDetailsClient({
 														{items.map((item, idx) => (
 															<tr key={idx}>
 																<td className="text-muted">
-																	{formatPrice(item.price)}
+																	{item.price === 0
+																		? "Consulte"
+																		: formatPrice(item.price)}
 																</td>
 																<td className="text-muted">
 																	{item.private_area}
@@ -519,13 +524,19 @@ export default function PropertyDetailsClient({
 										itemScope
 										itemType="https://schema.org/Offer"
 									>
-										<meta itemProp="priceCurrency" content="BRL" />
-										<meta itemProp="price" content={propertyData.price} />
-										<meta
-											itemProp="availability"
-											content="https://schema.org/InStock"
-										/>
-										{formatPrice(propertyData.price)}
+										{item.price === 0 ? (
+											"Consulte"
+										) : (
+											<>
+												<meta itemProp="priceCurrency" content="BRL" />
+												<meta itemProp="price" content={propertyData.price} />
+												<meta
+													itemProp="availability"
+													content="https://schema.org/InStock"
+												/>
+												{formatPrice(propertyData.price)}
+											</>
+										)}
 									</h5>
 									<span className="badge bg-primary">
 										{

@@ -66,7 +66,10 @@ const PropertySchema = validate.object({
 		.array(validate.number())
 		.min(1, "É necessário pelo menos uma opção de vaga"),
 	min_area: validate.number().positive("A área mínima deve ser positiva"),
-	price: validate.number().positive("O preço deve ser positivo"),
+	price: validate
+		.number()
+		.min(0, "O preço deve ser zero ou positivo")
+		.optional(),
 	rating: validate.number().min(0).max(5).optional(),
 	quantity_reviews: validate.number().int().nonnegative().optional(),
 	category: validate.number().int().positive("A categoria é obrigatória"),

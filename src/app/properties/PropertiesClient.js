@@ -118,11 +118,20 @@ export default function PropertiesClient({
 					name: property.name || property.address,
 					image: property.images?.[0]?.src || "",
 					url: `${getBaseUrl()}/imovel/${property.slug}`,
-					offers: {
-						"@type": "Offer",
-						price: property.price,
-						priceCurrency: "BRL",
-					},
+					offers:
+						property.price === 0
+							? {
+									"@type": "Offer",
+									price: "Consulte",
+									priceCurrency: "BRL",
+									availability: "https://schema.org/PreOrder",
+							  }
+							: {
+									"@type": "Offer",
+									price: property.price,
+									priceCurrency: "BRL",
+									availability: "https://schema.org/InStock",
+							  },
 				},
 			})),
 			numberOfItems: totalCount,
@@ -494,16 +503,25 @@ export default function PropertiesClient({
 																	itemScope
 																	itemType="https://schema.org/Offer"
 																>
-																	<meta
-																		itemProp="priceCurrency"
-																		content="BRL"
-																	/>
-																	<meta itemProp="price" content={item.price} />
-																	<span
-																		itemProp="availability"
-																		content="https://schema.org/InStock"
-																	></span>
-																	{formatPrice(item.price)}
+																	{item.price === 0 ? (
+																		"Consulte"
+																	) : (
+																		<>
+																			<meta
+																				itemProp="priceCurrency"
+																				content="BRL"
+																			/>
+																			<meta
+																				itemProp="price"
+																				content={item.price}
+																			/>
+																			<span
+																				itemProp="availability"
+																				content="https://schema.org/InStock"
+																			></span>
+																			{formatPrice(item.price)}
+																		</>
+																	)}
 																</p>
 															</li>
 															<li className="list-inline-item mb-0 text-muted">

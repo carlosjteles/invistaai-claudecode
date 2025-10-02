@@ -171,13 +171,19 @@ export default async function FeaturedProperties() {
 												itemScope
 												itemType="https://schema.org/Offer"
 											>
-												<meta itemProp="priceCurrency" content="BRL" />
-												<meta itemProp="price" content={item.price} />
-												<span
-													itemProp="availability"
-													content="https://schema.org/InStock"
-												></span>
-												{formatPrice(item.price)}
+												{item.price === 0 ? (
+													"Consulte"
+												) : (
+													<>
+														<meta itemProp="priceCurrency" content="BRL" />
+														<meta itemProp="price" content={item.price} />
+														<span
+															itemProp="availability"
+															content="https://schema.org/InStock"
+														></span>
+														{formatPrice(item.price)}
+													</>
+												)}
 											</p>
 										</li>
 										<li className="list-inline-item mb-0 text-muted">
@@ -194,7 +200,11 @@ export default async function FeaturedProperties() {
 												/>
 												<meta itemProp="bestRating" content="5" />
 
-												<ul className="fw-medium text-warning list-unstyled mb-0">
+												<ul
+													className={`fw-medium ${
+														item.quantity_reviews > 0 ? "text-warning" : ""
+													} list-unstyled mb-0`}
+												>
 													<li className="list-inline-item mb-0">
 														<i className="mdi mdi-star"></i>
 													</li>
