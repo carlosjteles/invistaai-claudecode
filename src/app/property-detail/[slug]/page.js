@@ -8,6 +8,7 @@ import prisma from "../../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../../helper/utils";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 120;
 
 export async function generateMetadata({ params }) {

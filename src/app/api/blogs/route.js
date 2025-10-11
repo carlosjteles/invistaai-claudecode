@@ -6,6 +6,8 @@ import { z as validate } from "zod";
 
 import { verifyToken } from "../../api/helper/auth";
 
+export const dynamic = "force-dynamic";
+
 const BlogContentSchema = validate.object({
 	type: validate.enum(["text", "quote", "link"], {
 		errorMap: () => ({ message: "Tipo deve ser 'text', 'quote' ou 'link'" }),

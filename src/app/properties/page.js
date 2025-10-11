@@ -6,6 +6,7 @@ import { getBaseUrl, getSiteName } from "../helper/utils";
 
 import { categories } from "../storage/filters";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 120;
 
 export const metadata = {

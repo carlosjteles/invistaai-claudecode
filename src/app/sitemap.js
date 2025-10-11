@@ -2,6 +2,8 @@ import prisma from "../db/prisma";
 
 import { getBaseUrl } from "./helper/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap() {
 	const properties = await prisma.property.findMany({
 		select: { slug: true, updatedAt: true },
