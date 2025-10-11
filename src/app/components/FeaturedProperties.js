@@ -7,7 +7,7 @@ import { formatPrice } from "../helper/formatter";
 
 import prisma from "../../db/prisma";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function FeaturedProperties() {
 	const propertyData = await prisma.property.findMany({

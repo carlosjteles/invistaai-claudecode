@@ -6,7 +6,7 @@ import { z as validate } from "zod";
 
 import { verifyToken } from "../../api/helper/auth";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 const BlogContentSchema = validate.object({
 	type: validate.enum(["text", "quote", "link"], {

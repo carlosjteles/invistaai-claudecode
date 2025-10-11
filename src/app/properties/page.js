@@ -6,8 +6,7 @@ import { getBaseUrl, getSiteName } from "../helper/utils";
 
 import { categories } from "../storage/filters";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 120;
+export const revalidate = 300;
 
 export const metadata = {
 	title: `Imóveis à Venda em São Paulo | ${getSiteName()}`,
