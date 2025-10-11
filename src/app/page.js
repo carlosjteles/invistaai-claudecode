@@ -14,6 +14,7 @@ import TextAnimation from "./components/TextAnimation";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 120;
 
 export default function Home() {

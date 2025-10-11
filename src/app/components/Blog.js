@@ -7,8 +7,6 @@ import prisma from "../../db/prisma";
 import { getBaseUrl, getSiteName } from "../helper/utils";
 import { formatDateISO } from "../helper/formatter";
 
-export const dynamic = "force-dynamic";
-
 export default async function Blog() {
 	const recentData = await prisma.blog.findMany({
 		where: {

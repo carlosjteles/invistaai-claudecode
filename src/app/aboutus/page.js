@@ -18,6 +18,8 @@ import { contact } from "../storage/about";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
 	title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
 	description:
