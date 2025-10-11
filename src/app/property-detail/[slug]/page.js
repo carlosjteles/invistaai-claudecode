@@ -8,78 +8,102 @@ import prisma from "../../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../../helper/utils";
 
-export async function generateMetadata({ params }) {
-	const propertyData = await prisma.property.findUnique({
-		where: { slug: params.slug, images: { some: {} } },
-		include: {
-			images: true,
-		},
-	});
+export const revalidate = 120;
 
-	if (!propertyData) {
+export async function generateMetadata({ params }) {
+	try {
+		const propertyData = await prisma.property.findUnique({
+			where: { slug: params.slug },
+			select: {
+				id: true,
+				name: true,
+				address: true,
+				neighborhood: true,
+				category: true,
+				preview: true,
+				seo: true,
+				slug: true,
+				images: {
+					where: { thumbnail: true },
+					take: 1,
+					select: {
+						src: true,
+						alt: true,
+					},
+				},
+			},
+		});
+
+		if (!propertyData) {
+			return {
+				title: `Imóvel não encontrado | ${getSiteName()}`,
+				description: "O imóvel que você está procurando não foi encontrado.",
+			};
+		}
+
+		const category =
+			categories.find((cat) => cat.id === propertyData.category)?.label || "";
+
+		const mainImage =
+			propertyData.images && propertyData.images.length > 0
+				? propertyData.images[0].src
+				: undefined;
+
 		return {
-			title: `Imóvel não encontrado | ${getSiteName()}`,
-			description: "O imóvel que você está procurando não foi encontrado.",
+			title:
+				propertyData.seo?.title ||
+				`${propertyData.name || propertyData.address} | ${getSiteName()}`,
+			description:
+				propertyData.seo?.description ||
+				`${propertyData.preview?.area} com ${propertyData.preview?.bedroom} em ${propertyData.neighborhood}`,
+			keywords:
+				propertyData.seo?.keywords ||
+				`imóvel, ${category}, ${propertyData.neighborhood}`,
+			openGraph: {
+				title:
+					propertyData.seo?.title || propertyData.name || propertyData.address,
+				description: propertyData.seo?.description,
+				type: "article",
+				url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
+				images: mainImage
+					? [
+							{
+								url: mainImage,
+								width: 1200,
+								height: 630,
+								alt: propertyData.name || propertyData.address,
+							},
+					  ]
+					: [],
+			},
+			twitter: {
+				card: "summary_large_image",
+				title:
+					propertyData.seo?.title || propertyData.name || propertyData.address,
+				description: propertyData.seo?.description,
+				images: mainImage ? [mainImage] : [],
+			},
+			alternates: {
+				canonical: `${getBaseUrl()}/imovel/${propertyData.slug}`,
+			},
+			robots: {
+				index: true,
+				follow: true,
+				"max-snippet": -1,
+				"max-image-preview": "large",
+			},
+		};
+	} catch (error) {
+		return {
+			title: `Imóvel | ${getSiteName()}`,
+			description: "Confira as melhores oportunidades de imóveis.",
 		};
 	}
-
-	const category =
-		categories.find((cat) => cat.id === propertyData.category)?.label || "";
-
-	const mainImage =
-		propertyData.images && propertyData.images.length > 0
-			? propertyData.images[0].src
-			: undefined;
-
-	return {
-		title:
-			propertyData.seo?.title ||
-			`${propertyData.name || propertyData.address} | ${getSiteName()}`,
-		description:
-			propertyData.seo?.description ||
-			`${propertyData.preview?.area} com ${propertyData.preview?.bedroom} em ${propertyData.neighborhood}`,
-		keywords:
-			propertyData.seo?.keywords ||
-			`imóvel, ${category}, ${propertyData.neighborhood}`,
-		openGraph: {
-			title:
-				propertyData.seo?.title || propertyData.name || propertyData.address,
-			description: propertyData.seo?.description,
-			type: "article",
-			url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
-			images: mainImage
-				? [
-						{
-							url: mainImage,
-							width: 1200,
-							height: 630,
-							alt: propertyData.name || propertyData.address,
-						},
-				  ]
-				: [],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title:
-				propertyData.seo?.title || propertyData.name || propertyData.address,
-			description: propertyData.seo?.description,
-			images: mainImage ? [mainImage] : [],
-		},
-		alternates: {
-			canonical: `${getBaseUrl()}/imovel/${propertyData.slug}`,
-		},
-		robots: {
-			index: true,
-			follow: true,
-			"max-snippet": -1,
-			"max-image-preview": "large",
-		},
-	};
 }
 
 export default async function PropertyDetails({ params }) {
 	const propertyData = await prisma.property.findUnique({
-		where: { slug: params.slug, images: { some: {} } },
+		where: { slug: params.slug },
 		include: {
 			images: {
 				where: {

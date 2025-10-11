@@ -14,7 +14,7 @@ import TextAnimation from "./components/TextAnimation";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
-export const revalidate = 60;
+export const revalidate = 120;
 
 export default function Home() {
 	const homeJsonLd = {
@@ -173,7 +173,7 @@ export default function Home() {
 
 										<div className="col-lg-12 col-md-12">
 											<Image
-												src="/images/logo-icon.png"
+												src="/images/icon.svg"
 												width={100}
 												height={100}
 												className="img-fluid"

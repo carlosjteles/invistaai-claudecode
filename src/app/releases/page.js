@@ -2,7 +2,7 @@ import Properties from "../properties/page";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export const metadata = {
 	title: `Lançamentos Imobiliários | ${getSiteName()}`,
