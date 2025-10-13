@@ -1,31 +1,7 @@
 User-agent: *
 Allow: /
 
-# Host
-Host: https://invistaai.com
-
-# Sitemaps
-Sitemap: https://invistaai.com/sitemap.xml
-
-# Desallow admin/api routes
-User-agent: *
 Disallow: /api/
-Disallow: /admin/
 Disallow: /_next/
-Disallow: /static/
 
-# Allow important pages
-Allow: /imoveis
-Allow: /imovel/
-Allow: /sobre
-Allow: /contato
-Allow: /blogs
-Allow: /blog/
-
-# Crawl delay
-Crawl-delay: 2
-
-# Block bad bots
-User-agent: MJ12bot
-User-agent: AhrefsBot
-Disallow: /
+Sitemap: https://www.invistaai.com/sitemap.xml

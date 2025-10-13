@@ -109,6 +109,7 @@ export default function Home() {
 					>
 						<Image
 							src="/images/bg/home.webp"
+							alt={`Invista em imóveis em São Paulo com ${getSiteName()} - Curadoria especializada`}
 							fill
 							priority
 							fetchPriority="high"
