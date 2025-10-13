@@ -65,7 +65,6 @@ export const metadata = {
 	viewport: {
 		width: "device-width",
 		initialScale: 1,
-		maximumScale: 1,
 	},
 	icons: {
 		icon: "/images/favicon.ico",

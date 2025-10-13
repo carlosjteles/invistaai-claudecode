@@ -122,15 +122,15 @@ export default function Customers() {
 														itemProp="image"
 													/>
 													<div className="flex-1 ms-3">
-														<h6
-															className="mb-0"
+														<p
+															className="fw-semibold mb-0"
 															itemProp="author"
 															itemScope
 															itemType="https://schema.org/Person"
 														>
 															<span itemProp="name">{item.name}</span>
 															<meta itemProp="jobTitle" content={item.title} />
-														</h6>
+														</p>
 														<small className="text-muted">{item.title}</small>
 													</div>
 												</div>

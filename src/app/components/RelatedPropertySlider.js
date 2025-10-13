@@ -98,18 +98,22 @@ export default function RelatedPropertySlider({ propertyData }) {
 														<Link
 															href={`/imovel/${item.slug}`}
 															className="btn btn-sm btn-icon btn-pills btn-primary"
-															aria-label="Ver detalhes do imóvel"
+															aria-label={`Ver detalhes do imóvel ${
+																item.name || item.address
+															}`}
 														>
-															<FiHome className="icons" />
+															<FiHome className="icons" aria-hidden="true" />
 														</Link>
 													</li>
 													<li className="mt-1">
 														<Link
 															href={`/imovel/${item.slug}?openGallery=true`}
 															className="btn btn-sm btn-icon btn-pills btn-primary"
-															aria-label="Ver galeria de fotos"
+															aria-label={`Ver galeria de fotos do imóvel ${
+																item.name || item.address
+															}`}
 														>
-															<FiCamera className="icons" />
+															<FiCamera className="icons" aria-hidden="true" />
 														</Link>
 													</li>
 												</ul>

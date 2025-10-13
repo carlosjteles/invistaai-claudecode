@@ -107,15 +107,20 @@ export default function Home() {
 						className="bg-home-one d-table w-100 shadow rounded-3 overflow-hidden"
 						id="home"
 					>
-						<div
-							className="bg-overlay image-wrap"
+						<Image
+							src="/images/bg/home.webp"
+							fill
+							priority
+							fetchPriority="high"
+							quality={100}
+							sizes="100vw"
 							id="hero-images"
+							className="bg-overlay image-wrap"
 							style={{
-								backgroundImage: "url('/images/bg/home.webp')",
-								backgroundRepeat: "no-repeat",
-								backgroundSize: "cover",
+								objectFit: "cover",
+								objectPosition: "center",
 							}}
-						></div>
+						/>
 						<div className="bg-overlay bg-black opacity-50"></div>
 
 						<div className="container">
