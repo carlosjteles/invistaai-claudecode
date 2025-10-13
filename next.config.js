@@ -9,6 +9,10 @@ const nextConfig = {
 	images: {
 		domains: ["deolsoahklnyjahujmdh.supabase.co"],
 	},
+	optimizeFonts: true,
+	compiler: {
+		removeConsole: process.env.NODE_ENV === "production",
+	},
 	webpack(config) {
 		config.module.rules.forEach((rule) => {
 			const { oneOf } = rule;

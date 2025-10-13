@@ -15,6 +15,8 @@ const league = League_Spartan({
 	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 	display: "swap",
 	variable: "--font-league",
+	preload: true,
+	fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata = {
