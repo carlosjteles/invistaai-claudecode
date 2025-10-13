@@ -109,11 +109,11 @@ export default function Home() {
 					>
 						<Image
 							src="/images/bg/home.webp"
-							alt={`Invista em imóveis em São Paulo com ${getSiteName()} - Curadoria especializada`}
+							alt={`Investimento imobiliário em São Paulo - ${getSiteName()}`}
 							fill
 							priority
 							fetchPriority="high"
-							quality={100}
+							quality={85}
 							sizes="100vw"
 							id="hero-images"
 							className="bg-overlay image-wrap"
@@ -124,7 +124,7 @@ export default function Home() {
 						/>
 						<div className="bg-overlay bg-black opacity-50"></div>
 
-						<div className="container">
+						<div className="container position-relative" style={{ zIndex: 1 }}>
 							<div className="row justify-content-center">
 								<div className="col-12">
 									<div className="title-heading">
