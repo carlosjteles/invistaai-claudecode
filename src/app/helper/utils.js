@@ -7,7 +7,7 @@ export function getBaseUrl() {
 		return "http://localhost:3000";
 	}
 
-	return "https://www.invistaai.com.br";
+	return "https://www.invistaai.com";
 }
 
 export function getSiteName() {
