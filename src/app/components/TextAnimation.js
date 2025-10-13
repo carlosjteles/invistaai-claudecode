@@ -4,7 +4,7 @@ import { TypeAnimation } from "react-type-animation";
 
 export default function TextAnimation() {
 	return (
-		<h4 className="heading fw-bold text-white title-dark mb-3">
+		<h1 className="heading fw-bold text-white title-dark mb-3">
 			Vamos ajudar você a encontrar <br /> sua Casa
 			<TypeAnimation
 				sequence={["dos Sonhos", 1000, "Íncrível", 1000]}
@@ -14,6 +14,6 @@ export default function TextAnimation() {
 				className="typewrite text-primary ms-2"
 				cursor={false}
 			/>
-		</h4>
+		</h1>
 	);
 }

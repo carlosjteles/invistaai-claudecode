@@ -159,9 +159,9 @@ export default function BlogsClient({
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Últimas Notícias
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Conteúdo & Insights
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>

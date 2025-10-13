@@ -207,9 +207,9 @@ export default function PropertiesClient({
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Selecionamos oportunidades imperdíveis para você
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Explore Nossas Ofertas
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>

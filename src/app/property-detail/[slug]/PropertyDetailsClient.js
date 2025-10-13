@@ -614,7 +614,7 @@ export default function PropertyDetailsClient({
 						<div className="row justify-content-center">
 							<div className="col">
 								<div className="section-title text-center mb-4 pb-2">
-									<h4 className="title mb-3">Você também pode gostar</h4>
+									<h1 className="title mb-3">Você também pode gostar</h1>
 									<p className="text-muted para-desc mb-0 mx-auto">
 										Confira opções semelhantes à venda e encontre seu próximo
 										imóvel.

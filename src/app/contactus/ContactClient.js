@@ -174,9 +174,9 @@ export default function ContactClient() {
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Ajudamos você a realizar seu sonho
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Fale agora com nossa equipe
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>

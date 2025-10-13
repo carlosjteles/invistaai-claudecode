@@ -151,9 +151,9 @@ export default function BlogDetailClient({
 						<div className="col-12">
 							<div className="title-heading text-center">
 								<span className="badge bg-primary">{blogPost.tag}</span>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark mt-4">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark mt-4">
 									{blogPost.title}
-								</h5>
+								</h1>
 
 								<ul className="list-inline text-center mb-0">
 									<li className="list-inline-item mx-4 mt-4">
