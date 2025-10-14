@@ -2,22 +2,6 @@ import { PrismaClient } from "../generated/prisma/index.js";
 
 const globalForPrisma = globalThis;
 
-const prismaClientSingleton = () => {
-	return new PrismaClient({
-		log:
-			process.env.NODE_ENV === "development"
-				? ["query", "error", "warn"]
-				: ["error"],
-		datasources: {
-			db: {
-				url: process.env.DATABASE_URL,
-			},
-		},
-	});
-};
-
-const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
-
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
 
@@ -47,9 +31,26 @@ async function executeWithRetry(operation, retries = MAX_RETRIES) {
 	}
 }
 
-prisma.$use(async (params, next) => {
-	return executeWithRetry(() => next(params));
-});
+const prismaClientSingleton = () => {
+	const client = new PrismaClient({
+		log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+		datasources: {
+			db: {
+				url: process.env.DATABASE_URL,
+			},
+		},
+	});
+
+	return client.$extends({
+		query: {
+			$allOperations: async ({ operation, model, args, query }) => {
+				return executeWithRetry(() => query(args));
+			},
+		},
+	});
+};
+
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 if (process.env.VERCEL) {
 	prisma.$connect().catch((error) => {
