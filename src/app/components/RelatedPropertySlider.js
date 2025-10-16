@@ -130,6 +130,41 @@ export default function RelatedPropertySlider({ propertyData }) {
 											</Link>
 
 											<div
+												itemProp="itemReviewed"
+												itemScope
+												itemType="https://schema.org/Product"
+											>
+												<meta itemProp="name" content={item.name} />
+												<meta
+													itemProp="url"
+													content={`https://www.invistaai.com/imovel/${item.slug}`}
+												/>
+
+												{thumbnail && (
+													<meta itemProp="image" content={thumbnail.src} />
+												)}
+
+												{item.quantity_reviews > 0 && (
+													<div
+														itemProp="aggregateRating"
+														itemScope
+														itemType="https://schema.org/AggregateRating"
+													>
+														<meta
+															itemProp="ratingValue"
+															content={item.rating}
+														/>
+														<meta
+															itemProp="reviewCount"
+															content={item.quantity_reviews}
+														/>
+														<meta itemProp="bestRating" content="5" />
+														<meta itemProp="worstRating" content="1" />
+													</div>
+												)}
+											</div>
+
+											<div
 												itemProp="accommodationFeature"
 												itemScope
 												itemType="https://schema.org/QuantitativeValue"
@@ -196,46 +231,30 @@ export default function RelatedPropertySlider({ propertyData }) {
 												</li>
 												<li className="list-inline-item mb-0 text-muted">
 													<span className="text-muted">Avaliação</span>
-													<div
-														itemProp="aggregateRating"
-														itemScope
-														itemType="https://schema.org/AggregateRating"
+													<ul
+														className={`fw-medium ${
+															item.quantity_reviews > 0 ? "text-warning" : ""
+														} list-unstyled mb-0`}
 													>
-														<meta
-															itemProp="ratingValue"
-															content={item.rating}
-														/>
-														<meta
-															itemProp="reviewCount"
-															content={item.quantity_reviews}
-														/>
-														<meta itemProp="bestRating" content="5" />
-
-														<ul
-															className={`fw-medium ${
-																item.quantity_reviews > 0 ? "text-warning" : ""
-															} list-unstyled mb-0`}
-														>
-															<li className="list-inline-item mb-0">
-																<i className="mdi mdi-star"></i>
-															</li>
-															<li className="list-inline-item mb-0">
-																<i className="mdi mdi-star"></i>
-															</li>
-															<li className="list-inline-item mb-0">
-																<i className="mdi mdi-star"></i>
-															</li>
-															<li className="list-inline-item mb-0">
-																<i className="mdi mdi-star"></i>
-															</li>
-															<li className="list-inline-item mb-0">
-																<i className="mdi mdi-star"></i>
-															</li>
-															<li className="list-inline-item mb-0 text-dark">
-																{item.rating} ({item.quantity_reviews})
-															</li>
-														</ul>
-													</div>
+														<li className="list-inline-item mb-0">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item mb-0">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item mb-0">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item mb-0">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item mb-0">
+															<i className="mdi mdi-star"></i>
+														</li>
+														<li className="list-inline-item mb-0 text-dark">
+															{item.rating} ({item.quantity_reviews})
+														</li>
+													</ul>
 												</li>
 											</ul>
 										</div>

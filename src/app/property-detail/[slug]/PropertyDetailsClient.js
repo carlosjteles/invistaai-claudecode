@@ -172,6 +172,17 @@ export default function PropertyDetailsClient({
 				},
 			],
 		},
+		itemReviewed: {
+			"@type": "Product",
+			name: propertyData.name || propertyData.address,
+			aggregateRating: {
+				"@type": "AggregateRating",
+				ratingValue: propertyData.rating || 0,
+				reviewCount: propertyData.quantity_reviews || 0,
+				bestRating: 5,
+				worstRating: 1,
+			},
+		},
 	};
 
 	return (
