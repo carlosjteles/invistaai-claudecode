@@ -8,6 +8,7 @@ const nextConfig = {
 	},
 	images: {
 		domains: ["deolsoahklnyjahujmdh.supabase.co"],
+		unoptimized: true,
 	},
 	optimizeFonts: true,
 	compiler: {
