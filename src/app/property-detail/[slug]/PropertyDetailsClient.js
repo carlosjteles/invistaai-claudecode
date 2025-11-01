@@ -122,17 +122,20 @@ export default function PropertyDetailsClient({
 						"@type": "Organization",
 						name: getSiteName(),
 					},
+					itemOffered: {
+						"@type": "Place",
+						address: {
+							"@type": "PostalAddress",
+							addressLocality: propertyData.seo?.city,
+							addressRegion: propertyData.seo?.state,
+							postalCode: propertyData.seo?.zip,
+							streetAddress: propertyData.seo?.street,
+							addressCountry: "BR",
+						},
+					},
 				},
 			],
 		}),
-		address: {
-			"@type": "PostalAddress",
-			addressLocality: propertyData.seo?.city,
-			addressRegion: propertyData.seo?.state,
-			postalCode: propertyData.seo?.zip,
-			streetAddress: propertyData.seo?.street,
-			addressCountry: "BR",
-		},
 		additionalProperty: [
 			{
 				"@type": "PropertyValue",
@@ -188,12 +191,6 @@ export default function PropertyDetailsClient({
 				worstRating: 1,
 			},
 		}),
-		datePublished: new Date(propertyData.createdAt || Date.now())
-			.toISOString()
-			.split("T")[0],
-		dateModified: new Date(propertyData.updatedAt || Date.now())
-			.toISOString()
-			.split("T")[0],
 	};
 
 	const breadcrumbSchema = {

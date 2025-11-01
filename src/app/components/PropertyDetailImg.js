@@ -43,7 +43,10 @@ export default function PropertyDetailImg({
 			itemType="https://schema.org/ImageGallery"
 		>
 			<meta itemProp="about" content={title || "Detalhes do imóvel"} />
-			<meta itemProp="numberOfItems" content={images.length} />
+			<meta
+				itemProp="description"
+				content={`Galeria com ${images.length} imagens do imóvel`}
+			/>
 
 			<div className="col-md-6">
 				<Link
