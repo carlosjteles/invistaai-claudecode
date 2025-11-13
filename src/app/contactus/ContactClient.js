@@ -240,107 +240,101 @@ export default function ContactClient() {
 							>
 								<meta itemProp="url" content={`${getBaseUrl()}/`} />
 
-								<div
-									itemProp="potentialAction"
-									itemScope
-									itemType="https://schema.org/ContactAction"
-								>
-									<form onSubmit={handleSubmit}>
-										<div className="row">
-											<div className="col-md-6">
-												<div className="mb-3">
-													<label className="form-label">
-														Seu nome <span className="text-danger">*</span>
-													</label>
-													<input
-														name="name"
-														id="name"
-														type="text"
-														value={name}
-														onChange={(e) => setName(e.target.value)}
-														className="form-control"
-														placeholder="Nome :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-md-6">
-												<div className="mb-3">
-													<label className="form-label">
-														Seu e-mail <span className="text-danger">*</span>
-													</label>
-													<input
-														name="email"
-														id="email"
-														type="email"
-														value={email}
-														onChange={(e) => setEmail(e.target.value)}
-														className="form-control"
-														placeholder="E-mail :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-12">
-												<div className="mb-3">
-													<label className="form-label">
-														Assunto <span className="text-danger">*</span>
-													</label>
-													<input
-														name="subject"
-														id="subject"
-														value={subject}
-														onChange={(e) => setSubject(e.target.value)}
-														className="form-control"
-														placeholder="Assunto :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-12">
-												<div className="mb-3">
-													<label className="form-label">
-														Mensagem <span className="text-danger">*</span>
-													</label>
-													<textarea
-														name="message"
-														id="message"
-														rows="4"
-														value={message}
-														onChange={(e) => setMessage(e.target.value)}
-														className="form-control"
-														placeholder="Mensagem :"
-													></textarea>
-												</div>
-											</div>
-
-											<div className="col-12 mb-3">
-												<ReCAPTCHA
-													ref={recaptchaRef}
-													size="normal"
-													sitekey={
-														process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
-													}
+								<form onSubmit={handleSubmit}>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="mb-3">
+												<label className="form-label">
+													Seu nome <span className="text-danger">*</span>
+												</label>
+												<input
+													name="name"
+													id="name"
+													type="text"
+													value={name}
+													onChange={(e) => setName(e.target.value)}
+													className="form-control"
+													placeholder="Nome :"
 												/>
 											</div>
 										</div>
-										<div className="row">
-											<div className="col-12">
-												<div className="d-grid">
-													<button
-														type="submit"
-														id="submit"
-														name="send"
-														className="btn btn-primary"
-														disabled={loading}
-													>
-														{loading ? "Enviando..." : "Enviar Mensagem"}
-													</button>
-												</div>
+
+										<div className="col-md-6">
+											<div className="mb-3">
+												<label className="form-label">
+													Seu e-mail <span className="text-danger">*</span>
+												</label>
+												<input
+													name="email"
+													id="email"
+													type="email"
+													value={email}
+													onChange={(e) => setEmail(e.target.value)}
+													className="form-control"
+													placeholder="E-mail :"
+												/>
 											</div>
 										</div>
-									</form>
-								</div>
+
+										<div className="col-12">
+											<div className="mb-3">
+												<label className="form-label">
+													Assunto <span className="text-danger">*</span>
+												</label>
+												<input
+													name="subject"
+													id="subject"
+													value={subject}
+													onChange={(e) => setSubject(e.target.value)}
+													className="form-control"
+													placeholder="Assunto :"
+												/>
+											</div>
+										</div>
+
+										<div className="col-12">
+											<div className="mb-3">
+												<label className="form-label">
+													Mensagem <span className="text-danger">*</span>
+												</label>
+												<textarea
+													name="message"
+													id="message"
+													rows="4"
+													value={message}
+													onChange={(e) => setMessage(e.target.value)}
+													className="form-control"
+													placeholder="Mensagem :"
+												></textarea>
+											</div>
+										</div>
+
+										<div className="col-12 mb-3">
+											<ReCAPTCHA
+												ref={recaptchaRef}
+												size="normal"
+												sitekey={
+													process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
+												}
+											/>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-12">
+											<div className="d-grid">
+												<button
+													type="submit"
+													id="submit"
+													name="send"
+													className="btn btn-primary"
+													disabled={loading}
+												>
+													{loading ? "Enviando..." : "Enviar Mensagem"}
+												</button>
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -518,7 +512,6 @@ export default function ContactClient() {
 										style={{ border: "0" }}
 										title={`Localização ${getSiteName()}`}
 										allowFullScreen
-										itemProp="hasMap"
 									></iframe>
 								</div>
 							</div>
