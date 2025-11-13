@@ -102,30 +102,32 @@ export default function BlogDetailClient({
 			"@type": "WebPage",
 			"@id": `${getBaseUrl()}/blog/${blogPost.slug}`,
 		},
-		breadcrumb: {
-			"@type": "BreadcrumbList",
-			itemListElement: [
-				{
-					"@type": "ListItem",
-					position: 1,
-					name: "Início",
-					item: getBaseUrl(),
-				},
-				{
-					"@type": "ListItem",
-					position: 2,
-					name: "Notícias",
-					item: `${getBaseUrl()}/blogs`,
-				},
-				{
-					"@type": "ListItem",
-					position: 3,
-					name: blogPost.title,
-					item: `${getBaseUrl()}/blog/${blogPost.slug}`,
-				},
-			],
-		},
 		articleBody: articleBody,
+	};
+
+	const breadcrumbSchema = {
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		itemListElement: [
+			{
+				"@type": "ListItem",
+				position: 1,
+				name: "Início",
+				item: getBaseUrl(),
+			},
+			{
+				"@type": "ListItem",
+				position: 2,
+				name: "Notícias",
+				item: `${getBaseUrl()}/blogs`,
+			},
+			{
+				"@type": "ListItem",
+				position: 3,
+				name: blogPost.title,
+				item: `${getBaseUrl()}/blog/${blogPost.slug}`,
+			},
+		],
 	};
 
 	return (
@@ -134,6 +136,11 @@ export default function BlogDetailClient({
 				id="blog-post-schema"
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+			/>
+			<Script
+				id="breadcrumb-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
 			/>
 
 			<Navbar
