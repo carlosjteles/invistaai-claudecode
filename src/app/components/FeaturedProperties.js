@@ -81,6 +81,7 @@ export default async function FeaturedProperties() {
 							>
 								<meta itemProp="identifier" content={item.id} />
 								<meta itemProp="url" content={`/imovel/${item.slug}`} />
+								<meta itemProp="name" content={item.name} />
 
 								{thumbnail && (
 									<div className="property-image position-relative overflow-hidden shadow">
@@ -129,78 +130,96 @@ export default async function FeaturedProperties() {
 										{item.name}
 									</Link>
 
-									<div
-										itemProp="itemReviewed"
-										itemScope
-										itemType="https://schema.org/Product"
-									>
-										<meta itemProp="name" content={item.name} />
-										<meta
-											itemProp="url"
-											content={`https://www.invistaai.com/imovel/${item.slug}`}
-										/>
+									{item.quantity_reviews > 0 && (
+										<div
+											itemProp="aggregateRating"
+											itemScope
+											itemType="https://schema.org/AggregateRating"
+										>
+											<meta itemProp="ratingValue" content={item.rating} />
+											<meta
+												itemProp="reviewCount"
+												content={item.quantity_reviews}
+											/>
+											<meta itemProp="bestRating" content="5" />
+											<meta itemProp="worstRating" content="1" />
+										</div>
+									)}
 
-										{thumbnail && (
-											<meta itemProp="image" content={thumbnail.src} />
-										)}
-
-										{item.quantity_reviews > 0 && (
-											<div
-												itemProp="aggregateRating"
+									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
 												itemScope
-												itemType="https://schema.org/AggregateRating"
+												itemType="https://schema.org/PropertyValue"
 											>
-												<meta itemProp="ratingValue" content={item.rating} />
-												<meta
-													itemProp="reviewCount"
-													content={item.quantity_reviews}
-												/>
-												<meta itemProp="bestRating" content="5" />
-												<meta itemProp="worstRating" content="1" />
-											</div>
-										)}
-									</div>
-
-									<div
-										itemProp="accommodationFeature"
-										itemScope
-										itemType="https://schema.org/QuantitativeValue"
-									>
-										<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
+												<i
+													className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted" itemProp="value">
 													{item.preview.area}
 												</small>
+												<meta itemProp="name" content="Área Total" />
 												<meta itemProp="unitText" content="m²" />
-											</li>
+											</span>
+										</li>
 
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-bed fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.bedroom}
 												</small>
-												<meta itemProp="unitText" content="bedroom" />
-											</li>
-										</ul>
-										<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
+												<meta itemProp="name" content="Quartos" />
+												<meta itemProp="value" content={item.preview.bedroom} />
+											</span>
+										</li>
+									</ul>
+									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-shower fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.suite}
 												</small>
-												<meta itemProp="unitText" content="bathroom" />
-											</li>
+												<meta itemProp="name" content="Banheiros" />
+												<meta itemProp="value" content={item.preview.suite} />
+											</span>
+										</li>
 
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-car fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.parking}
 												</small>
-												<meta itemProp="unitText" content="parkingSpace" />
-											</li>
-										</ul>
-									</div>
+												<meta itemProp="name" content="Vagas de Garagem" />
+												<meta itemProp="value" content={item.preview.parking} />
+											</span>
+										</li>
+									</ul>
 
 									<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
 										<li className="list-inline-item mb-0">
@@ -217,10 +236,10 @@ export default async function FeaturedProperties() {
 													<>
 														<meta itemProp="priceCurrency" content="BRL" />
 														<meta itemProp="price" content={item.price} />
-														<span
+														<meta
 															itemProp="availability"
 															content="https://schema.org/InStock"
-														></span>
+														/>
 														{formatPrice(item.price)}
 													</>
 												)}
@@ -234,19 +253,19 @@ export default async function FeaturedProperties() {
 												} list-unstyled mb-0`}
 											>
 												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star"></i>
+													<i className="mdi mdi-star" aria-hidden="true"></i>
 												</li>
 												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star"></i>
+													<i className="mdi mdi-star" aria-hidden="true"></i>
 												</li>
 												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star"></i>
+													<i className="mdi mdi-star" aria-hidden="true"></i>
 												</li>
 												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star"></i>
+													<i className="mdi mdi-star" aria-hidden="true"></i>
 												</li>
 												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star"></i>
+													<i className="mdi mdi-star" aria-hidden="true"></i>
 												</li>
 												<li className="list-inline-item mb-0 text-dark">
 													{item.rating} ({item.quantity_reviews})

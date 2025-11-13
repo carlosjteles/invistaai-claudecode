@@ -218,6 +218,11 @@ export default function PropertyDetailsClient({
 		],
 	};
 
+	const isTesting = React.useMemo(() => {
+		const testingParam = searchParams.get("testing");
+		return testingParam === "true" || testingParam === "1";
+	}, [searchParams]);
+
 	return (
 		<>
 			<Script
@@ -322,33 +327,115 @@ export default function PropertyDetailsClient({
 									</li>
 								</ul>
 
-								{propertyData.description &&
-									(Array.isArray(propertyData.description) ? (
-										propertyData.description.map((desc, index) => (
-											<p key={index} className="text-muted">
-												{desc}
-											</p>
-										))
-									) : (
-										<p className="text-muted">{propertyData.description}</p>
-									))}
+								{propertyData.id == "27" && isTesting ? (
+									<>
+										<h2 className="h5 mb-3 text-dark">
+											Albero Itaim Bibi — A Arte de Viver com Exclusividade no
+											Itaim
+										</h2>
+										<p className="text-muted">
+											Desenvolvido pela SDI Desenvolvimento Imobiliário e
+											assinado pelo conceituado escritório Perkins & Will, o
+											Albero Itaim Bibi é um lançamento de alto padrão projetado
+											para redefinir o luxo urbano em uma das regiões mais
+											nobres de São Paulo. Localizado na Av. São Gabriel 605, no
+											bairro do Itaim Bibi, o empreendimento combina arquitetura
+											marcante, lazer refinado, vista livre para o Parque
+											Ibirapuera e padrão de acabamento excepcional.
+										</p>
+										<h2 className="h5 mb-3 text-dark">
+											Apartamentos e tipologias do Albero Itaim Bibi
+										</h2>
+										<p className="text-muted">
+											Com metragens que variam de 105 a 564 m², dispondo de 2 a
+											5 suítes e até 5 vagas de garagem, o Albero itaim oferece
+											unidades tipo, garden e duplex, atendendo a perfis
+											sofisticados de moradores ou investidores exigentes.
+										</p>
+										<h2 className="h5 mb-3 text-dark">
+											Localização e valorização do Albero Itaim Bibi
+										</h2>
+										<p className="text-muted">
+											Situado a poucos passos do Parque Ibirapuera, o Itaim Bibi
+											conjuga tranquilidade de rua arborizada com acesso direto
+											às principais vias de São Paulo. Próximo a restaurantes
+											premiados, shopping centers, escolas bilíngues e
+											infraestruturas de mobilidade de ponta, o endereço traduz
+											localização estratégica e alto valor patrimonial.
+										</p>
+										<h2 className="h5 mb-3 text-dark">
+											Lazer e infraestrutura premium do Albero Itaim Bibi
+										</h2>
+										<p className="text-muted">
+											Com mais de 1.285 m² de lazer, o projeto oferece: piscina
+											com raia de 25 m, deck molhado, solário com vista livre,
+											SPA, academia “Fitness by Engenharia Esportiva”,
+											brinquedoteca, salão de jogos, bicicletário e mais. Todas
+											as unidades contam com ponto para carro elétrico,
+											certificação internacional de sustentabilidade (EDGE) e
+											projeto arquitetônico pensado para ventilação cruzada e
+											iluminação natural.
+										</p>
+										<h2 className="h5 mb-3 text-dark">
+											Por que escolher o Albero Itaim Bibi?
+										</h2>
+										<p className="text-muted">
+											Um endereço de alto padrão em uma das regiões mais
+											valorizadas de São Paulo.
+											<br />
+											Arquitetura assinada por Perkins & Will, paisagismo e
+											design sofisticado.
+											<br />
+											Tipologias flexíveis (tipo, garden, duplex) para
+											diferentes estilos de vida.
+											<br />
+											Valor patrimonial elevado e sinalizado para investimento
+											de longo prazo.
+											<br />
+											Atendimento exclusivo e direto com a SDI através da nossa
+											equipe especializada.
+										</p>
+										<h2 className="h5 mb-3 text-dark">
+											Agende sua visita no Albero Itaim Bibi
+										</h2>
+										<p className="text-muted">
+											Não perca a oportunidade de viver ou investir em um imóvel
+											que une exclusividade, localização premium e padrão
+											construtivo elevado. Fale agora com nossa consultoria
+											especializada e garanta seu acesso ao Albero Itaim Bibi.
+										</p>
+									</>
+								) : (
+									<>
+										{propertyData.description &&
+											(Array.isArray(propertyData.description) ? (
+												propertyData.description.map((desc, index) => (
+													<p key={index} className="text-muted">
+														{desc}
+													</p>
+												))
+											) : (
+												<p className="text-muted">{propertyData.description}</p>
+											))}
 
-								{propertyData.attributes &&
-									propertyData.attributes.length > 0 && (
-										<>
-											<h2 className="h5 mb-3 text-dark">Características</h2>
-											<ul className="row list-unstyled">
-												{propertyData.attributes.map((attr, index) => (
-													<li
-														key={index}
-														className="col-6 mb-2 mx-0 align-items-center"
-													>
-														<span className="text-muted">{attr}</span>
-													</li>
-												))}
-											</ul>
-										</>
-									)}
+										{propertyData.attributes &&
+											propertyData.attributes.length > 0 && (
+												<>
+													<h2 className="h5 mb-3 text-dark">Características</h2>
+													<ul className="row list-unstyled">
+														{propertyData.attributes.map((attr, index) => (
+															<li
+																key={index}
+																className="col-6 mb-2 mx-0 align-items-center"
+															>
+																<span className="text-muted">{attr}</span>
+															</li>
+														))}
+													</ul>
+												</>
+											)}
+									</>
+								)}
 
 								{typelogiesByType &&
 									Object.keys(typelogiesByType).length > 0 && (

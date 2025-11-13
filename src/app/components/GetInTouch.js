@@ -1,11 +1,13 @@
 import Link from "next/link";
 
+import { getSiteName } from "../helper/utils";
+
 export default function GetInTouch() {
 	return (
 		<div
 			className="row justify-content-center"
 			itemScope
-			itemType="https://schema.org/ContactAction"
+			itemType="https://schema.org/Organization"
 		>
 			<div className="col-12">
 				<div className="section-title text-center">
@@ -19,23 +21,29 @@ export default function GetInTouch() {
 						Quer investir melhor ou conquistar seu primeiro imóvel? Estamos
 						prontos para ajudar.
 					</p>
-					<div className="mt-4 pt-2">
+					<div
+						className="mt-4 pt-2"
+						itemProp="contactPoint"
+						itemScope
+						itemType="https://schema.org/ContactPoint"
+					>
+						<meta itemProp="contactType" content="Consultoria" />
 						<Link
 							href="/contato"
 							className="btn btn-pills btn-primary"
 							itemProp="url"
 						>
-							<span itemProp="actionOption">Fale com um consultor</span>{" "}
-							<i className="mdi mdi-arrow-right align-middle"></i>
+							Fale com um consultor{" "}
+							<i
+								className="mdi mdi-arrow-right align-middle"
+								aria-hidden="true"
+							></i>
 						</Link>
 					</div>
 				</div>
 			</div>
 
-			<meta
-				itemProp="availableChannel"
-				content="https://schema.org/ContactPage"
-			/>
+			<meta itemProp="name" content={getSiteName()} />
 			<meta itemProp="serviceType" content="Consultoria Imobiliária" />
 		</div>
 	);
