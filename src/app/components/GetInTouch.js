@@ -44,7 +44,6 @@ export default function GetInTouch() {
 			</div>
 
 			<meta itemProp="name" content={getSiteName()} />
-			<meta itemProp="serviceType" content="Consultoria Imobiliária" />
 		</div>
 	);
 }

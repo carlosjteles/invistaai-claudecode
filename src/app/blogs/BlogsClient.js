@@ -97,7 +97,6 @@ export default function BlogsClient({
 					description: post.desc,
 					image: post.image || post.thumbnail,
 					url: `${getBaseUrl()}/blog/${post.slug}`,
-					datePublished: formatDateISO(post.createdAt),
 					author: {
 						"@type": "Organization",
 						name: getSiteName(),
@@ -252,10 +251,6 @@ export default function BlogsClient({
 													itemScope
 													itemType="https://schema.org/BlogPosting"
 												>
-													<meta
-														itemProp="datePublished"
-														content={formatDateISO(item.createdAt)}
-													/>
 													<meta itemProp="author" content={item.author} />
 													<meta itemProp="keywords" content={item.tag} />
 
@@ -297,7 +292,7 @@ export default function BlogsClient({
 																className="title fw-medium fs-5 text-dark"
 																itemProp="url"
 															>
-																<span itemProp="headline">{item.title}</span>
+																{item.title}
 															</Link>
 															<p
 																className="text-muted mt-2"
@@ -428,10 +423,7 @@ export default function BlogsClient({
 													>
 														<meta itemProp="position" content={index + 1} />
 														<meta itemProp="name" content={item.title} />
-														<meta
-															itemProp="datePublished"
-															content={formatDateISO(item.createdAt)}
-														/>
+
 														<Image
 															src={recentImageSrc}
 															width={105}
@@ -447,7 +439,7 @@ export default function BlogsClient({
 																className="d-block title text-dark fw-medium"
 																itemProp="url"
 															>
-																<span itemProp="headline">{item.title}</span>
+																{item.title}
 															</Link>
 															<span className="text-muted small">
 																{formatDate(item.createdAt)}
