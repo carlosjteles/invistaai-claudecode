@@ -448,25 +448,6 @@ export default function PropertiesClient({
 															{item.name || item.address}
 														</Link>
 
-														<div
-															itemProp="itemReviewed"
-															itemScope
-															itemType="https://schema.org/Product"
-														>
-															<meta itemProp="name" content={item.name} />
-															<meta
-																itemProp="url"
-																content={`https://www.invistaai.com/imovel/${item.slug}`}
-															/>
-
-															{thumbnail && (
-																<meta
-																	itemProp="image"
-																	content={thumbnail.src}
-																/>
-															)}
-														</div>
-
 														{item.quantity_reviews > 0 && (
 															<div
 																itemProp="aggregateRating"
@@ -485,11 +466,6 @@ export default function PropertiesClient({
 																<meta itemProp="worstRating" content="1" />
 															</div>
 														)}
-
-														<meta
-															itemProp="numberOfRooms"
-															content={item.preview.bedroom}
-														/>
 
 														<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 															<li className="col-6 d-flex align-items-center m-0">
