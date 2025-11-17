@@ -279,9 +279,18 @@ export default function BlogDetailClient({
 									{content.map((item, idx) => {
 										if (item.type === "text") {
 											return (
-												<p className="text-muted" key={idx}>
+												<p
+													className="text-muted"
+													key={idx}
+													dangerouslySetInnerHTML={{ __html: item.value }}
+												></p>
+											);
+										}
+										if (item.type === "title") {
+											return (
+												<h2 className="h5 mb-3 text-dark" key={idx}>
 													{item.value}
-												</p>
+												</h2>
 											);
 										}
 										if (item.type === "quote") {
@@ -343,7 +352,9 @@ export default function BlogDetailClient({
 									/>
 
 									<div className="card-body">
-										<h5 className="card-title mb-0">Notícias Relacionadas :</h5>
+										<h2 className="card-title h5 mb-0">
+											Notícias Relacionadas :
+										</h2>
 
 										<div className="row g-4 mt-0">
 											{relatedPosts.map((item, index) => {
