@@ -263,9 +263,6 @@ export default function PropertyDetailsClient({
 									Imóveis
 								</Link>
 							</li>
-							<li className="breadcrumb-item active" aria-current="page">
-								{propertyData.name || propertyData.address}
-							</li>
 						</ol>
 					</nav>
 				</div>

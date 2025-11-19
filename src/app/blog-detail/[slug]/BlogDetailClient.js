@@ -211,20 +211,6 @@ export default function BlogDetailClient({
 
 									<meta itemProp="position" content="2" />
 								</li>
-								<li
-									className="breadcrumb-item active"
-									aria-current="page"
-									itemProp="itemListElement"
-									itemScope
-									itemType="https://schema.org/ListItem"
-								>
-									<span itemProp="name">{blogPost.title}</span>
-									<meta itemProp="position" content="3" />
-									<meta
-										itemProp="item"
-										content={`${getBaseUrl()}/blog/${blogPost.slug}`}
-									/>
-								</li>
 							</ul>
 						</nav>
 					</div>
