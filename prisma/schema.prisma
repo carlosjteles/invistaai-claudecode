@@ -60,7 +60,7 @@ model Property {
   release_in        String
   book              String?
   video             String?
-  description       String[]
+  description       Json
   attributes        String[]
   description_embed String?
   preview           Json
