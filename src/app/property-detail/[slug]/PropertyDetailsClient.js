@@ -10,7 +10,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
-import { FiArrowRight } from "../assets/icons/vander";
+import { FiArrowRight } from "../../assets/icons/vander";
 
 const BuildingDocumentsSlider = dynamic(
 	() => import("../../components/BuildingDocumentsSlider"),
