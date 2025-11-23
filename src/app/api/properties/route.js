@@ -8,9 +8,20 @@ import { verifyToken } from "../../api/helper/auth";
 
 const DescriptionItemSchema = validate.union([
 	validate.string(),
-	validate.object({
-		text: validate.string(),
-	}),
+	validate
+		.object({
+			title: validate.string().optional(),
+			content: validate
+				.union([validate.string(), validate.array(validate.string())])
+				.optional(),
+			list: validate.array(validate.string()).optional(),
+		})
+		.refine(
+			({ content, list }) => content !== undefined || list !== undefined,
+			{
+				message: "O objeto deve conter content ou list",
+			}
+		),
 ]);
 
 const ImageSchema = validate.object({

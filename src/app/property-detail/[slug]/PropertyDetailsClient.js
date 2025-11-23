@@ -10,6 +10,8 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 
+import { FiArrowRight } from "../assets/icons/vander";
+
 const BuildingDocumentsSlider = dynamic(
 	() => import("../../components/BuildingDocumentsSlider"),
 	{ ssr: false }
@@ -329,11 +331,36 @@ export default function PropertyDetailsClient({
 												</h2>
 											)}
 											{dataDescription.content &&
-												Array.isArray(dataDescription.content) &&
-												typeof dataDescription.content === "string" && (
-													<p className="text-muted">
-														{dataDescription.content}
-													</p>
+											Array.isArray(dataDescription.content) &&
+											typeof dataDescription.content[0] === "string" ? (
+												dataDescription.content.map((desc, idx) => (
+													<p
+														key={idx}
+														className="text-muted"
+														dangerouslySetInnerHTML={{
+															__html: desc,
+														}}
+													></p>
+												))
+											) : (
+												<p
+													className="text-muted"
+													dangerouslySetInnerHTML={{
+														__html: dataDescription.content,
+													}}
+												></p>
+											)}
+
+											{dataDescription.list &&
+												dataDescription.list.length > 0 && (
+													<ul className="list-unstyled text-muted mb-2">
+														{dataDescription.list.map((item, liIdx) => (
+															<li key={liIdx} className="ms-0 mt-2 text-muted">
+																<FiArrowRight className="fea icon-sm me-2" />
+																{item}
+															</li>
+														))}
+													</ul>
 												)}
 										</div>
 									))
