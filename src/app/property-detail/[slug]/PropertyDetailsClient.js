@@ -279,7 +279,7 @@ export default function PropertyDetailsClient({
 												aria-hidden="true"
 											></i>
 											<span className="text-muted fs-5">
-												<small>{propertyData.preview?.area}</small> m²
+												<small>{propertyData.preview?.area}</small> 
 											</span>
 										</span>
 									</li>
