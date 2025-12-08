@@ -1,10 +1,10 @@
 export const contact = {
 	email: "contato@invistaai.com",
 	phone: "5511978777584",
-	map: "https://maps.app.goo.gl/Q8jFNpztn8ndJdj18",
+	map: "https://maps.app.goo.gl/whD1DvhRWCPnxfqb7",
 	address: {
-		street: "Avenida Luiz Carlos Berrini 1681",
-		complement: "Sala 111/112",
+		street: "Av. Luiz Carlos Berrini 1681",
+		complement: "Sala 111",
 		neighborhood: "Cidade Monções",
 		city: "São Paulo",
 		state: "SP",
