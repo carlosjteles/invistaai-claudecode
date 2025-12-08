@@ -4,7 +4,7 @@ export const contact = {
 	map: "https://maps.app.goo.gl/whD1DvhRWCPnxfqb7",
 	address: {
 		street: "Av. Luiz Carlos Berrini 1681",
-		complement: "Sala 111",
+		//complement: "Sala 111",
 		neighborhood: "Cidade Monções",
 		city: "São Paulo",
 		state: "SP",
