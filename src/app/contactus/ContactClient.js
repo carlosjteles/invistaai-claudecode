@@ -368,8 +368,8 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Telefone</h5>
 									<p className="text-muted">
-										Comece agora mesmo a buscar o imóvel ideal com a nossa
-										equipe
+										Conecte-se com nossa equipe e encontre seu imóvel com 
+										agilidade.
 									</p>
 									<Link
 										href={`tel:${contact.phone}`}
@@ -401,8 +401,8 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Whatsapp</h5>
 									<p className="text-muted">
-										Atendimento rápido e personalizado para encontrar o imóvel
-										ideal.
+										Fale agora mesmo e receba um atendimento direto, rápido
+										e eficiente.
 									</p>
 									<Link
 										href={`https://wa.me/${contact.phone}`}
@@ -436,7 +436,7 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Email</h5>
 									<p className="text-muted">
-										Envie suas dúvidas ou agende uma visita com facilidade
+										Envie sua mensagem e receba orientação completa sem complicação.
 									</p>
 									<Link
 										href={`mailto:${contact.email}`}
