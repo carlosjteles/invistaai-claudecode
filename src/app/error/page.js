@@ -55,7 +55,7 @@ export default function Error() {
 							<div className="text-center">
 								<p className="mb-0 text-muted d-flex flex-wrap justify-content-center align-items-end gap-2">
 									Todos os direitos reservados.{" "}
-									<Link href="/" className="text-reset" onClick={scrollToTop}>
+									<Link href="#" className="text-reset" onClick={scrollToTop}>
 										{getSiteName()}
 									</Link>
 									<Link
