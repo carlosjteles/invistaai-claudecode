@@ -124,8 +124,8 @@ export default function Home() {
 									<div className="title-heading">
 										<TextAnimation />
 										<p className="para-desc text-white title-dark mb-0">
-											Uma plataforma inteligente para quem quer comprar imóveis
-											com agilidade, confiança e sem taxas abusivas.
+											Unimos tecnologia e propósito para transformar a 
+											sua compra na melhor experiência.
 										</p>
 									</div>
 								</div>
@@ -192,21 +192,21 @@ export default function Home() {
 									Por que escolher a {getSiteName()}
 								</p>
 								<h4 className="title mb-3">
-									Investimento imobiliário com foco em valorização
+									Investimento Imobiliário Humanizado
 								</h4>
 								<p className="text-muted para-desc mb-0">
 									Nossa plataforma une dados de mercado, tecnologia e curadoria
 									criteriosa para entregar comparativos claros e análises
 									fundamentadas. Isso garante decisões de investimento seguras e
 									alinhadas ao seu perfil, seja para diversificação de carteira
-									ou conquista da casa própria.
+									ou conquista do primeiro imóvel.
 								</p>
 
 								<p className="text-muted para-desc mb-0">
 									Mais do que uma plataforma, oferecemos acompanhamento
 									consultivo em todas as etapas: do estudo financeiro ao crédito
 									e documentação. Transparência e resultados reais são a base da
-									confiança que construímos com cada investidor.
+									confiança que construímos com cada cliente.
 								</p>
 
 								<div className="mt-4">
