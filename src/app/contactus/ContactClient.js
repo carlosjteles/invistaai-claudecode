@@ -174,9 +174,9 @@ export default function ContactClient() {
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Ajudamos você a realizar seu sonho
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Fale agora com nossa equipe
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>
@@ -240,107 +240,101 @@ export default function ContactClient() {
 							>
 								<meta itemProp="url" content={`${getBaseUrl()}/`} />
 
-								<div
-									itemProp="potentialAction"
-									itemScope
-									itemType="https://schema.org/ContactAction"
-								>
-									<form onSubmit={handleSubmit}>
-										<div className="row">
-											<div className="col-md-6">
-												<div className="mb-3">
-													<label className="form-label">
-														Seu nome <span className="text-danger">*</span>
-													</label>
-													<input
-														name="name"
-														id="name"
-														type="text"
-														value={name}
-														onChange={(e) => setName(e.target.value)}
-														className="form-control"
-														placeholder="Nome :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-md-6">
-												<div className="mb-3">
-													<label className="form-label">
-														Seu e-mail <span className="text-danger">*</span>
-													</label>
-													<input
-														name="email"
-														id="email"
-														type="email"
-														value={email}
-														onChange={(e) => setEmail(e.target.value)}
-														className="form-control"
-														placeholder="E-mail :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-12">
-												<div className="mb-3">
-													<label className="form-label">
-														Assunto <span className="text-danger">*</span>
-													</label>
-													<input
-														name="subject"
-														id="subject"
-														value={subject}
-														onChange={(e) => setSubject(e.target.value)}
-														className="form-control"
-														placeholder="Assunto :"
-													/>
-												</div>
-											</div>
-
-											<div className="col-12">
-												<div className="mb-3">
-													<label className="form-label">
-														Mensagem <span className="text-danger">*</span>
-													</label>
-													<textarea
-														name="message"
-														id="message"
-														rows="4"
-														value={message}
-														onChange={(e) => setMessage(e.target.value)}
-														className="form-control"
-														placeholder="Mensagem :"
-													></textarea>
-												</div>
-											</div>
-
-											<div className="col-12 mb-3">
-												<ReCAPTCHA
-													ref={recaptchaRef}
-													size="normal"
-													sitekey={
-														process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
-													}
+								<form onSubmit={handleSubmit}>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="mb-3">
+												<label className="form-label">
+													Seu nome <span className="text-danger">*</span>
+												</label>
+												<input
+													name="name"
+													id="name"
+													type="text"
+													value={name}
+													onChange={(e) => setName(e.target.value)}
+													className="form-control"
+													placeholder="Nome :"
 												/>
 											</div>
 										</div>
-										<div className="row">
-											<div className="col-12">
-												<div className="d-grid">
-													<button
-														type="submit"
-														id="submit"
-														name="send"
-														className="btn btn-primary"
-														disabled={loading}
-													>
-														{loading ? "Enviando..." : "Enviar Mensagem"}
-													</button>
-												</div>
+
+										<div className="col-md-6">
+											<div className="mb-3">
+												<label className="form-label">
+													Seu e-mail <span className="text-danger">*</span>
+												</label>
+												<input
+													name="email"
+													id="email"
+													type="email"
+													value={email}
+													onChange={(e) => setEmail(e.target.value)}
+													className="form-control"
+													placeholder="E-mail :"
+												/>
 											</div>
 										</div>
-									</form>
-								</div>
+
+										<div className="col-12">
+											<div className="mb-3">
+												<label className="form-label">
+													Assunto <span className="text-danger">*</span>
+												</label>
+												<input
+													name="subject"
+													id="subject"
+													value={subject}
+													onChange={(e) => setSubject(e.target.value)}
+													className="form-control"
+													placeholder="Assunto :"
+												/>
+											</div>
+										</div>
+
+										<div className="col-12">
+											<div className="mb-3">
+												<label className="form-label">
+													Mensagem <span className="text-danger">*</span>
+												</label>
+												<textarea
+													name="message"
+													id="message"
+													rows="4"
+													value={message}
+													onChange={(e) => setMessage(e.target.value)}
+													className="form-control"
+													placeholder="Mensagem :"
+												></textarea>
+											</div>
+										</div>
+
+										<div className="col-12 mb-3">
+											<ReCAPTCHA
+												ref={recaptchaRef}
+												size="normal"
+												sitekey={
+													process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
+												}
+											/>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-12">
+											<div className="d-grid">
+												<button
+													type="submit"
+													id="submit"
+													name="send"
+													className="btn btn-primary"
+													disabled={loading}
+												>
+													{loading ? "Enviando..." : "Enviar Mensagem"}
+												</button>
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -374,8 +368,8 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Telefone</h5>
 									<p className="text-muted">
-										Comece agora mesmo a buscar o imóvel ideal com a nossa
-										equipe
+										Conecte-se com nossa equipe e encontre seu imóvel com
+										agilidade.
 									</p>
 									<Link
 										href={`tel:${contact.phone}`}
@@ -407,8 +401,8 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Whatsapp</h5>
 									<p className="text-muted">
-										Atendimento rápido e personalizado para encontrar o imóvel
-										ideal.
+										Fale agora mesmo e receba um atendimento direto, rápido e
+										eficiente.
 									</p>
 									<Link
 										href={`https://wa.me/${contact.phone}`}
@@ -442,7 +436,8 @@ export default function ContactClient() {
 								<div className="mt-4">
 									<h5 className="mb-3">Email</h5>
 									<p className="text-muted">
-										Envie suas dúvidas ou agende uma visita com facilidade
+										Envie sua mensagem e receba orientação completa sem
+										complicação.
 									</p>
 									<Link
 										href={`mailto:${contact.email}`}
@@ -514,11 +509,10 @@ export default function ContactClient() {
 							>
 								<div className="card-body p-0">
 									<iframe
-										src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8673.001502629168!2d-46.6945696!3d-23.611552799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e1!3m2!1spt-BR!2sbr!4v1754091802104!5m2!1spt-BR!2sbr"
+										src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d58494.20236166945!2d-46.6922574!3d-23.608362!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce50cbf8cfe177%3A0x2e4796ba4256d66a!2sAv.%20Engenheiro%20Lu%C3%ADs%20Carlos%20Berrini%2C%201681%20-%20Sl.111%2F112%20-%20Cidade%20Mon%C3%A7%C3%B5es%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004571-011!5e0!3m2!1spt-BR!2sbr!4v1765539413118!5m2!1spt-BR!2sbr"
 										style={{ border: "0" }}
 										title={`Localização ${getSiteName()}`}
 										allowFullScreen
-										itemProp="hasMap"
 									></iframe>
 								</div>
 							</div>

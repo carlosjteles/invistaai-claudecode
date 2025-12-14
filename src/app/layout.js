@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "../app/assets/scss/style.scss";
 import "../app/assets/css/materialdesignicons.min.css";
 
+import GoogleAnalyticsClient from "./components/GoogleAnalyticsClient";
+
 import { Providers } from "./providers";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
@@ -15,6 +17,8 @@ const league = League_Spartan({
 	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 	display: "swap",
 	variable: "--font-league",
+	preload: true,
+	fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata = {
@@ -65,7 +69,6 @@ export const metadata = {
 	viewport: {
 		width: "device-width",
 		initialScale: 1,
-		maximumScale: 1,
 	},
 	icons: {
 		icon: "/images/favicon.ico",
@@ -135,13 +138,33 @@ export default function RootLayout({ children }) {
 		<html lang="pt-BR">
 			<head>
 				<Script
+					src={`https://www.googletagmanager.com/gtag/js?id=${
+						process.env.NEXT_PUBLIC_GA_ID || "G-4BELWMGKF8"
+					}`}
+					strategy="afterInteractive"
+				/>
+				<Script id="gtag-init" strategy="afterInteractive">
+					{`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${
+													process.env.NEXT_PUBLIC_GA_ID || "G-4BELWMGKF8"
+												}');
+                    `}
+				</Script>
+
+				<Script
 					id="schema-org"
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 				/>
 			</head>
 			<body className={league.variable}>
-				<Providers>{children}</Providers>
+				<Providers>
+					<GoogleAnalyticsClient />
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);

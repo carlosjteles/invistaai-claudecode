@@ -14,7 +14,7 @@ import TextAnimation from "./components/TextAnimation";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default function Home() {
 	const homeJsonLd = {
@@ -107,18 +107,24 @@ export default function Home() {
 						className="bg-home-one d-table w-100 shadow rounded-3 overflow-hidden"
 						id="home"
 					>
-						<div
-							className="bg-overlay image-wrap"
+						<Image
+							src="/images/bg/home.webp"
+							alt={`Investimento imobiliário em São Paulo - ${getSiteName()}`}
+							fill
+							priority
+							fetchPriority="high"
+							quality={85}
+							sizes="100vw"
 							id="hero-images"
+							className="bg-overlay image-wrap"
 							style={{
-								backgroundImage: "url('/images/bg/home.webp')",
-								backgroundRepeat: "no-repeat",
-								backgroundSize: "cover",
+								objectFit: "cover",
+								objectPosition: "center",
 							}}
-						></div>
+						/>
 						<div className="bg-overlay bg-black opacity-50"></div>
 
-						<div className="container">
+						<div className="container position-relative" style={{ zIndex: 1 }}>
 							<div className="row justify-content-center">
 								<div className="col-12">
 									<div className="title-heading">
@@ -173,7 +179,7 @@ export default function Home() {
 
 										<div className="col-lg-12 col-md-12">
 											<Image
-												src="/images/logo-icon.png"
+												src="/images/icon.svg"
 												width={100}
 												height={100}
 												className="img-fluid"

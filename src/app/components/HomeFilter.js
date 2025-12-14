@@ -87,7 +87,11 @@ export default function HomeFilter() {
 								>
 									<meta
 										itemProp="target"
-										content={`${getBaseUrl()}/imoveis?q=${search}`}
+										content={`${getBaseUrl()}/imoveis?q={search_term_string}`}
+									/>
+									<meta
+										itemProp="query-input"
+										content="required name=search_term_string"
 									/>
 
 									<div className="row g-lg-0">
@@ -180,7 +184,6 @@ export default function HomeFilter() {
 												className="btn btn-primary searchbtn w-100"
 												value="Buscar imóveis"
 												aria-label="Buscar imóveis"
-												itemProp="query-input-button"
 											/>
 										</div>
 									</div>

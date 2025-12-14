@@ -4,6 +4,8 @@ import prisma from "../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 
+export const revalidate = 300;
+
 export const metadata = {
 	title: `Blog e Notícias sobre Imóveis em São Paulo | ${getSiteName()}`,
 	description:

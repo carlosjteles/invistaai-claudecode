@@ -121,9 +121,9 @@ export default function Terms() {
 					<div className="row mt-5 justify-content-center">
 						<div className="col-12">
 							<div className="title-heading text-center">
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Termos e condições
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>

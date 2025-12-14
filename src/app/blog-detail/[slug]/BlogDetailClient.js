@@ -102,30 +102,32 @@ export default function BlogDetailClient({
 			"@type": "WebPage",
 			"@id": `${getBaseUrl()}/blog/${blogPost.slug}`,
 		},
-		breadcrumb: {
-			"@type": "BreadcrumbList",
-			itemListElement: [
-				{
-					"@type": "ListItem",
-					position: 1,
-					name: "Início",
-					item: getBaseUrl(),
-				},
-				{
-					"@type": "ListItem",
-					position: 2,
-					name: "Notícias",
-					item: `${getBaseUrl()}/blogs`,
-				},
-				{
-					"@type": "ListItem",
-					position: 3,
-					name: blogPost.title,
-					item: `${getBaseUrl()}/blog/${blogPost.slug}`,
-				},
-			],
-		},
 		articleBody: articleBody,
+	};
+
+	const breadcrumbSchema = {
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		itemListElement: [
+			{
+				"@type": "ListItem",
+				position: 1,
+				name: "Início",
+				item: getBaseUrl(),
+			},
+			{
+				"@type": "ListItem",
+				position: 2,
+				name: "Notícias",
+				item: `${getBaseUrl()}/blogs`,
+			},
+			{
+				"@type": "ListItem",
+				position: 3,
+				name: blogPost.title,
+				item: `${getBaseUrl()}/blog/${blogPost.slug}`,
+			},
+		],
 	};
 
 	return (
@@ -134,6 +136,11 @@ export default function BlogDetailClient({
 				id="blog-post-schema"
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+			/>
+			<Script
+				id="breadcrumb-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
 			/>
 
 			<Navbar
@@ -151,9 +158,9 @@ export default function BlogDetailClient({
 						<div className="col-12">
 							<div className="title-heading text-center">
 								<span className="badge bg-primary">{blogPost.tag}</span>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark mt-4">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark mt-4">
 									{blogPost.title}
-								</h5>
+								</h1>
 
 								<ul className="list-inline text-center mb-0">
 									<li className="list-inline-item mx-4 mt-4">
@@ -203,20 +210,6 @@ export default function BlogDetailClient({
 									</Link>
 
 									<meta itemProp="position" content="2" />
-								</li>
-								<li
-									className="breadcrumb-item active"
-									aria-current="page"
-									itemProp="itemListElement"
-									itemScope
-									itemType="https://schema.org/ListItem"
-								>
-									<span itemProp="name">{blogPost.title}</span>
-									<meta itemProp="position" content="3" />
-									<meta
-										itemProp="item"
-										content={`${getBaseUrl()}/blog/${blogPost.slug}`}
-									/>
 								</li>
 							</ul>
 						</nav>
@@ -272,9 +265,18 @@ export default function BlogDetailClient({
 									{content.map((item, idx) => {
 										if (item.type === "text") {
 											return (
-												<p className="text-muted" key={idx}>
+												<p
+													className="text-muted"
+													key={idx}
+													dangerouslySetInnerHTML={{ __html: item.value }}
+												></p>
+											);
+										}
+										if (item.type === "title") {
+											return (
+												<h2 className="h5 mb-3 text-dark" key={idx}>
 													{item.value}
-												</p>
+												</h2>
 											);
 										}
 										if (item.type === "quote") {
@@ -336,7 +338,9 @@ export default function BlogDetailClient({
 									/>
 
 									<div className="card-body">
-										<h5 className="card-title mb-0">Notícias Relacionadas :</h5>
+										<h2 className="card-title h5 mb-0">
+											Notícias Relacionadas :
+										</h2>
 
 										<div className="row g-4 mt-0">
 											{relatedPosts.map((item, index) => {

@@ -156,26 +156,16 @@ export default function PropertiesClient({
 		potentialAction: [
 			{
 				"@type": "SearchAction",
-				target: `${getBaseUrl()}/imoveis?q={search_term_string}`,
-				"query-input": "required name=search_term_string",
-			},
-			{
-				"@type": "FilterAction",
-				target: `${getBaseUrl()}/imoveis?categoria={category}`,
-				object: {
-					"@type": "PropertyValueSpecification",
-					valueRequired: false,
-					valueName: "categoria",
-				},
-			},
-			{
-				"@type": "FilterAction",
-				target: `${getBaseUrl()}/imoveis?preco-min={min_price}&preco-max={max_price}`,
-				object: {
-					"@type": "PropertyValueSpecification",
-					valueRequired: false,
-					valueName: "preco",
-				},
+				target: `${getBaseUrl()}/imoveis?q={search_term_string}&categoria={categoria}&quartos={quartos}&vagas={vagas}&suites={suites}&preco-min={min_price}&preco-max={max_price}`,
+				"query-input": [
+					"required name=search_term_string",
+					"optional name=categoria",
+					"optional name=quartos",
+					"optional name=vagas",
+					"optional name=suites",
+					"optional name=min_price",
+					"optional name=max_price",
+				],
 			},
 		],
 	};
@@ -207,9 +197,9 @@ export default function PropertiesClient({
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Selecionamos oportunidades imperdíveis para você
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Explore Nossas Ofertas
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>
@@ -272,26 +262,16 @@ export default function PropertiesClient({
 							>
 								<meta itemProp="url" content={`${getBaseUrl()}/imoveis`} />
 
-								<div
-									itemProp="potentialAction"
-									itemScope
-									itemType="https://schema.org/SearchAction"
-								>
-									<meta
-										itemProp="target"
-										content={`${getBaseUrl()}/imoveis?q={search_term_string}`}
-									/>
+								<h6 className="mb-0">Buscar Imóveis</h6>
+								<input
+									type="text"
+									className="form-control rounded-3 border"
+									name="q"
+									placeholder="O que você está procurando?"
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+								/>
 
-									<h6 className="mb-0">Buscar Imóveis</h6>
-									<input
-										type="text"
-										className="form-control rounded-3 border"
-										name="q"
-										placeholder="O que você está procurando?"
-										value={searchTerm}
-										onChange={(e) => setSearchTerm(e.target.value)}
-									/>
-								</div>
 								<div className="mt-4">
 									<h6 className="mb-0">Categorias</h6>
 									<select
@@ -432,17 +412,28 @@ export default function PropertiesClient({
 																	<Link
 																		href={`/imovel/${item.slug}`}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		itemProp="name"
+																		aria-label={`Ver detalhes do imóvel ${
+																			item.name || item.address
+																		}`}
 																	>
-																		<FiHome className="icons" />
+																		<FiHome
+																			className="icons"
+																			aria-hidden="true"
+																		/>
 																	</Link>
 																</li>
 																<li className="mt-1">
 																	<Link
 																		href={`/imovel/${item.slug}?openGallery=true`}
 																		className="btn btn-sm btn-icon btn-pills btn-primary"
+																		aria-label={`Ver galeria de fotos do imóvel ${
+																			item.name || item.address
+																		}`}
 																	>
-																		<FiCamera className="icons" />
+																		<FiCamera
+																			className="icons"
+																			aria-hidden="true"
+																		/>
 																	</Link>
 																</li>
 															</ul>
@@ -457,42 +448,55 @@ export default function PropertiesClient({
 															{item.name || item.address}
 														</Link>
 
-														<div
-															itemProp="accommodationFeature"
-															itemScope
-															itemType="https://schema.org/QuantitativeValue"
-														>
-															<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-																<li className="col-6 d-flex align-items-center m-0">
-																	<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-																	<small className="text-muted">
-																		{item.preview.area}
-																	</small>
-																</li>
+														{item.quantity_reviews > 0 && (
+															<div
+																itemProp="aggregateRating"
+																itemScope
+																itemType="https://schema.org/AggregateRating"
+															>
+																<meta
+																	itemProp="ratingValue"
+																	content={item.rating}
+																/>
+																<meta
+																	itemProp="reviewCount"
+																	content={item.quantity_reviews}
+																/>
+																<meta itemProp="bestRating" content="5" />
+																<meta itemProp="worstRating" content="1" />
+															</div>
+														)}
 
-																<li className="col-6 d-flex align-items-center m-0">
-																	<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-																	<small className="text-muted">
-																		{item.preview.bedroom}
-																	</small>
-																</li>
-															</ul>
-															<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-																<li className="col-6 d-flex align-items-center m-0">
-																	<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-																	<small className="text-muted">
-																		{item.preview.suite}
-																	</small>
-																</li>
+														<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
+															<li className="col-6 d-flex align-items-center m-0">
+																<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
+																<small className="text-muted">
+																	{item.preview.area}
+																</small>
+															</li>
 
-																<li className="col-6 d-flex align-items-center m-0">
-																	<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
-																	<small className="text-muted">
-																		{item.preview.parking}
-																	</small>
-																</li>
-															</ul>
-														</div>
+															<li className="col-6 d-flex align-items-center m-0">
+																<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
+																<small className="text-muted">
+																	{item.preview.bedroom}
+																</small>
+															</li>
+														</ul>
+														<ul className="list-unstyled pb-3 pt-0 border-bottom row">
+															<li className="col-6 d-flex align-items-center m-0">
+																<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
+																<small className="text-muted">
+																	{item.preview.suite}
+																</small>
+															</li>
+
+															<li className="col-6 d-flex align-items-center m-0">
+																<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
+																<small className="text-muted">
+																	{item.preview.parking}
+																</small>
+															</li>
+														</ul>
 
 														<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
 															<li className="list-inline-item mb-0">
@@ -526,47 +530,32 @@ export default function PropertiesClient({
 															</li>
 															<li className="list-inline-item mb-0 text-muted">
 																<span className="text-muted">Avaliação</span>
-																<div
-																	itemProp="aggregateRating"
-																	itemScope
-																	itemType="https://schema.org/AggregateRating"
+																<ul
+																	className={`fw-medium ${
+																		item.quantity_reviews > 0
+																			? "text-warning"
+																			: ""
+																	} list-unstyled mb-0`}
 																>
-																	<meta
-																		itemProp="ratingValue"
-																		content={item.rating}
-																	/>
-																	<meta
-																		itemProp="reviewCount"
-																		content={item.quantity_reviews}
-																	/>
-																	<meta itemProp="bestRating" content="5" />
-																	<ul
-																		className={`fw-medium ${
-																			item.quantity_reviews > 0
-																				? "text-warning"
-																				: ""
-																		} list-unstyled mb-0`}
-																	>
-																		<li className="list-inline-item mb-0">
-																			<i className="mdi mdi-star"></i>
-																		</li>
-																		<li className="list-inline-item mb-0">
-																			<i className="mdi mdi-star"></i>
-																		</li>
-																		<li className="list-inline-item mb-0">
-																			<i className="mdi mdi-star"></i>
-																		</li>
-																		<li className="list-inline-item mb-0">
-																			<i className="mdi mdi-star"></i>
-																		</li>
-																		<li className="list-inline-item mb-0">
-																			<i className="mdi mdi-star"></i>
-																		</li>
-																		<li className="list-inline-item mb-0 text-dark">
-																			{item.rating} ({item.quantity_reviews})
-																		</li>
-																	</ul>
-																</div>
+																	<li className="list-inline-item mb-0">
+																		<i className="mdi mdi-star"></i>
+																	</li>
+																	<li className="list-inline-item mb-0">
+																		<i className="mdi mdi-star"></i>
+																	</li>
+																	<li className="list-inline-item mb-0">
+																		<i className="mdi mdi-star"></i>
+																	</li>
+																	<li className="list-inline-item mb-0">
+																		<i className="mdi mdi-star"></i>
+																	</li>
+																	<li className="list-inline-item mb-0">
+																		<i className="mdi mdi-star"></i>
+																	</li>
+																	<li className="list-inline-item mb-0 text-dark">
+																		{item.rating} ({item.quantity_reviews})
+																	</li>
+																</ul>
 															</li>
 														</ul>
 													</div>

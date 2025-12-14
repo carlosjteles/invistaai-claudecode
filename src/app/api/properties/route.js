@@ -6,6 +6,24 @@ import { z as validate } from "zod";
 
 import { verifyToken } from "../../api/helper/auth";
 
+const DescriptionItemSchema = validate.union([
+	validate.string(),
+	validate
+		.object({
+			title: validate.string().optional(),
+			content: validate
+				.union([validate.string(), validate.array(validate.string())])
+				.optional(),
+			list: validate.array(validate.string()).optional(),
+		})
+		.refine(
+			({ content, list }) => content !== undefined || list !== undefined,
+			{
+				message: "O objeto deve conter content ou list",
+			}
+		),
+]);
+
 const ImageSchema = validate.object({
 	src: validate.string(),
 	title: validate.string().optional(),
@@ -84,7 +102,7 @@ const PropertySchema = validate.object({
 	attributes: validate.array(validate.string()).optional(),
 	typelogies: validate.array(TypologySchema).optional(),
 	description: validate
-		.array(validate.string())
+		.array(DescriptionItemSchema)
 		.min(1, "É necessário pelo menos um parágrafo de descrição"),
 	description_embed: validate
 		.string()
@@ -146,7 +164,7 @@ const PropertyUpdateSchema = validate.object({
 	book: validate.string().url("A URL do book é inválida").optional().nullable(),
 	attributes: validate.array(validate.string()).optional(),
 	description: validate
-		.array(validate.string())
+		.array(DescriptionItemSchema)
 		.min(1, "É necessário pelo menos um parágrafo de descrição")
 		.optional(),
 	description_embed: validate

@@ -6,9 +6,13 @@ import { z as validate } from "zod";
 
 import { verifyToken } from "../../api/helper/auth";
 
+export const revalidate = 300;
+
 const BlogContentSchema = validate.object({
-	type: validate.enum(["text", "quote", "link"], {
-		errorMap: () => ({ message: "Tipo deve ser 'text', 'quote' ou 'link'" }),
+	type: validate.enum(["text", "quote", "link", "title"], {
+		errorMap: () => ({
+			message: "Tipo deve ser 'text', 'quote', 'link' ou 'title'",
+		}),
 	}),
 	value: validate.string().min(1, "O valor do conteúdo é obrigatório"),
 	author: validate.string().optional().nullable(),

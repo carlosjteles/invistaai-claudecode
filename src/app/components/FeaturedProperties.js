@@ -7,6 +7,8 @@ import { formatPrice } from "../helper/formatter";
 
 import prisma from "../../db/prisma";
 
+export const revalidate = 300;
+
 export default async function FeaturedProperties() {
 	const propertyData = await prisma.property.findMany({
 		where: {
@@ -79,6 +81,7 @@ export default async function FeaturedProperties() {
 							>
 								<meta itemProp="identifier" content={item.id} />
 								<meta itemProp="url" content={`/imovel/${item.slug}`} />
+								<meta itemProp="name" content={item.name} />
 
 								{thumbnail && (
 									<div className="property-image position-relative overflow-hidden shadow">
@@ -96,16 +99,22 @@ export default async function FeaturedProperties() {
 												<Link
 													href={`/imovel/${item.slug}`}
 													className="btn btn-sm btn-icon btn-pills btn-primary"
+													aria-label={`Ver detalhes do imóvel ${
+														item.name || item.address
+													}`}
 												>
-													<FiHome className="icons" />
+													<FiHome className="icons" aria-hidden="true" />
 												</Link>
 											</li>
 											<li className="mt-1">
 												<Link
 													href={`/imovel/${item.slug}?openGallery=true`}
 													className="btn btn-sm btn-icon btn-pills btn-primary"
+													aria-label={`Ver galeria de fotos do imóvel ${
+														item.name || item.address
+													}`}
 												>
-													<FiCamera className="icons" />
+													<FiCamera className="icons" aria-hidden="true" />
 												</Link>
 											</li>
 										</ul>
@@ -121,46 +130,96 @@ export default async function FeaturedProperties() {
 										{item.name}
 									</Link>
 
-									<div
-										itemProp="accommodationFeature"
-										itemScope
-										itemType="https://schema.org/QuantitativeValue"
-									>
-										<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
+									{item.quantity_reviews > 0 && (
+										<div
+											itemProp="aggregateRating"
+											itemScope
+											itemType="https://schema.org/AggregateRating"
+										>
+											<meta itemProp="ratingValue" content={item.rating} />
+											<meta
+												itemProp="reviewCount"
+												content={item.quantity_reviews}
+											/>
+											<meta itemProp="bestRating" content="5" />
+											<meta itemProp="worstRating" content="1" />
+										</div>
+									)}
+
+									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted" itemProp="value">
 													{item.preview.area}
 												</small>
+												<meta itemProp="name" content="Área Total" />
 												<meta itemProp="unitText" content="m²" />
-											</li>
+											</span>
+										</li>
 
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-bed fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.bedroom}
 												</small>
-												<meta itemProp="unitText" content="bedroom" />
-											</li>
-										</ul>
-										<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
+												<meta itemProp="name" content="Quartos" />
+												<meta itemProp="value" content={item.preview.bedroom} />
+											</span>
+										</li>
+									</ul>
+									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-shower fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.suite}
 												</small>
-												<meta itemProp="unitText" content="bathroom" />
-											</li>
+												<meta itemProp="name" content="Banheiros" />
+												<meta itemProp="value" content={item.preview.suite} />
+											</span>
+										</li>
 
-											<li className="col-6 d-flex align-items-center m-0">
-												<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
+										<li className="col-6 d-flex align-items-center m-0">
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-car fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
 												<small className="text-muted">
 													{item.preview.parking}
 												</small>
-												<meta itemProp="unitText" content="parkingSpace" />
-											</li>
-										</ul>
-									</div>
+												<meta itemProp="name" content="Vagas de Garagem" />
+												<meta itemProp="value" content={item.preview.parking} />
+											</span>
+										</li>
+									</ul>
 
 									<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
 										<li className="list-inline-item mb-0">
@@ -177,10 +236,10 @@ export default async function FeaturedProperties() {
 													<>
 														<meta itemProp="priceCurrency" content="BRL" />
 														<meta itemProp="price" content={item.price} />
-														<span
+														<meta
 															itemProp="availability"
 															content="https://schema.org/InStock"
-														></span>
+														/>
 														{formatPrice(item.price)}
 													</>
 												)}
@@ -188,43 +247,30 @@ export default async function FeaturedProperties() {
 										</li>
 										<li className="list-inline-item mb-0 text-muted">
 											<span className="text-muted">Avaliação</span>
-											<div
-												itemProp="aggregateRating"
-												itemScope
-												itemType="https://schema.org/AggregateRating"
+											<ul
+												className={`fw-medium ${
+													item.quantity_reviews > 0 ? "text-warning" : ""
+												} list-unstyled mb-0`}
 											>
-												<meta itemProp="ratingValue" content={item.rating} />
-												<meta
-													itemProp="reviewCount"
-													content={item.quantity_reviews}
-												/>
-												<meta itemProp="bestRating" content="5" />
-
-												<ul
-													className={`fw-medium ${
-														item.quantity_reviews > 0 ? "text-warning" : ""
-													} list-unstyled mb-0`}
-												>
-													<li className="list-inline-item mb-0">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item mb-0">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item mb-0">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item mb-0">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item mb-0">
-														<i className="mdi mdi-star"></i>
-													</li>
-													<li className="list-inline-item mb-0 text-dark">
-														{item.rating} ({item.quantity_reviews})
-													</li>
-												</ul>
-											</div>
+												<li className="list-inline-item mb-0">
+													<i className="mdi mdi-star" aria-hidden="true"></i>
+												</li>
+												<li className="list-inline-item mb-0">
+													<i className="mdi mdi-star" aria-hidden="true"></i>
+												</li>
+												<li className="list-inline-item mb-0">
+													<i className="mdi mdi-star" aria-hidden="true"></i>
+												</li>
+												<li className="list-inline-item mb-0">
+													<i className="mdi mdi-star" aria-hidden="true"></i>
+												</li>
+												<li className="list-inline-item mb-0">
+													<i className="mdi mdi-star" aria-hidden="true"></i>
+												</li>
+												<li className="list-inline-item mb-0 text-dark">
+													{item.rating} ({item.quantity_reviews})
+												</li>
+											</ul>
 										</li>
 									</ul>
 								</div>

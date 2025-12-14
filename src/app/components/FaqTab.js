@@ -72,7 +72,7 @@ export default function FaqTab() {
 						<meta itemProp="numberOfItems" content={section.contents.length} />
 
 						<div className="section-title">
-							<h4 itemProp="headline">{section.sectionTitle}</h4>
+							<h4 itemProp="name">{section.sectionTitle}</h4>
 						</div>
 						<div className="accordion mt-4 pt-2">
 							{section.contents.map((item, itemIdx) => (

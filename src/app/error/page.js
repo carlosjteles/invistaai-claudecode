@@ -1,9 +1,17 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 
 import { getSiteName } from "../helper/utils";
 
 export default function Error() {
+	const scrollToTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
+	};
+
 	return (
 		<section className="position-relative bg-soft-primary">
 			<div className="container">
@@ -46,11 +54,14 @@ export default function Error() {
 							</div>
 							<div className="text-center">
 								<p className="mb-0 text-muted d-flex flex-wrap justify-content-center align-items-end gap-2">
-									© {new Date().getFullYear()} {getSiteName()}. Desenvolvido por{" "}
+									Todos os direitos reservados.{" "}
+									<Link href="#" className="text-reset" onClick={scrollToTop}>
+										{getSiteName()}
+									</Link>
 									<Link
 										href="https://www.damcdeveloper.com/"
 										target="_blank"
-										className="text-reset"
+										className="text-reset d-none"
 										aria-label="Desenvolvido por DAMC"
 									>
 										<Image
@@ -61,7 +72,6 @@ export default function Error() {
 											width={101}
 										/>
 									</Link>
-									.
 								</p>
 							</div>
 						</div>

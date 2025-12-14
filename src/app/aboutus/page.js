@@ -18,6 +18,8 @@ import { contact } from "../storage/about";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 
+export const revalidate = 300;
+
 export const metadata = {
 	title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
 	description:
@@ -141,13 +143,12 @@ export default function AboutUs() {
 								<p className="text-white-50 para-desc mx-auto mb-0">
 									Nossa história: {getSiteName()}
 								</p>
-								<h5 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
+								<h1 className="heading fw-semibold mb-0 sub-heading text-white title-dark">
 									Sobre nós
-								</h5>
+								</h1>
 							</div>
 						</div>
 					</div>
-					{/* Adicionar após o div.container na section principal */}
 					<div className="position-middle-bottom">
 						<nav aria-label="breadcrumb" className="d-block">
 							<ul

@@ -7,6 +7,8 @@ import prisma from "../../../db/prisma";
 import { formatDateISO } from "../../helper/formatter";
 import { getBaseUrl, getSiteName } from "../../helper/utils";
 
+export const revalidate = 300;
+
 export async function generateMetadata({ params }) {
 	const blogPost = await prisma.blog.findUnique({
 		where: {
