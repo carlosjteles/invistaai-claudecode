@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
+import { getBaseUrl } from "../helper/utils";
 
 import prisma from "../../db/prisma";
 
@@ -76,11 +77,15 @@ export default async function FeaturedProperties() {
 
 							<div
 								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
+								itemProp="item"
 								itemScope
-								itemType="https://schema.org/RealEstateListing"
+								itemType="https://schema.org/Product"
 							>
-								<meta itemProp="identifier" content={item.id} />
-								<meta itemProp="url" content={`/imovel/${item.slug}`} />
+								<meta itemProp="sku" content={item.id} />
+								<meta
+									itemProp="url"
+									content={`${getBaseUrl()}/imovel/${item.slug}`}
+								/>
 								<meta itemProp="name" content={item.name} />
 
 								{thumbnail && (
