@@ -1,11 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
-import { getBaseUrl } from "../helper/utils";
 
 import prisma from "../../db/prisma";
 
@@ -41,58 +39,8 @@ export default async function FeaturedProperties() {
 		return null;
 	}
 
-	const featuredJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "ItemList",
-		name: "Imóveis em destaque",
-		numberOfItems: propertyData.length,
-		itemListElement: propertyData.map((item, index) => {
-			const thumbnail = item.images?.[0] || null;
-			const hasPrice = item.price > 0;
-			const hasRating = item.quantity_reviews > 0;
-
-			return {
-				"@type": "ListItem",
-				position: index + 1,
-				item: {
-					"@type": "RealEstateListing",
-					name: item.name,
-					url: `${getBaseUrl()}/imovel/${item.slug}`,
-					...(thumbnail && { image: thumbnail.src }),
-					offers: hasPrice
-						? {
-								"@type": "Offer",
-								price: item.price,
-								priceCurrency: "BRL",
-								availability: "https://schema.org/InStock",
-						  }
-						: {
-								"@type": "Offer",
-								price: "Consulte",
-								priceCurrency: "BRL",
-								availability: "https://schema.org/PreOrder",
-						  },
-					...(hasRating && {
-						aggregateRating: {
-							"@type": "AggregateRating",
-							ratingValue: item.rating,
-							reviewCount: item.quantity_reviews,
-							bestRating: 5,
-							worstRating: 1,
-						},
-					}),
-				},
-			};
-		}),
-	};
-
 	return (
 		<>
-			<Script
-				id="featured-properties-schema"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(featuredJsonLd) }}
-			/>
 			<div className="row justify-content-center">
 				<div className="col">
 					<div className="section-title text-center mb-4 pb-2">
@@ -104,13 +52,37 @@ export default async function FeaturedProperties() {
 				</div>
 			</div>
 
-			<div className="row g-4 mt-0">
-				{propertyData.map((item) => {
+			<div
+				className="row g-4 mt-0"
+				itemScope
+				itemType="https://schema.org/ItemList"
+			>
+				<meta itemProp="name" content="Imóveis em destaque" />
+				<meta itemProp="itemListOrder" content="Unordered" />
+				<meta itemProp="numberOfItems" content={propertyData.length} />
+
+				{propertyData.map((item, index) => {
 					const thumbnail = item.images?.[0] || null;
 
 					return (
-						<div className="col-lg-4 col-md-6 col-12" key={item.id}>
-							<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
+						<div
+							className="col-lg-4 col-md-6 col-12"
+							key={index}
+							itemProp="itemListElement"
+							itemScope
+							itemType="https://schema.org/ListItem"
+						>
+							<meta itemProp="position" content={index + 1} />
+
+							<div
+								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
+								itemScope
+								itemType="https://schema.org/RealEstateListing"
+							>
+								<meta itemProp="identifier" content={item.id} />
+								<meta itemProp="url" content={`/imovel/${item.slug}`} />
+								<meta itemProp="name" content={item.name} />
+
 								{thumbnail && (
 									<div className="property-image position-relative overflow-hidden shadow">
 										<Image
@@ -120,6 +92,7 @@ export default async function FeaturedProperties() {
 											sizes="100vw"
 											className="img-fluid"
 											alt={thumbnail.alt}
+											itemProp="image"
 										/>
 										<ul className="list-unstyled property-icon">
 											<li>
@@ -152,64 +125,123 @@ export default async function FeaturedProperties() {
 									<Link
 										href={`/imovel/${item.slug}`}
 										className="title fs-5 text-dark fw-medium"
+										itemProp="name"
 									>
 										{item.name}
 									</Link>
 
 									{item.quantity_reviews > 0 && (
-										<div className="visually-hidden" aria-hidden="true">
-											Avaliação média {item.rating} em {item.quantity_reviews}{" "}
-											opiniões
+										<div
+											itemProp="aggregateRating"
+											itemScope
+											itemType="https://schema.org/AggregateRating"
+										>
+											<meta itemProp="ratingValue" content={item.rating} />
+											<meta
+												itemProp="reviewCount"
+												content={item.quantity_reviews}
+											/>
+											<meta itemProp="bestRating" content="5" />
+											<meta itemProp="worstRating" content="1" />
 										</div>
 									)}
 
 									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 										<li className="col-6 d-flex align-items-center m-0">
-											<i
-												className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
-												aria-hidden="true"
-											></i>
-											<small className="text-muted">{item.preview.area}</small>
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
+												<small className="text-muted" itemProp="value">
+													{item.preview.area}
+												</small>
+												<meta itemProp="name" content="Área Total" />
+												<meta itemProp="unitText" content="m²" />
+											</span>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
-											<i
-												className="mdi mdi-bed fs-5 me-2 text-primary"
-												aria-hidden="true"
-											></i>
-											<small className="text-muted">
-												{item.preview.bedroom}
-											</small>
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-bed fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
+												<small className="text-muted">
+													{item.preview.bedroom}
+												</small>
+												<meta itemProp="name" content="Quartos" />
+												<meta itemProp="value" content={item.preview.bedroom} />
+											</span>
 										</li>
 									</ul>
 									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 										<li className="col-6 d-flex align-items-center m-0">
-											<i
-												className="mdi mdi-shower fs-5 me-2 text-primary"
-												aria-hidden="true"
-											></i>
-											<small className="text-muted">{item.preview.suite}</small>
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-shower fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
+												<small className="text-muted">
+													{item.preview.suite}
+												</small>
+												<meta itemProp="name" content="Banheiros" />
+												<meta itemProp="value" content={item.preview.suite} />
+											</span>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
-											<i
-												className="mdi mdi-car fs-5 me-2 text-primary"
-												aria-hidden="true"
-											></i>
-											<small className="text-muted">
-												{item.preview.parking}
-											</small>
+											<span
+												itemProp="additionalProperty"
+												itemScope
+												itemType="https://schema.org/PropertyValue"
+											>
+												<i
+													className="mdi mdi-car fs-5 me-2 text-primary"
+													aria-hidden="true"
+												></i>
+												<small className="text-muted">
+													{item.preview.parking}
+												</small>
+												<meta itemProp="name" content="Vagas de Garagem" />
+												<meta itemProp="value" content={item.preview.parking} />
+											</span>
 										</li>
 									</ul>
 
 									<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
 										<li className="list-inline-item mb-0">
 											<span className="text-muted">Preço</span>
-											<p className="fw-medium mb-0">
+											<p
+												className="fw-medium mb-0"
+												itemProp="offers"
+												itemScope
+												itemType="https://schema.org/Offer"
+											>
 												{item.price === 0 ? (
 													"Consulte"
 												) : (
-													<>{formatPrice(item.price)}</>
+													<>
+														<meta itemProp="priceCurrency" content="BRL" />
+														<meta itemProp="price" content={item.price} />
+														<meta
+															itemProp="availability"
+															content="https://schema.org/InStock"
+														/>
+														{formatPrice(item.price)}
+													</>
 												)}
 											</p>
 										</li>

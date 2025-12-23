@@ -387,16 +387,14 @@ export default function PropertiesClient({
 
 												<div
 													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
-													temProp="item"
 													itemScope
-													itemType="https://schema.org/Product"
+													itemType="https://schema.org/RealEstateListing"
 												>
-													<meta itemProp="sku" content={item.id} />
+													<meta itemProp="identifier" content={item.id} />
 													<meta
 														itemProp="url"
 														content={`${getBaseUrl()}/imovel/${item.slug}`}
 													/>
-													<meta itemProp="name" content={item.name} />
 
 													{thumbnail && (
 														<div className="property-image position-relative overflow-hidden shadow">

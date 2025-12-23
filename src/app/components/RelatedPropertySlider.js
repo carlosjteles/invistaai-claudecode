@@ -73,16 +73,14 @@ export default function RelatedPropertySlider({ propertyData }) {
 
 									<div
 										className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2"
-										itemProp="item"
 										itemScope
-										itemType="https://schema.org/Product"
+										itemType="https://schema.org/RealEstateListing"
 									>
-										<meta itemProp="sku" content={item.id} />
+										<meta itemProp="identifier" content={item.id} />
 										<meta
 											itemProp="url"
 											content={`${getBaseUrl()}/imovel/${item.slug}`}
 										/>
-										<meta itemProp="name" content={item.name} />
 
 										{thumbnail && (
 											<div className="property-image position-relative overflow-hidden shadow">
@@ -126,6 +124,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 											<Link
 												href={`/imovel/${item.slug}`}
 												className="title fs-5 text-dark fw-medium"
+												itemProp="name"
 											>
 												{item.name || item.address}
 											</Link>
