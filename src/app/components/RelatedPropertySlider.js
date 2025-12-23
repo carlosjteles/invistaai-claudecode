@@ -126,7 +126,6 @@ export default function RelatedPropertySlider({ propertyData }) {
 											<Link
 												href={`/imovel/${item.slug}`}
 												className="title fs-5 text-dark fw-medium"
-												itemProp="name"
 											>
 												{item.name || item.address}
 											</Link>

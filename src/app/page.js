@@ -14,6 +14,8 @@ import TextAnimation from "./components/TextAnimation";
 
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
+import { contact } from "./storage/about";
+
 export const revalidate = 300;
 
 export default function Home() {
@@ -23,6 +25,14 @@ export default function Home() {
 		publisher: {
 			"@type": "RealEstateAgent",
 			name: getSiteName(),
+			address: {
+				"@type": "PostalAddress",
+				streetAddress: contact.address.street,
+				addressLocality: contact.address.city,
+				addressRegion: contact.address.state,
+				postalCode: contact.address.zip,
+				addressCountry: "BR",
+			},
 		},
 		name: "Página Inicial",
 		description:
@@ -130,8 +140,8 @@ export default function Home() {
 									<div className="title-heading">
 										<TextAnimation />
 										<p className="para-desc text-white title-dark mb-0">
-											Unimos tecnologia e propósito para transformar a 
-											sua compra na melhor experiência.
+											Unimos tecnologia e propósito para transformar a sua
+											compra na melhor experiência.
 										</p>
 									</div>
 								</div>

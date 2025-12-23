@@ -130,7 +130,6 @@ export default async function FeaturedProperties() {
 									<Link
 										href={`/imovel/${item.slug}`}
 										className="title fs-5 text-dark fw-medium"
-										itemProp="name"
 									>
 										{item.name}
 									</Link>
