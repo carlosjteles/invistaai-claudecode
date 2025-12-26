@@ -216,7 +216,11 @@ export default function PropertiesClient({
 									itemScope
 									itemType="https://schema.org/ListItem"
 								>
-									<Link href="/">Início</Link>
+									<Link href="/">
+										<span itemProp="name">Início</span>
+									</Link>
+									<meta itemProp="position" content="1" />
+									<meta itemProp="item" content={`${getBaseUrl()}`} />
 								</li>
 								<li
 									className="breadcrumb-item active"
@@ -370,6 +374,7 @@ export default function PropertiesClient({
 
 								<div className="row g-4">
 									{propertyData.map((item, index) => {
+										const itemUrl = `${getBaseUrl()}/imovel/${item.slug}`;
 										const thumbnail = item.images?.[0] || null;
 
 										return (
@@ -384,17 +389,16 @@ export default function PropertiesClient({
 													itemProp="position"
 													content={(currentPage - 1) * 8 + index + 1}
 												/>
+												<meta itemProp="item" content={itemUrl} />
 
 												<div
 													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
 													itemScope
-													itemType="https://schema.org/RealEstateListing"
+													itemType="https://schema.org/Product"
 												>
 													<meta itemProp="identifier" content={item.id} />
-													<meta
-														itemProp="url"
-														content={`${getBaseUrl()}/imovel/${item.slug}`}
-													/>
+													<meta itemProp="url" content={itemUrl} />
+													<meta itemProp="name" content={item.name} />
 
 													{thumbnail && (
 														<div className="property-image position-relative overflow-hidden shadow">
