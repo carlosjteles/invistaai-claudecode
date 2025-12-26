@@ -87,6 +87,7 @@ export const metadata = {
 export const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "RealEstateAgent",
+	"@id": `${getBaseUrl()}#organization`,
 	name: getSiteName(),
 	url: getBaseUrl(),
 	logo: `${getBaseUrl()}/images/logo-dark.svg`,
@@ -98,7 +99,9 @@ export const jsonLd = {
 		addressLocality: contact.address.city,
 		addressRegion: contact.address.state,
 		postalCode: contact.address.zip,
-		streetAddress: `${contact.address.street}, ${contact.address.complement}`,
+		streetAddress: contact.address.complement
+			? `${contact.address.street}, ${contact.address.complement}`
+			: contact.address.street,
 		addressCountry: "BR",
 	},
 	geo: {
@@ -111,7 +114,7 @@ export const jsonLd = {
 	email: contact.email,
 	openingHours: "Mo,Tu,We,Th,Fr 09:00-18:00",
 	priceRange: "R$",
-	sameAs: Object.values(contact.social),
+	sameAs: Object.values(contact.social || {}).filter(Boolean),
 	knowsAbout: [
 		"Investimento Imobiliário",
 		"Mercado Imobiliário São Paulo",

@@ -174,9 +174,10 @@ export default function Customers() {
 													itemProp="itemReviewed"
 													itemScope
 													itemType="https://schema.org/RealEstateAgent"
+													itemID={`${getBaseUrl()}#organization`}
 												>
 													<meta itemProp="name" content={getSiteName()} />
-													<meta itemProp="priceRange" content="R$" />
+													<meta itemProp="url" content={getBaseUrl()} />
 												</div>
 
 												<meta itemProp="datePublished" content="2023-01-01" />
