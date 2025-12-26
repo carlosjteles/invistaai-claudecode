@@ -33,6 +33,8 @@ export default function Home() {
 				postalCode: contact.address.zip,
 				addressCountry: "BR",
 			},
+			telephone: `+${contact.phone}`,
+			url: getBaseUrl(),
 		},
 		name: "Página Inicial",
 		description:
@@ -99,12 +101,39 @@ export default function Home() {
 		],
 	};
 
+	const sameAs = Object.values(contact.social || {}).filter(Boolean);
+
+	const organizationJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "RealEstateAgent",
+		"@id": `${getBaseUrl()}#organization`,
+		name: getSiteName(),
+		url: getBaseUrl(),
+		telephone: `+${contact.phone}`,
+		logo: `${getBaseUrl()}/images/icon.svg`,
+		image: `${getBaseUrl()}/images/icon.svg`,
+		address: {
+			"@type": "PostalAddress",
+			streetAddress: contact.address.street,
+			addressLocality: contact.address.city,
+			addressRegion: contact.address.state,
+			postalCode: contact.address.zip,
+			addressCountry: "BR",
+		},
+		sameAs,
+	};
+
 	return (
 		<>
 			<Script
 				id="homepage-schema"
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+			/>
+			<Script
+				id="organization-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
 			/>
 
 			<Navbar

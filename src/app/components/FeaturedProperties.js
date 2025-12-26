@@ -11,8 +11,6 @@ import prisma from "../../db/prisma";
 export const revalidate = 300;
 
 export default async function FeaturedProperties() {
-	const baseUrl = getBaseUrl();
-
 	const propertyData = await prisma.property.findMany({
 		where: {
 			images: {
@@ -66,12 +64,12 @@ export default async function FeaturedProperties() {
 
 				{propertyData.map((item, index) => {
 					const thumbnail = item.images?.[0] || null;
-					const detailUrl = `${baseUrl}/imovel/${item.slug}`;
+					const itemUrl = `${getBaseUrl()}/imovel/${item.slug}`;
 					const imageUrl =
 						thumbnail &&
 						(thumbnail.src.startsWith("http")
 							? thumbnail.src
-							: `${baseUrl}${thumbnail.src}`);
+							: `${getBaseUrl()}${thumbnail.src}`);
 
 					return (
 						<div
@@ -82,7 +80,7 @@ export default async function FeaturedProperties() {
 							itemType="https://schema.org/ListItem"
 						>
 							<meta itemProp="position" content={index + 1} />
-							<meta itemProp="item" content={detailUrl} />
+							<meta itemProp="item" content={itemUrl} />
 
 							<div
 								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
@@ -90,7 +88,7 @@ export default async function FeaturedProperties() {
 								itemType="https://schema.org/Product"
 							>
 								<meta itemProp="identifier" content={item.id} />
-								<meta itemProp="url" content={detailUrl} />
+								<meta itemProp="url" content={itemUrl} />
 								<meta itemProp="name" content={item.name} />
 								{imageUrl && <meta itemProp="image" content={imageUrl} />}
 
