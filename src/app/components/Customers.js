@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import { getSiteName } from "../helper/utils";
+import { getBaseUrl, getSiteName } from "./helper/utils";
 
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
