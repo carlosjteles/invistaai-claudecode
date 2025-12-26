@@ -4,12 +4,15 @@ import Image from "next/image";
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
+import { getBaseUrl } from "../helper/utils";
 
 import prisma from "../../db/prisma";
 
 export const revalidate = 300;
 
 export default async function FeaturedProperties() {
+	const baseUrl = getBaseUrl();
+
 	const propertyData = await prisma.property.findMany({
 		where: {
 			images: {
@@ -63,6 +66,12 @@ export default async function FeaturedProperties() {
 
 				{propertyData.map((item, index) => {
 					const thumbnail = item.images?.[0] || null;
+					const detailUrl = `${baseUrl}/imovel/${item.slug}`;
+					const imageUrl =
+						thumbnail &&
+						(thumbnail.src.startsWith("http")
+							? thumbnail.src
+							: `${baseUrl}${thumbnail.src}`);
 
 					return (
 						<div
@@ -73,15 +82,17 @@ export default async function FeaturedProperties() {
 							itemType="https://schema.org/ListItem"
 						>
 							<meta itemProp="position" content={index + 1} />
+							<meta itemProp="item" content={detailUrl} />
 
 							<div
 								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
 								itemScope
-								itemType="https://schema.org/RealEstateListing"
+								itemType="https://schema.org/Product"
 							>
 								<meta itemProp="identifier" content={item.id} />
-								<meta itemProp="url" content={`/imovel/${item.slug}`} />
+								<meta itemProp="url" content={detailUrl} />
 								<meta itemProp="name" content={item.name} />
+								{imageUrl && <meta itemProp="image" content={imageUrl} />}
 
 								{thumbnail && (
 									<div className="property-image position-relative overflow-hidden shadow">
