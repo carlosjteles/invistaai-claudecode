@@ -65,7 +65,7 @@ export async function GET() {
 							<loc>${url.loc}</loc>
 							<lastmod>${today.toISOString()}</lastmod>
 							<changefreq>${url.changeFrequency}</changefreq>
-							<priority>${url.priority}</priority>
+							<priority>${url.priority.toFixed(1)}</priority>
 						</url>`
 				)
 				.join("\n")}
