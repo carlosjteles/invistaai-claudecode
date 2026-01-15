@@ -23,7 +23,7 @@ const league = League_Spartan({
 
 export const metadata = {
 	metadataBase: new URL(getBaseUrl()),
-	title: `Comprar Imóveis em São Paulo | ${getSiteName()}`,
+	title: getSiteName(),
 	description:
 		"Encontre apartamentos, studios e imóveis em São Paulo com potencial de valorização. Curadoria especializada e suporte completo para investidores e compradores.",
 	keywords: [
