@@ -40,6 +40,28 @@ export const metadata = {
 	},
 };
 
+const normalizeFaqAnswer = (blocks = []) => {
+	const stripHtml = (value = "") =>
+		value
+			.replace(/<[^>]+>/g, " ")
+			.replace(/\s+/g, " ")
+			.trim();
+
+	return blocks
+		.flatMap((block) => {
+			if (block.type === "text" || block.type === "subtitle") {
+				return [stripHtml(block.value || "")];
+			}
+			if (block.type === "list" && Array.isArray(block.items)) {
+				return block.items.map((item) => stripHtml(item.value || ""));
+			}
+			return [];
+		})
+		.filter(Boolean)
+		.join(" ")
+		.trim();
+};
+
 export default function Faqs() {
 	const faqsSchema = {
 		"@context": "https://schema.org",
@@ -50,12 +72,9 @@ export default function Faqs() {
 				name: item.title,
 				acceptedAnswer: {
 					"@type": "Answer",
-					text: item.content
-						.filter((block) => block.type === "text")
-						.map((block) => block.value)
-						.join(" "),
+					text: normalizeFaqAnswer(item.content),
 				},
-			}))
+			})),
 		),
 		publisher: {
 			"@type": "Organization",

@@ -14,17 +14,17 @@ import { FiArrowRight } from "../../assets/icons/vander";
 
 const BuildingDocumentsSlider = dynamic(
 	() => import("../../components/BuildingDocumentsSlider"),
-	{ ssr: false }
+	{ ssr: false },
 );
 
 const FinancingSimulation = dynamic(
 	() => import("../../components/FinancingSimulation"),
-	{ ssr: false }
+	{ ssr: false },
 );
 
 const RelatedPropertySlider = dynamic(
 	() => import("../../components/RelatedPropertySlider"),
-	{ ssr: false }
+	{ ssr: false },
 );
 
 const YoutubeEmbed = dynamic(() => import("../../components/YoutubeEmbed"), {
@@ -55,7 +55,7 @@ export default function PropertyDetailsClient({
 	const buildingDocumentsImages = React.useMemo(() => {
 		if (!propertyData.images) return [];
 		return propertyData.images.filter(
-			(img) => img.type === "building_documents"
+			(img) => img.type === "building_documents",
 		);
 	}, [propertyData.images]);
 
@@ -93,15 +93,49 @@ export default function PropertyDetailsClient({
 		return getSiteName();
 	}, [propertyData.seo]);
 
+	const normalizedDescription = React.useMemo(() => {
+		const stripHtml = (value) =>
+			typeof value === "string"
+				? value
+						.replace(/<[^>]+>/g, " ")
+						.replace(/\s+/g, " ")
+						.trim()
+				: "";
+
+		const collectText = (value) => {
+			if (!value) return [];
+			if (typeof value === "string") return [stripHtml(value)];
+			if (Array.isArray(value)) {
+				return value.reduce((acc, item) => acc.concat(collectText(item)), []);
+			}
+			if (typeof value === "object") {
+				const parts = [];
+				if (value.title) parts.push(stripHtml(value.title));
+				if (value.content) parts.push(...collectText(value.content));
+				if (Array.isArray(value.list)) {
+					parts.push(
+						value.list
+							.map((item) => stripHtml(item))
+							.filter(Boolean)
+							.join(" "),
+					);
+				}
+				return parts;
+			}
+			return [];
+		};
+
+		return collectText(propertyData.description)
+			.filter(Boolean)
+			.join(" ")
+			.trim();
+	}, [propertyData.description]);
+
 	const propertySchema = {
 		"@context": "https://schema.org",
 		"@type": "Product",
 		name: propertyData.name || propertyData.address,
-		description: propertyData.description
-			? Array.isArray(propertyData.description)
-				? propertyData.description.join(" ")
-				: propertyData.description
-			: "",
+		description: normalizedDescription,
 		image: propertyData.images?.map((img) => img.src) || [],
 		identifier: propertyData.id,
 		url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
@@ -144,8 +178,8 @@ export default function PropertyDetailsClient({
 				name: "Quartos",
 				value: Array.isArray(propertyData.bedroom)
 					? Math.min(
-							...propertyData.bedroom.filter((v) => typeof v === "number")
-					  )
+							...propertyData.bedroom.filter((v) => typeof v === "number"),
+						)
 					: propertyData.bedroom || 0,
 			},
 			{
@@ -172,7 +206,7 @@ export default function PropertyDetailsClient({
 							name: "Previsão de Entrega",
 							value: propertyData.delivery_in,
 						},
-				  ]
+					]
 				: []),
 			...(propertyData.release_in
 				? [
@@ -181,7 +215,7 @@ export default function PropertyDetailsClient({
 							name: "Data de Lançamento",
 							value: propertyData.release_in,
 						},
-				  ]
+					]
 				: []),
 		].filter(Boolean),
 		...(propertyData.quantity_reviews > 0 && {
@@ -279,7 +313,7 @@ export default function PropertyDetailsClient({
 												aria-hidden="true"
 											></i>
 											<span className="text-muted fs-5">
-												<small>{propertyData.preview?.area}</small> 
+												<small>{propertyData.preview?.area}</small>
 											</span>
 										</span>
 									</li>
@@ -570,7 +604,7 @@ export default function PropertyDetailsClient({
 									<span className="badge bg-primary">
 										{
 											categories.find(
-												(item) => item.id === propertyData.category
+												(item) => item.id === propertyData.category,
 											)?.label
 										}
 									</span>
@@ -582,7 +616,7 @@ export default function PropertyDetailsClient({
 											<span className="small text-muted">Preço por m²</span>
 											<span className="small">
 												{formatPrice(
-													propertyData.price / propertyData.min_area
+													propertyData.price / propertyData.min_area,
 												)}
 											</span>
 										</div>
