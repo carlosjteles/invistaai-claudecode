@@ -25,7 +25,7 @@ const BlogSchema = validate.object({
 		.min(1, "O slug é obrigatório")
 		.regex(
 			/^[a-z0-9-]+$/,
-			"Slug deve conter apenas letras minúsculas, números e hífens"
+			"Slug deve conter apenas letras minúsculas, números e hífens",
 		),
 	image: validate.string().min(1, "A URL da imagem é obrigatória"),
 	thumbnail: validate.string().min(1, "A URL da thumbnail é obrigatória"),
@@ -47,7 +47,7 @@ export async function POST(request) {
 	if (!tokenCheck.success) {
 		return NextResponse.json(
 			{ success: false, message: tokenCheck.message },
-			{ status: tokenCheck.status }
+			{ status: tokenCheck.status },
 		);
 	}
 
@@ -70,16 +70,18 @@ export async function POST(request) {
 				},
 			});
 
-			await tx.blogContent.createMany({
-				data: validatedData.content.map((item, index) => ({
-					blogId: blog.id,
-					type: item.type,
-					value: item.value,
-					author: item.author || null,
-					href: item.href || null,
-					order: index,
-				})),
-			});
+			for (const [index, item] of validatedData.content.entries()) {
+				await tx.blogContent.create({
+					data: {
+						blogId: blog.id,
+						type: item.type,
+						value: item.value,
+						author: item.author || null,
+						href: item.href || null,
+						order: index,
+					},
+				});
+			}
 
 			return blog;
 		});
@@ -90,7 +92,7 @@ export async function POST(request) {
 				message: "Blog criado com sucesso",
 				data: { id: result.id },
 			},
-			{ status: 201 }
+			{ status: 201 },
 		);
 	} catch (error) {
 		console.error("Erro ao criar blog:", error);
@@ -107,7 +109,7 @@ export async function POST(request) {
 					message: "Erro de validação",
 					errors: formattedErrors,
 				},
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -118,7 +120,7 @@ export async function POST(request) {
 					message: "Já existe um blog com este slug",
 					field: error.meta?.target?.[0] || "slug",
 				},
-				{ status: 409 }
+				{ status: 409 },
 			);
 		}
 
@@ -127,7 +129,7 @@ export async function POST(request) {
 				success: false,
 				message: "Erro interno do servidor",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	} finally {
 		await prisma.$disconnect();
