@@ -3,7 +3,6 @@ import Image from "next/image";
 import Script from "next/script";
 
 import Categories from "./components/Categories";
-import Customers from "./components/Customers";
 import FeaturedProperties from "./components/FeaturedProperties";
 import Footer from "./components/Footer";
 import GetInTouch from "./components/GetInTouch";
@@ -271,10 +270,6 @@ export default function Home() {
 
 				<div className="container mt-100 mt-60">
 					<FeaturedProperties />
-				</div>
-
-				<div className="container mt-100 mt-60">
-					<Customers />
 				</div>
 
 				<div className="container mt-100 mt-60">
