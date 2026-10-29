@@ -17,7 +17,7 @@ export default async function FeaturedProperties() {
 				some: {},
 			},
 		},
-		take: 6,
+		take: 12,
 		include: {
 			images: {
 				select: {
@@ -253,33 +253,6 @@ export default async function FeaturedProperties() {
 													</>
 												)}
 											</p>
-										</li>
-										<li className="list-inline-item mb-0 text-muted">
-											<span className="text-muted">Avaliação</span>
-											<ul
-												className={`fw-medium ${
-													item.quantity_reviews > 0 ? "text-warning" : ""
-												} list-unstyled mb-0`}
-											>
-												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star" aria-hidden="true"></i>
-												</li>
-												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star" aria-hidden="true"></i>
-												</li>
-												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star" aria-hidden="true"></i>
-												</li>
-												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star" aria-hidden="true"></i>
-												</li>
-												<li className="list-inline-item mb-0">
-													<i className="mdi mdi-star" aria-hidden="true"></i>
-												</li>
-												<li className="list-inline-item mb-0 text-dark">
-													{item.rating} ({item.quantity_reviews})
-												</li>
-											</ul>
 										</li>
 									</ul>
 								</div>
