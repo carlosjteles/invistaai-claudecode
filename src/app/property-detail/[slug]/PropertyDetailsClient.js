@@ -657,6 +657,14 @@ export default function PropertyDetailsClient({
 									</Link>
 								</div>
 
+								<Link
+									href={`/comparar?imoveis=${propertyData.slug}`}
+									className="btn btn-soft-primary w-100 small mt-2"
+									aria-label={`Comparar ${propertyData.name} com outros imóveis`}
+								>
+									Comparar com outros imóveis
+								</Link>
+
 								{propertyData.price > 0 && propertyData.price < 600000 && (
 									<FinancingSimulation />
 								)}

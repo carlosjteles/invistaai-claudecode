@@ -25,6 +25,16 @@ export async function GET() {
 			priority: 0.9,
 		},
 		{
+			loc: `${baseUrl}/indice-preco-m2`,
+			changeFrequency: "daily",
+			priority: 0.8,
+		},
+		{
+			loc: `${baseUrl}/comparar`,
+			changeFrequency: "weekly",
+			priority: 0.6,
+		},
+		{
 			loc: `${baseUrl}/blogs`,
 			changeFrequency: "monthly",
 			priority: 0.7,
