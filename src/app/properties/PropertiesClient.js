@@ -390,16 +390,12 @@ export default function PropertiesClient({
 													itemProp="position"
 													content={(currentPage - 1) * 8 + index + 1}
 												/>
-												<meta itemProp="item" content={itemUrl} />
+												<meta itemProp="url" content={itemUrl} />
+												<meta itemProp="name" content={item.name} />
 
 												<div
 													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
-													itemScope
-													itemType="https://schema.org/Product"
 												>
-													<meta itemProp="identifier" content={item.id} />
-													<meta itemProp="url" content={itemUrl} />
-													<meta itemProp="name" content={item.name} />
 
 													{thumbnail && (
 														<div className="property-image position-relative overflow-hidden shadow">
@@ -410,7 +406,6 @@ export default function PropertiesClient({
 																sizes="100vw"
 																className="img-fluid"
 																alt={thumbnail.alt}
-																itemProp="image"
 															/>
 															<ul className="list-unstyled property-icon">
 																<li>
@@ -489,26 +484,11 @@ export default function PropertiesClient({
 																<span className="text-muted">Preço</span>
 																<p
 																	className="fw-medium mb-0"
-																	itemProp="offers"
-																	itemScope
-																	itemType="https://schema.org/Offer"
 																>
 																	{item.price === 0 ? (
 																		"Consulte"
 																	) : (
 																		<>
-																			<meta
-																				itemProp="priceCurrency"
-																				content="BRL"
-																			/>
-																			<meta
-																				itemProp="price"
-																				content={item.price}
-																			/>
-																			<span
-																				itemProp="availability"
-																				content="https://schema.org/InStock"
-																			></span>
 																			{formatPrice(item.price)}
 																		</>
 																	)}
