@@ -1,4 +1,3 @@
-import Script from "next/script";
 import Link from "next/link";
 
 import FaqTab from "../components/FaqTab";
@@ -88,10 +87,12 @@ export default function Faqs() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="faq-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(faqsSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(faqsSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

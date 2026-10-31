@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
 
 	return {
 		title: `${blogPost.title} | ${getSiteName()}`,
-		description: blogPost.desc,
+		description: blogPost.description,
 		keywords: blogPost.keywords,
 		openGraph: {
 			title: blogPost.title,

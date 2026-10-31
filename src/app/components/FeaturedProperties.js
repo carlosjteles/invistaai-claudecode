@@ -139,22 +139,6 @@ export default async function FeaturedProperties() {
 										{item.name}
 									</Link>
 
-									{item.quantity_reviews > 0 && (
-										<div
-											itemProp="aggregateRating"
-											itemScope
-											itemType="https://schema.org/AggregateRating"
-										>
-											<meta itemProp="ratingValue" content={item.rating} />
-											<meta
-												itemProp="reviewCount"
-												content={item.quantity_reviews}
-											/>
-											<meta itemProp="bestRating" content="5" />
-											<meta itemProp="worstRating" content="1" />
-										</div>
-									)}
-
 									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 										<li className="col-6 d-flex align-items-center m-0">
 											<span

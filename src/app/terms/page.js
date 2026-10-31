@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 
 import { FiArrowRight } from "../assets/icons/vander";
 
@@ -97,10 +96,12 @@ export default function Terms() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="terms-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(termsJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(termsJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

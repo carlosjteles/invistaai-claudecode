@@ -120,36 +120,60 @@ export default async function PropertyDetails({ params }) {
 		notFound();
 	}
 
+	const relatedInclude = {
+		images: {
+			select: {
+				id: true,
+				src: true,
+				alt: true,
+			},
+			where: {
+				thumbnail: true,
+			},
+			take: 1,
+		},
+	};
+
+	/** 1º: mesmo bairro; depois: faixa de preço parecida, para completar 6 */
 	const relatedProperties = await prisma.property.findMany({
 		where: {
 			images: { some: {} },
 			slug: { not: params.slug },
 			neighborhood: propertyData.neighborhood,
-			price: {
-				gte: propertyData.price * 0.8,
-				lte: propertyData.price * 1.2,
-			},
 		},
-		include: {
-			images: {
-				select: {
-					id: true,
-					src: true,
-					alt: true,
-				},
-				where: {
-					thumbnail: true,
-				},
-				take: 1,
-			},
-		},
+		include: relatedInclude,
+		orderBy: { updatedAt: "desc" },
 		take: 6,
 	});
+
+	if (relatedProperties.length < 6 && propertyData.price > 0) {
+		const moreProperties = await prisma.property.findMany({
+			where: {
+				images: { some: {} },
+				slug: {
+					notIn: [params.slug, ...relatedProperties.map((item) => item.slug)],
+				},
+				price: {
+					gte: propertyData.price * 0.6,
+					lte: propertyData.price * 1.4,
+				},
+			},
+			include: relatedInclude,
+			orderBy: { updatedAt: "desc" },
+			take: 6 - relatedProperties.length,
+		});
+
+		relatedProperties.push(...moreProperties);
+	}
 
 	return (
 		<PropertyDetailsClient
 			propertyData={propertyData}
 			relatedProperties={relatedProperties}
+			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
+				"pt-BR",
+				{ timeZone: "America/Sao_Paulo" }
+			)}
 		/>
 	);
 }

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Script from "next/script";
 import dynamic from "next/dynamic";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -148,10 +147,12 @@ export default function ContactClient() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="contact-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(contactJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

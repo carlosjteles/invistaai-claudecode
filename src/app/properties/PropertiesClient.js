@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/Navbar";
@@ -172,10 +171,12 @@ export default function PropertiesClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="properties-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(propertiesJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(propertiesJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -451,25 +452,6 @@ export default function PropertiesClient({
 														>
 															{item.name || item.address}
 														</Link>
-
-														{item.quantity_reviews > 0 && (
-															<div
-																itemProp="aggregateRating"
-																itemScope
-																itemType="https://schema.org/AggregateRating"
-															>
-																<meta
-																	itemProp="ratingValue"
-																	content={item.rating}
-																/>
-																<meta
-																	itemProp="reviewCount"
-																	content={item.quantity_reviews}
-																/>
-																<meta itemProp="bestRating" content="5" />
-																<meta itemProp="worstRating" content="1" />
-															</div>
-														)}
 
 														<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 															<li className="col-6 d-flex align-items-center m-0">

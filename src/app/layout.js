@@ -14,7 +14,7 @@ import { contact } from "./storage/about";
 
 const league = League_Spartan({
 	subsets: ["latin"],
-	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+	weight: ["300", "400", "500", "600", "700", "900"],
 	display: "swap",
 	variable: "--font-league",
 	preload: true,
@@ -157,10 +157,12 @@ export default function RootLayout({ children }) {
                     `}
 				</Script>
 
-				<Script
+				<script
 					id="schema-org"
 					type="application/ld+json"
-					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+					}}
 				/>
 			</head>
 			<body className={league.variable}>
