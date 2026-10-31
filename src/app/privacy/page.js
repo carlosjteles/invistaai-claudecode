@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -92,10 +91,12 @@ export default function Privacy() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="privacy-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(privacyJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(privacyJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

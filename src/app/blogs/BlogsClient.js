@@ -2,7 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/Navbar";
@@ -135,10 +134,12 @@ export default function BlogsClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="blogs-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogsJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(blogsJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

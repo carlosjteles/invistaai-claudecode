@@ -2,7 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import Script from "next/script";
 import dynamic from "next/dynamic";
 
 import PropertyDetailImg from "../../components/PropertyDetailImg";
@@ -22,10 +21,7 @@ const FinancingSimulation = dynamic(
 	{ ssr: false },
 );
 
-const RelatedPropertySlider = dynamic(
-	() => import("../../components/RelatedPropertySlider"),
-	{ ssr: false },
-);
+import RelatedPropertySlider from "../../components/RelatedPropertySlider";
 
 const YoutubeEmbed = dynamic(() => import("../../components/YoutubeEmbed"), {
 	ssr: false,
@@ -40,6 +36,7 @@ import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
 export default function PropertyDetailsClient({
 	propertyData,
 	relatedProperties,
+	updatedLabel,
 }) {
 	const searchParams = useSearchParams();
 	const openGallery = searchParams.get("openGallery");
@@ -83,6 +80,7 @@ export default function PropertyDetailsClient({
 	};
 
 	const brandName = React.useMemo(() => {
+		if (propertyData.seo?.developer) return propertyData.seo.developer;
 		const kw = propertyData.seo?.keywords;
 		if (Array.isArray(kw)) {
 			if (kw.length >= 2) return kw[kw.length - 2];
@@ -135,8 +133,8 @@ export default function PropertyDetailsClient({
 		"@context": "https://schema.org",
 		"@type": "Product",
 		name: propertyData.name || propertyData.address,
-		description: normalizedDescription,
-		image: propertyData.images?.map((img) => img.src) || [],
+		description: normalizedDescription.slice(0, 5000),
+		image: perspectiveImages.slice(0, 10).map((img) => img.src),
 		identifier: propertyData.id,
 		url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 		category:
@@ -218,15 +216,6 @@ export default function PropertyDetailsClient({
 					]
 				: []),
 		].filter(Boolean),
-		...(propertyData.quantity_reviews > 0 && {
-			aggregateRating: {
-				"@type": "AggregateRating",
-				ratingValue: Number(propertyData.rating) || 0,
-				reviewCount: propertyData.quantity_reviews || 0,
-				bestRating: 5,
-				worstRating: 1,
-			},
-		}),
 	};
 
 	const breadcrumbSchema = {
@@ -256,16 +245,20 @@ export default function PropertyDetailsClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="property-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(propertySchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(propertySchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
-			<Script
+			<script
 				id="breadcrumb-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -586,6 +579,12 @@ export default function PropertyDetailsClient({
 										</div>
 									</div>
 								)}
+
+								<p className="text-muted small mt-4 mb-0">
+									{updatedLabel && <>Página atualizada em {updatedLabel}. </>}
+									Responsável: {contact.broker.name}, corretor de imóveis –
+									CRECI {contact.broker.creci}.
+								</p>
 							</div>
 						</div>
 

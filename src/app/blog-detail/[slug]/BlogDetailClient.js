@@ -3,7 +3,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Script from "next/script";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -132,15 +131,19 @@ export default function BlogDetailClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="blog-post-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(blogSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
-			<Script
+			<script
 				id="breadcrumb-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

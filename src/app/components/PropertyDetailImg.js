@@ -61,6 +61,7 @@ export default function PropertyDetailImg({
 						width={0}
 						height={0}
 						sizes="100vw"
+						priority
 						className="img-fluid rounded-3 shadow"
 						alt={firstImage.alt || `Imóvel: vista principal`}
 						itemProp="image"

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 
 import Categories from "./components/Categories";
 import FeaturedProperties from "./components/FeaturedProperties";
@@ -124,15 +123,19 @@ export default function Home() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="homepage-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(homeJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
-			<Script
+			<script
 				id="organization-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

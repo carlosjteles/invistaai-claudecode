@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Script from "next/script";
 
 import Navbar from "../components/Navbar";
 import About from "../components/About";
@@ -120,10 +119,12 @@ export default function AboutUs() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="about-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(aboutJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
