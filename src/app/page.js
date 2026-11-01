@@ -157,14 +157,14 @@ export default function Home() {
 					>
 						<Image
 							src="/images/bg/home.webp"
-							alt={`Investimento imobiliário em São Paulo - ${getSiteName()}`}
+							alt={`Lobby de empreendimento de alto padrão em São Paulo - ${getSiteName()}`}
 							fill
 							priority
 							fetchPriority="high"
-							quality={60}
+							quality={75}
 							sizes="100vw"
 							id="hero-images"
-							className="bg-overlay image-wrap"
+							className="bg-overlay"
 							style={{
 								objectFit: "cover",
 								objectPosition: "center",
