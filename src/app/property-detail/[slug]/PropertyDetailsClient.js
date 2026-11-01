@@ -36,6 +36,7 @@ export default function PropertyDetailsClient({
 	propertyData,
 	relatedProperties,
 	updatedLabel,
+	bairro = null,
 }) {
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
 	const [openGallery, setOpenGallery] = React.useState(false);
@@ -236,13 +237,19 @@ export default function PropertyDetailsClient({
 				name: "Imóveis",
 				item: `${getBaseUrl()}/imoveis`,
 			},
-			{
+			bairro && {
 				"@type": "ListItem",
 				position: 3,
+				name: bairro.nome,
+				item: `${getBaseUrl()}/bairro/${bairro.slug}`,
+			},
+			{
+				"@type": "ListItem",
+				position: bairro ? 4 : 3,
 				name: propertyData.name || propertyData.address,
 				item: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 			},
-		],
+		].filter(Boolean),
 	};
 
 	return (
@@ -289,6 +296,11 @@ export default function PropertyDetailsClient({
 									Imóveis
 								</Link>
 							</li>
+							{bairro && (
+								<li className="breadcrumb-item">
+									<Link href={`/bairro/${bairro.slug}`}>{bairro.nome}</Link>
+								</li>
+							)}
 						</ol>
 					</nav>
 				</div>

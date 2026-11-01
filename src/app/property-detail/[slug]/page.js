@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import PropertyDetailsClient from "./PropertyDetailsClient";
 
@@ -101,6 +101,27 @@ export async function generateMetadata({ params }) {
 	}
 }
 
+async function getRedirect(slug) {
+	try {
+		const rows = await prisma.$queryRaw`
+			select destino from conteudo.redirecionamentos where origem = ${`/imovel/${slug}`} limit 1`;
+		return rows[0]?.destino || null;
+	} catch (e) {
+		return null;
+	}
+}
+
+async function getBairro(neighborhood) {
+	if (!neighborhood) return null;
+	try {
+		const rows = await prisma.$queryRaw`
+			select slug, nome from conteudo.bairros where ativo and ${neighborhood} = any(bairros) order by ordem limit 1`;
+		return rows[0] || null;
+	} catch (e) {
+		return null;
+	}
+}
+
 export default async function PropertyDetails({ params }) {
 	const propertyData = await prisma.property.findUnique({
 		where: { slug: params.slug },
@@ -117,8 +138,13 @@ export default async function PropertyDetails({ params }) {
 	});
 
 	if (!propertyData) {
+		// Imóvel removido: redireciona (308) para a página do bairro ou para /imoveis
+		const destino = await getRedirect(params.slug);
+		if (destino) permanentRedirect(destino);
 		notFound();
 	}
+
+	const bairro = await getBairro(propertyData.neighborhood);
 
 	const relatedInclude = {
 		images: {
@@ -170,6 +196,7 @@ export default async function PropertyDetails({ params }) {
 		<PropertyDetailsClient
 			propertyData={propertyData}
 			relatedProperties={relatedProperties}
+			bairro={bairro}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }

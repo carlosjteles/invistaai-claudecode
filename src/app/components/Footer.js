@@ -133,31 +133,36 @@ export default function Footer({ showImage = false }) {
 									</div>
 
 									<div className="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-										<h2 className="footer-head h5">Guias de bairro</h2>
+										<h2 className="footer-head h5">Imóveis por bairro</h2>
 										<ul className="list-unstyled footer-list mt-4">
 											<li>
-												<Link href="/blog/bairro-moema" className="text-foot">
+												<Link href="/bairro/moema" className="text-foot">
 													<i className="mdi mdi-chevron-right align-middle me-1"></i> Moema
 												</Link>
 											</li>
 											<li>
-												<Link href="/blog/itaim-bibi" className="text-foot">
+												<Link href="/bairro/jardins" className="text-foot">
+													<i className="mdi mdi-chevron-right align-middle me-1"></i> Jardins
+												</Link>
+											</li>
+											<li>
+												<Link href="/bairro/itaim-bibi" className="text-foot">
 													<i className="mdi mdi-chevron-right align-middle me-1"></i> Itaim Bibi
 												</Link>
 											</li>
 											<li>
-												<Link href="/blog/bairro-jardim-europa" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Jardim Europa
+												<Link href="/bairro/vila-nova-conceicao" className="text-foot">
+													<i className="mdi mdi-chevron-right align-middle me-1"></i> Vila Nova Conceição
 												</Link>
 											</li>
 											<li>
-												<Link href="/blog/bairro-brooklin" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Brooklin
+												<Link href="/bairro/pinheiros" className="text-foot">
+													<i className="mdi mdi-chevron-right align-middle me-1"></i> Pinheiros
 												</Link>
 											</li>
 											<li>
-												<Link href="/blog/bairro-perdizes" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Perdizes
+												<Link href="/bairros" className="text-foot">
+													<i className="mdi mdi-chevron-right align-middle me-1"></i> Todos os bairros
 												</Link>
 											</li>
 										</ul>

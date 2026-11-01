@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBaseUrl } from "../helper/utils";
+import prisma from "../../db/prisma";
 
 export const revalidate = 86400;
 
@@ -7,6 +8,13 @@ export async function GET() {
 	const baseUrl = getBaseUrl();
 
 	const today = new Date();
+
+	let bairros = [];
+	try {
+		bairros = await prisma.$queryRaw`select slug from conteudo.bairros where ativo order by ordem`;
+	} catch (e) {
+		bairros = [];
+	}
 
 	const urls = [
 		{
@@ -34,6 +42,16 @@ export async function GET() {
 			changeFrequency: "weekly",
 			priority: 0.6,
 		},
+		{
+			loc: `${baseUrl}/bairros`,
+			changeFrequency: "weekly",
+			priority: 0.8,
+		},
+		...bairros.map((b) => ({
+			loc: `${baseUrl}/bairro/${b.slug}`,
+			changeFrequency: "weekly",
+			priority: 0.8,
+		})),
 		{
 			loc: `${baseUrl}/blogs`,
 			changeFrequency: "monthly",
