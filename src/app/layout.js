@@ -1,4 +1,4 @@
-import { League_Spartan } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
 import "../app/assets/css/bootstrap.purged.css";
 import "../app/assets/scss/style.scss";
@@ -11,12 +11,19 @@ import { getBaseUrl, getSiteName } from "./helper/utils";
 
 import { contact } from "./storage/about";
 
-const league = League_Spartan({
+const heading = Cormorant_Garamond({
 	subsets: ["latin"],
-	weight: ["400", "500", "600", "700", "900"],
+	weight: ["500", "600", "700"],
 	display: "swap",
-	variable: "--font-league",
-	preload: true,
+	variable: "--font-heading",
+	fallback: ["Georgia", "serif"],
+});
+
+const body = Manrope({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	display: "swap",
+	variable: "--font-body",
 	fallback: ["Arial", "sans-serif"],
 });
 
@@ -81,7 +88,7 @@ export const metadata = {
 export const viewport = {
 	width: "device-width",
 	initialScale: 1,
-	themeColor: "#09acf4",
+	themeColor: "#1e3a5f",
 };
 
 export const jsonLd = {
@@ -165,7 +172,7 @@ export default function RootLayout({ children }) {
 					}}
 				/>
 			</head>
-			<body className={league.variable}>
+			<body className={`${heading.variable} ${body.variable}`}>
 				<Providers>
 					<GoogleAnalyticsClient />
 					{children}
