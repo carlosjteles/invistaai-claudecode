@@ -1,0 +1,23 @@
+//
+// alto-padrao.scss: ajustes da identidade alto padrão (azul-marinho + champagne, Cormorant + Manrope)
+//
+.text-accent { color: $accent !important; }
+.bg-accent { background-color: $accent !important; }
+.border-accent { border-color: $accent !important; }
+
+// Títulos de seção com um fio champagne discreto
+.section-title .title::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    margin-top: 12px;
+    background: $accent;
+}
+.section-title.text-center .title::after { margin-left: auto; margin-right: auto; }
+
+// Rodapé: títulos das colunas em champagne
+.footer-head { color: $accent !important; letter-spacing: 0.08em; text-transform: uppercase; font-size: 15px !important; font-family: var(--font-body) !important; }
+
+// Botões com leve espaçamento de letras (padrão das marcas de alto padrão)
+.btn { letter-spacing: 0.02em; }
