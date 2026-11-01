@@ -18,6 +18,10 @@ export default function PropertyDetailImg({
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [open, setIsOpen] = useState(openGallery);
 
+	React.useEffect(() => {
+		if (openGallery) setIsOpen(true);
+	}, [openGallery]);
+
 	const currentImage = images[currentImageIndex];
 	const firstImage = images.find((img, idx) => idx === 0);
 
