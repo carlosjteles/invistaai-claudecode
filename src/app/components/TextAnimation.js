@@ -5,23 +5,28 @@ import { TypeAnimation } from "react-type-animation";
 export default function TextAnimation() {
 	return (
 		<h1 className="heading fw-bold text-white title-dark mb-3">
-			Apartamentos de alto padrão <br />
-			<TypeAnimation
-				sequence={[
-					"em São Paulo", 1800,
-					"nos Jardins", 1800,
-					"em Moema", 1800,
-					"no Itaim Bibi", 1800,
-					"em Pinheiros", 1800,
-					"na Vila Nova Conceição", 1800,
-				]}
-				wrapper="span"
-				speed={40}
-				deletionSpeed={60}
-				repeat={Infinity}
-				className="typewrite text-primary"
-				cursor={false}
-			/>
+			Apartamentos de alto padrão{" "}
+			{/* Linha com altura reservada e sem quebra: a troca dos bairros não empurra o resto da página */}
+			<span
+				className="d-block"
+				style={{ minHeight: "1.25em", whiteSpace: "nowrap" }}
+			>
+				<TypeAnimation
+					sequence={[
+						"em São Paulo", 2500,
+						"nos Jardins", 2500,
+						"em Moema", 2500,
+						"no Itaim Bibi", 2500,
+						"em Pinheiros", 2500,
+					]}
+					wrapper="span"
+					speed={45}
+					deletionSpeed={70}
+					repeat={Infinity}
+					className="typewrite text-primary"
+					cursor={false}
+				/>
+			</span>
 		</h1>
 	);
 }
