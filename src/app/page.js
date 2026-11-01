@@ -161,7 +161,7 @@ export default function Home() {
 							fill
 							priority
 							fetchPriority="high"
-							quality={85}
+							quality={60}
 							sizes="100vw"
 							id="hero-images"
 							className="bg-overlay image-wrap"
