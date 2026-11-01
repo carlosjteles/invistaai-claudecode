@@ -107,7 +107,7 @@ export default function Footer({ showImage = false }) {
 									</div>
 
 									<div className="col-lg-2 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-										<h5 className="footer-head">Imóveis</h5>
+										<h2 className="footer-head h5">Imóveis</h2>
 										<ul className="list-unstyled footer-list mt-4">
 											<li>
 												<Link href="/imoveis" className="text-foot">
@@ -133,7 +133,7 @@ export default function Footer({ showImage = false }) {
 									</div>
 
 									<div className="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-										<h5 className="footer-head">Guias de bairro</h5>
+										<h2 className="footer-head h5">Guias de bairro</h2>
 										<ul className="list-unstyled footer-list mt-4">
 											<li>
 												<Link href="/blog/bairro-moema" className="text-foot">
@@ -164,7 +164,7 @@ export default function Footer({ showImage = false }) {
 									</div>
 
 									<div className="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-										<h5 className="footer-head">Contato</h5>
+										<h2 className="footer-head h5">Contato</h2>
 
 										<div className="d-flex mt-4">
 											<AiOutlineWhatsApp className="fea icon-sm text-primary mt-1 me-3" />
