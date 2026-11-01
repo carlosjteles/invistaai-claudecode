@@ -45,7 +45,7 @@ export default async function FeaturedProperties() {
 			<div className="row justify-content-center">
 				<div className="col">
 					<div className="section-title text-center mb-4 pb-2">
-						<h4 className="title mb-3">Imóveis em destaque</h4>
+						<h2 className="title h4 mb-3">Imóveis em destaque</h2>
 						<p className="text-muted para-desc mb-0 mx-auto">
 							Veja os imóveis em destaque com localização e preço estratégicos.
 						</p>

@@ -33,7 +33,7 @@ export default async function Categories() {
 			<div className="row justify-content-center">
 				<div className="col">
 					<div className="section-title mb-4 pb-2">
-						<h4 className="title mb-3">Categorias de Imóveis</h4>
+						<h2 className="title h4 mb-3">Categorias de Imóveis</h2>
 						<p className="text-muted para-desc mb-0">
 							Navegue por categorias exclusivas e encontre com facilidade o
 							imóvel perfeito para você comprar sem complicação.

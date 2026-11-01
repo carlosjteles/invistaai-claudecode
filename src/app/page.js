@@ -253,11 +253,11 @@ export default function Home() {
 									Selecionamos lançamentos e imóveis prontos de alto padrão das
 									principais incorporadoras de São Paulo e mantemos preço,
 									plantas e prazo de entrega sempre atualizados. Com o{" "}
-									<Link href="/indice-preco-m2" className="text-primary">
+									<Link href="/indice-preco-m2" className="text-primary text-decoration-underline">
 										Índice de preço do m²
 									</Link>{" "}
 									e o{" "}
-									<Link href="/comparar" className="text-primary">
+									<Link href="/comparar" className="text-primary text-decoration-underline">
 										comparador de imóveis
 									</Link>
 									, você vê quanto vale cada bairro e cada projeto antes de
