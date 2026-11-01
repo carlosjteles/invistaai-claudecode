@@ -16,6 +16,13 @@ import { contact } from "./storage/about";
 
 export const revalidate = 300;
 
+export const metadata = {
+	title: `Apartamentos de alto padrão em São Paulo | ${getSiteName()}`,
+	description:
+		"Lançamentos, obras e imóveis prontos de alto padrão em São Paulo, com preço, plantas e entrega atualizados toda semana. Compare projetos e veja o preço do m² por bairro.",
+	alternates: { canonical: getBaseUrl() },
+};
+
 export default function Home() {
 	const homeJsonLd = {
 		"@context": "https://schema.org",
@@ -36,7 +43,7 @@ export default function Home() {
 		},
 		name: "Página Inicial",
 		description:
-			"Uma plataforma inteligente para quem quer comprar imóveis com agilidade, confiança e sem taxas abusivas.",
+			"Apartamentos de alto padrão em São Paulo: lançamentos, obras e prontos selecionados, com preço, plantas e entrega atualizados toda semana.",
 		url: getBaseUrl(),
 		breadcrumb: {
 			"@type": "BreadcrumbList",
@@ -171,8 +178,9 @@ export default function Home() {
 									<div className="title-heading">
 										<TextAnimation />
 										<p className="para-desc text-white title-dark mb-0">
-											Unimos tecnologia e propósito para transformar a sua
-											compra na melhor experiência.
+											Lançamentos, obras e imóveis prontos selecionados pela
+											nossa equipe, com preço, plantas e prazo de entrega
+											atualizados toda semana.
 										</p>
 									</div>
 								</div>
@@ -238,22 +246,29 @@ export default function Home() {
 								<p className="h6 text-primary fw-medium mb-2 mt-0 mx-0">
 									Por que escolher a {getSiteName()}
 								</p>
-								<h4 className="title mb-3">
-									Investimento Imobiliário Humanizado
-								</h4>
-								<p className="text-muted para-desc mb-0">
-									Nossa plataforma une dados de mercado, tecnologia e curadoria
-									criteriosa para entregar comparativos claros e análises
-									fundamentadas. Isso garante decisões de investimento seguras e
-									alinhadas ao seu perfil, seja para diversificação de carteira
-									ou conquista do primeiro imóvel.
+								<h2 className="title h4 mb-3">
+									Investimento imobiliário humanizado
+								</h2>
+								<p className="text-muted para-desc mb-3">
+									Selecionamos lançamentos e imóveis prontos de alto padrão das
+									principais incorporadoras de São Paulo e mantemos preço,
+									plantas e prazo de entrega sempre atualizados. Com o{" "}
+									<Link href="/indice-preco-m2" className="text-primary">
+										Índice de preço do m²
+									</Link>{" "}
+									e o{" "}
+									<Link href="/comparar" className="text-primary">
+										comparador de imóveis
+									</Link>
+									, você vê quanto vale cada bairro e cada projeto antes de
+									decidir.
 								</p>
 
 								<p className="text-muted para-desc mb-0">
-									Mais do que uma plataforma, oferecemos acompanhamento
-									consultivo em todas as etapas: do estudo financeiro ao crédito
-									e documentação. Transparência e resultados reais são a base da
-									confiança que construímos com cada cliente.
+									E você não decide sozinho: um corretor acompanha cada etapa,
+									da visita ao decorado à negociação, à simulação de crédito e à
+									documentação. Para morar ou para investir, a escolha é sua,
+									com todas as informações na mesa.
 								</p>
 
 								<div className="mt-4">
