@@ -21,3 +21,45 @@
 
 // Botões com leve espaçamento de letras (padrão das marcas de alto padrão)
 .btn { letter-spacing: 0.02em; }
+
+// Cards de imóveis: título em até 2 linhas (sem invadir a linha de baixo no celular)
+.property .card-body .title {
+    font-family: var(--font-heading);
+    font-size: 23px !important;
+    font-weight: 600 !important;
+    height: auto;
+    min-height: 2.6em;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+// Ícones de metragem, dormitórios, suítes e vagas maiores e texto mais legível
+.property .card-body ul li svg {
+    font-size: 24px !important;
+    margin-right: 10px !important;
+    flex-shrink: 0;
+}
+.property .card-body ul.row > li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.property .card-body ul li > span {
+    display: flex;
+    align-items: center;
+}
+.property .card-body ul li small {
+    font-size: 15px;
+    font-weight: 500;
+    color: $dark !important;
+}
+
+// Títulos menores no celular (os tamanhos do tema eram fixos para desktop)
+@media (max-width: 767.98px) {
+    h1, .h1, .fs-1 { font-size: 32px !important; }
+    h2, .h2, .fs-2 { font-size: 28px !important; }
+    h3, .h3, .fs-3 { font-size: 24px !important; }
+    h4, .h4, .fs-4 { font-size: 22px !important; }
+    .title-heading .heading { font-size: 34px !important; line-height: 1.2; }
+}
