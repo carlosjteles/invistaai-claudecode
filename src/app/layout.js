@@ -66,10 +66,6 @@ export const metadata = {
 	alternates: {
 		canonical: `${getBaseUrl()}`,
 	},
-	viewport: {
-		width: "device-width",
-		initialScale: 1,
-	},
 	icons: {
 		icon: "/images/favicon.ico",
 		shortcut: "/images/favicon-16x16.png",
@@ -81,6 +77,11 @@ export const metadata = {
 			sizes: "32x32",
 		},
 	},
+};
+
+export const viewport = {
+	width: "device-width",
+	initialScale: 1,
 	themeColor: "#09acf4",
 };
 

@@ -7,7 +7,9 @@ const nextConfig = {
 		includePaths: [path.join(__dirname, "styles")],
 	},
 	images: {
-		domains: ["deolsoahklnyjahujmdh.supabase.co"],
+		remotePatterns: [
+			{ protocol: "https", hostname: "deolsoahklnyjahujmdh.supabase.co" },
+		],
 		// Otimização ligada só onde a imagem não leva a prop `unoptimized`
 		// (cards de imóveis, hero e fotos da home). Galerias seguem no original.
 		deviceSizes: [640, 828, 1080, 1600, 1920],

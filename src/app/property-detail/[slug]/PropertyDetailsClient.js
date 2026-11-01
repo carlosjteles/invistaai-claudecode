@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import PropertyDetailImg from "../../components/PropertyDetailImg";
@@ -38,8 +37,11 @@ export default function PropertyDetailsClient({
 	relatedProperties,
 	updatedLabel,
 }) {
-	const searchParams = useSearchParams();
-	const openGallery = searchParams.get("openGallery");
+	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
+	const [openGallery, setOpenGallery] = React.useState(false);
+	React.useEffect(() => {
+		setOpenGallery(Boolean(new URLSearchParams(window.location.search).get("openGallery")));
+	}, []);
 
 	const [activeTab, setActiveTab] = React.useState("plantas");
 
