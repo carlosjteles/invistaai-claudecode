@@ -12,6 +12,7 @@ import { formatDate, formatDateISO } from "../../helper/formatter";
 import { getBaseUrl, getSiteName } from "../../helper/utils";
 
 import Swal from "sweetalert2";
+import Mdi from "../../components/Mdi";
 
 export default function BlogDetailClient({
 	blogPost,
@@ -289,7 +290,7 @@ export default function BlogDetailClient({
 													className="text-center mx-auto blockquote"
 													key={idx}
 												>
-													<i className="mdi mdi-format-quote-open mdi-48px text-muted opacity-2 d-block"></i>
+													<Mdi n="format-quote-open" className="text-muted opacity-2 d-block" style={{ fontSize: 48 }} />
 													{item.value}
 													{item.author && (
 														<small className="d-block text-muted mt-2">
@@ -436,7 +437,7 @@ export default function BlogDetailClient({
 																		aria-label={`Ler mais sobre ${item.title}`}
 																	>
 																		Leia Mais{" "}
-																		<i className="mdi mdi-chevron-right align-middle"></i>
+																		<Mdi n="chevron-right" className="align-middle" />
 																	</Link>
 																</div>
 															</div>

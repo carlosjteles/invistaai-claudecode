@@ -1,4 +1,5 @@
 import React from "react";
+import Mdi from "./Mdi";
 
 export default function Pagination({
 	currentPage,
@@ -27,7 +28,7 @@ export default function Pagination({
 							aria-label="Anterior"
 						>
 							<span aria-hidden="true">
-								<i className="mdi mdi-chevron-left fs-6"></i>
+								<Mdi n="chevron-left" className="fs-6" />
 							</span>
 						</button>
 					</li>
@@ -90,7 +91,7 @@ export default function Pagination({
 							aria-label="Próximo"
 						>
 							<span aria-hidden="true">
-								<i className="mdi mdi-chevron-right fs-6"></i>
+								<Mdi n="chevron-right" className="fs-6" />
 							</span>
 						</button>
 					</li>

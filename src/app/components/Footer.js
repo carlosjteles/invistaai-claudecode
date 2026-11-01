@@ -16,6 +16,7 @@ import { contact } from "../storage/about";
 
 import { formatPhone } from "../helper/formatter";
 import { getSiteName } from "../helper/utils";
+import Mdi from "./Mdi";
 
 export default function Footer({ showImage = false }) {
 	const hasSocial = contact.social && Object.keys(contact.social).length > 0;
@@ -111,27 +112,27 @@ export default function Footer({ showImage = false }) {
 										<ul className="list-unstyled footer-list mt-4">
 											<li>
 												<Link href="/imoveis" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Todos os imóveis
+													<Mdi n="chevron-right" className="align-middle me-1" /> Todos os imóveis
 												</Link>
 											</li>
 											<li>
 												<Link href="/lancamentos" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Lançamentos
+													<Mdi n="chevron-right" className="align-middle me-1" /> Lançamentos
 												</Link>
 											</li>
 											<li>
 												<Link href="/indice-preco-m2" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Preço do m² por bairro
+													<Mdi n="chevron-right" className="align-middle me-1" /> Preço do m² por bairro
 												</Link>
 											</li>
 											<li>
 												<Link href="/comparar" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Comparar imóveis
+													<Mdi n="chevron-right" className="align-middle me-1" /> Comparar imóveis
 												</Link>
 											</li>
 											<li>
 												<Link href="/incorporadoras" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Por incorporadora
+													<Mdi n="chevron-right" className="align-middle me-1" /> Por incorporadora
 												</Link>
 											</li>
 										</ul>
@@ -142,32 +143,32 @@ export default function Footer({ showImage = false }) {
 										<ul className="list-unstyled footer-list mt-4">
 											<li>
 												<Link href="/bairro/moema" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Moema
+													<Mdi n="chevron-right" className="align-middle me-1" /> Moema
 												</Link>
 											</li>
 											<li>
 												<Link href="/bairro/jardins" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Jardins
+													<Mdi n="chevron-right" className="align-middle me-1" /> Jardins
 												</Link>
 											</li>
 											<li>
 												<Link href="/bairro/itaim-bibi" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Itaim Bibi
+													<Mdi n="chevron-right" className="align-middle me-1" /> Itaim Bibi
 												</Link>
 											</li>
 											<li>
 												<Link href="/bairro/vila-nova-conceicao" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Vila Nova Conceição
+													<Mdi n="chevron-right" className="align-middle me-1" /> Vila Nova Conceição
 												</Link>
 											</li>
 											<li>
 												<Link href="/bairro/pinheiros" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Pinheiros
+													<Mdi n="chevron-right" className="align-middle me-1" /> Pinheiros
 												</Link>
 											</li>
 											<li>
 												<Link href="/bairros" className="text-foot">
-													<i className="mdi mdi-chevron-right align-middle me-1"></i> Todos os bairros
+													<Mdi n="chevron-right" className="align-middle me-1" /> Todos os bairros
 												</Link>
 											</li>
 										</ul>

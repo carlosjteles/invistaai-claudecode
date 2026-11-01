@@ -6,6 +6,7 @@ import prisma from "../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 import { formatDateISO } from "../helper/formatter";
+import Mdi from "./Mdi";
 
 export default async function Blog() {
 	const recentData = await prisma.blog.findMany({
@@ -134,7 +135,7 @@ export default async function Blog() {
 											aria-label={`Ler o artigo completo: ${item.title}`}
 										>
 											Leia mais{" "}
-											<i className="mdi mdi-chevron-right align-middle"></i>
+											<Mdi n="chevron-right" className="align-middle" />
 										</Link>
 
 										<div

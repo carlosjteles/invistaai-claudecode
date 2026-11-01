@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
+import Mdi from "./Mdi";
 
 /** Card de imóvel (mesmo visual dos cards da home e da lista), para páginas renderizadas no servidor. */
 export default function PropertyCard({ item }) {
@@ -54,13 +55,13 @@ export default function PropertyCard({ item }) {
 				<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 					<li className="col-6 d-flex align-items-center m-0">
 						<span>
-							<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary" aria-hidden="true"></i>
+							<Mdi n="arrow-expand-all" className="fs-5 me-2 text-primary" />
 							<small className="text-muted">{item.preview?.area}</small>
 						</span>
 					</li>
 					<li className="col-6 d-flex align-items-center m-0">
 						<span>
-							<i className="mdi mdi-bed fs-5 me-2 text-primary" aria-hidden="true"></i>
+							<Mdi n="bed" className="fs-5 me-2 text-primary" />
 							<small className="text-muted">{item.preview?.bedroom}</small>
 						</span>
 					</li>
@@ -68,13 +69,13 @@ export default function PropertyCard({ item }) {
 				<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 					<li className="col-6 d-flex align-items-center m-0">
 						<span>
-							<i className="mdi mdi-shower fs-5 me-2 text-primary" aria-hidden="true"></i>
+							<Mdi n="shower" className="fs-5 me-2 text-primary" />
 							<small className="text-muted">{item.preview?.suite}</small>
 						</span>
 					</li>
 					<li className="col-6 d-flex align-items-center m-0">
 						<span>
-							<i className="mdi mdi-car fs-5 me-2 text-primary" aria-hidden="true"></i>
+							<Mdi n="car" className="fs-5 me-2 text-primary" />
 							<small className="text-muted">{item.preview?.parking}</small>
 						</span>
 					</li>

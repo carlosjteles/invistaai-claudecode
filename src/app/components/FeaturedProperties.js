@@ -7,6 +7,7 @@ import { formatPrice } from "../helper/formatter";
 import { getBaseUrl } from "../helper/utils";
 
 import prisma from "../../db/prisma";
+import Mdi from "./Mdi";
 
 export const revalidate = 300;
 
@@ -132,10 +133,7 @@ export default async function FeaturedProperties() {
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
 											>
-												<i
-													className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
-													aria-hidden="true"
-												></i>
+												<Mdi n="arrow-expand-all" className="fs-5 me-2 text-primary" />
 												<small className="text-muted">
 													{item.preview.area}
 												</small>
@@ -145,10 +143,7 @@ export default async function FeaturedProperties() {
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
 											>
-												<i
-													className="mdi mdi-bed fs-5 me-2 text-primary"
-													aria-hidden="true"
-												></i>
+												<Mdi n="bed" className="fs-5 me-2 text-primary" />
 												<small className="text-muted">
 													{item.preview.bedroom}
 												</small>
@@ -159,10 +154,7 @@ export default async function FeaturedProperties() {
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
 											>
-												<i
-													className="mdi mdi-shower fs-5 me-2 text-primary"
-													aria-hidden="true"
-												></i>
+												<Mdi n="shower" className="fs-5 me-2 text-primary" />
 												<small className="text-muted">
 													{item.preview.suite}
 												</small>
@@ -172,10 +164,7 @@ export default async function FeaturedProperties() {
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
 											>
-												<i
-													className="mdi mdi-car fs-5 me-2 text-primary"
-													aria-hidden="true"
-												></i>
+												<Mdi n="car" className="fs-5 me-2 text-primary" />
 												<small className="text-muted">
 													{item.preview.parking}
 												</small>
@@ -209,7 +198,7 @@ export default async function FeaturedProperties() {
 					<div className="text-center">
 						<Link href="/imoveis" className="mt-3 fs-6 text-primary">
 							Veja mais opções{" "}
-							<i className="mdi mdi-arrow-right align-middle"></i>
+							<Mdi n="arrow-right" className="align-middle" />
 						</Link>
 					</div>
 				</div>
