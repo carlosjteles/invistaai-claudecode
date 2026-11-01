@@ -120,6 +120,7 @@ export default function BuildingDocumentsSlider({ images }) {
 											aria-label={`Ver imagem: ${item.alt}`}
 										>
 											<Image
+												unoptimized
 												src={item.src}
 												width={0}
 												height={0}

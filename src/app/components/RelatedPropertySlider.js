@@ -80,7 +80,8 @@ export default function RelatedPropertySlider({ propertyData }) {
 										src={thumbnail.src}
 										width={0}
 										height={0}
-										sizes="100vw"
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
+										quality={70}
 										className="img-fluid"
 										alt={thumbnail.alt}
 									/>
