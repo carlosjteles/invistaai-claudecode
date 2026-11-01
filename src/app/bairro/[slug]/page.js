@@ -24,7 +24,7 @@ const lista = (itens) => (itens.length <= 1 ? itens.join("") : `${itens.slice(0,
 async function getBairro(slug) {
 	try {
 		const rows = await prisma.$queryRaw`
-			select slug, nome, prep, bairros, guia_slug, intro from conteudo.bairros where slug = ${slug} and ativo limit 1`;
+			select slug, nome, prep, bairros, extras, guia_slug, intro from conteudo.bairros where slug = ${slug} and ativo limit 1`;
 		return rows[0] || null;
 	} catch (e) {
 		console.error("bairro:", e);
@@ -57,7 +57,10 @@ async function getDados(slug) {
 	if (!bairro) return null;
 	const [imoveis, indice, outros] = await Promise.all([
 		prisma.property.findMany({
-			where: { neighborhood: { in: bairro.bairros }, images: { some: {} } },
+			where: {
+				OR: [{ neighborhood: { in: bairro.bairros } }, { slug: { in: bairro.extras || [] } }],
+				images: { some: {} },
+			},
 			include: { images: { where: { thumbnail: true }, select: { src: true, alt: true }, take: 1 } },
 			orderBy: [{ category: "asc" }, { price: "desc" }],
 		}),
