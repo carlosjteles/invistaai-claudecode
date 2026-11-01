@@ -1,6 +1,6 @@
 import { League_Spartan } from "next/font/google";
 import Script from "next/script";
-import "bootstrap/dist/css/bootstrap.css";
+import "../app/assets/css/bootstrap.purged.css";
 import "../app/assets/scss/style.scss";
 import "../app/assets/css/materialdesignicons.min.css";
 
