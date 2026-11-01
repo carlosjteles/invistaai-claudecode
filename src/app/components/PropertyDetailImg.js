@@ -57,6 +57,7 @@ export default function PropertyDetailImg({
 					aria-label={`Ver imagem: ${firstImage.alt}`}
 				>
 					<Image
+						unoptimized
 						src={firstImage.src}
 						width={0}
 						height={0}
@@ -86,6 +87,7 @@ export default function PropertyDetailImg({
 								aria-label={`Ver imagem: ${img.alt || `Vista ${idx + 2}`}`}
 							>
 								<Image
+									unoptimized
 									src={img.src}
 									width={0}
 									height={0}

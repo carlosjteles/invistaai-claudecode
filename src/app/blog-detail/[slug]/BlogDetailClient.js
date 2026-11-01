@@ -252,6 +252,7 @@ export default function BlogDetailClient({
 								{blogPost.image && (
 									<figure>
 										<Image
+											unoptimized
 											src={blogPost.image}
 											width={0}
 											height={0}
@@ -312,6 +313,7 @@ export default function BlogDetailClient({
 										if (item.type === "image" && item.src) {
 											return (
 												<Image
+													unoptimized
 													src={item.src}
 													width={0}
 													height={0}
@@ -384,6 +386,7 @@ export default function BlogDetailClient({
 															<div className="card-img blog-image position-relative overflow-hidden rounded-0">
 																<div className="position-relative overflow-hidden">
 																	<Image
+																		unoptimized
 																		src={imgSrc}
 																		width={0}
 																		height={0}
@@ -540,6 +543,7 @@ export default function BlogDetailClient({
 															/>
 
 															<Image
+																unoptimized
 																src={imgSrc}
 																width={105}
 																height={65}
