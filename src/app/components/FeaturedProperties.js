@@ -89,7 +89,7 @@ export default async function FeaturedProperties() {
 											width={0}
 											height={0}
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
-											quality={70}
+											quality={60}
 											className="img-fluid"
 											alt={thumbnail.alt}
 										/>
