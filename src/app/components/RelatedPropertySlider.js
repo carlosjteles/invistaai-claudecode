@@ -67,17 +67,12 @@ export default function RelatedPropertySlider({ propertyData }) {
 						itemType="https://schema.org/ListItem"
 					>
 						<meta itemProp="position" content={index + 1} />
+						<meta itemProp="url" content={`${getBaseUrl()}/imovel/${item.slug}`} />
+						<meta itemProp="name" content={item.name} />
 
 						<div
 							className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2"
-							itemScope
-							itemType="https://schema.org/RealEstateListing"
 						>
-							<meta itemProp="identifier" content={item.id} />
-							<meta
-								itemProp="url"
-								content={`${getBaseUrl()}/imovel/${item.slug}`}
-							/>
 
 							{thumbnail && (
 								<div className="property-image position-relative overflow-hidden shadow">
@@ -88,7 +83,6 @@ export default function RelatedPropertySlider({ propertyData }) {
 										sizes="100vw"
 										className="img-fluid"
 										alt={thumbnail.alt}
-										itemProp="image"
 									/>
 									<ul className="list-unstyled property-icon">
 										<li>
@@ -121,40 +115,19 @@ export default function RelatedPropertySlider({ propertyData }) {
 								<Link
 									href={`/imovel/${item.slug}`}
 									className="title fs-5 text-dark fw-medium"
-									itemProp="name"
 								>
 									{item.name || item.address}
 								</Link>
 
-								<div
-									itemProp="itemReviewed"
-									itemScope
-									itemType="https://schema.org/Product"
-								>
-									<meta itemProp="name" content={item.name} />
-									<meta
-										itemProp="url"
-										content={`https://www.invistaai.com/imovel/${item.slug}`}
-									/>
-
-									{thumbnail && (
-										<meta itemProp="image" content={thumbnail.src} />
-									)}
-
-								</div>
 
 								<div
-									itemProp="accommodationFeature"
-									itemScope
-									itemType="https://schema.org/QuantitativeValue"
 								>
 									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 										<li className="col-6 d-flex align-items-center m-0">
 											<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-											<small className="text-muted" itemProp="value">
+											<small className="text-muted">
 												{item.preview?.area}
 											</small>
-											<meta itemProp="unitText" content="m²" />
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
@@ -162,7 +135,6 @@ export default function RelatedPropertySlider({ propertyData }) {
 											<small className="text-muted">
 												{item.preview?.bedroom}
 											</small>
-											<meta itemProp="unitText" content="bedroom" />
 										</li>
 									</ul>
 									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
@@ -171,7 +143,6 @@ export default function RelatedPropertySlider({ propertyData }) {
 											<small className="text-muted">
 												{item.preview?.suite}
 											</small>
-											<meta itemProp="unitText" content="bathroom" />
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
@@ -179,7 +150,6 @@ export default function RelatedPropertySlider({ propertyData }) {
 											<small className="text-muted">
 												{item.preview?.parking}
 											</small>
-											<meta itemProp="unitText" content="parkingSpace" />
 										</li>
 									</ul>
 								</div>
@@ -189,20 +159,11 @@ export default function RelatedPropertySlider({ propertyData }) {
 										<span className="text-muted">Preço</span>
 										<p
 											className="fw-medium mb-0"
-											itemProp="offers"
-											itemScope
-											itemType="https://schema.org/Offer"
 										>
 											{item.price === 0 ? (
 												"Consulte"
 											) : (
 												<>
-													<meta itemProp="priceCurrency" content="BRL" />
-													<meta itemProp="price" content={item.price} />
-													<span
-														itemProp="availability"
-														content="https://schema.org/InStock"
-													></span>
 													{formatPrice(item.price)}
 												</>
 											)}
@@ -216,7 +177,7 @@ export default function RelatedPropertySlider({ propertyData }) {
 			});
 
 	return (
-		<div className="row">
+		<div className="row" itemScope itemType="https://schema.org/ItemList">
 			<meta itemProp="name" content="Imóveis Relacionados" />
 			<meta itemProp="numberOfItems" content={propertyData.length} />
 			<meta itemProp="itemListOrder" content="Unordered" />

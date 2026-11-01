@@ -65,11 +65,6 @@ export default async function FeaturedProperties() {
 				{propertyData.map((item, index) => {
 					const thumbnail = item.images?.[0] || null;
 					const itemUrl = `${getBaseUrl()}/imovel/${item.slug}`;
-					const imageUrl =
-						thumbnail &&
-						(thumbnail.src.startsWith("http")
-							? thumbnail.src
-							: `${getBaseUrl()}${thumbnail.src}`);
 
 					return (
 						<div
@@ -80,17 +75,12 @@ export default async function FeaturedProperties() {
 							itemType="https://schema.org/ListItem"
 						>
 							<meta itemProp="position" content={index + 1} />
-							<meta itemProp="item" content={itemUrl} />
+							<meta itemProp="url" content={itemUrl} />
+							<meta itemProp="name" content={item.name} />
 
 							<div
 								className="card property border-0 shadow position-relative overflow-hidden rounded-3"
-								itemScope
-								itemType="https://schema.org/Product"
 							>
-								<meta itemProp="identifier" content={item.id} />
-								<meta itemProp="url" content={itemUrl} />
-								<meta itemProp="name" content={item.name} />
-								{imageUrl && <meta itemProp="image" content={imageUrl} />}
 
 								{thumbnail && (
 									<div className="property-image position-relative overflow-hidden shadow">
@@ -101,7 +91,6 @@ export default async function FeaturedProperties() {
 											sizes="100vw"
 											className="img-fluid"
 											alt={thumbnail.alt}
-											itemProp="image"
 										/>
 										<ul className="list-unstyled property-icon">
 											<li>
@@ -134,7 +123,6 @@ export default async function FeaturedProperties() {
 									<Link
 										href={`/imovel/${item.slug}`}
 										className="title fs-5 text-dark fw-medium"
-										itemProp="name"
 									>
 										{item.name}
 									</Link>
@@ -142,27 +130,19 @@ export default async function FeaturedProperties() {
 									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
-												itemProp="additionalProperty"
-												itemScope
-												itemType="https://schema.org/PropertyValue"
 											>
 												<i
 													className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"
 													aria-hidden="true"
 												></i>
-												<small className="text-muted" itemProp="value">
+												<small className="text-muted">
 													{item.preview.area}
 												</small>
-												<meta itemProp="name" content="Área Total" />
-												<meta itemProp="unitText" content="m²" />
 											</span>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
-												itemProp="additionalProperty"
-												itemScope
-												itemType="https://schema.org/PropertyValue"
 											>
 												<i
 													className="mdi mdi-bed fs-5 me-2 text-primary"
@@ -171,17 +151,12 @@ export default async function FeaturedProperties() {
 												<small className="text-muted">
 													{item.preview.bedroom}
 												</small>
-												<meta itemProp="name" content="Quartos" />
-												<meta itemProp="value" content={item.preview.bedroom} />
 											</span>
 										</li>
 									</ul>
 									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
-												itemProp="additionalProperty"
-												itemScope
-												itemType="https://schema.org/PropertyValue"
 											>
 												<i
 													className="mdi mdi-shower fs-5 me-2 text-primary"
@@ -190,16 +165,11 @@ export default async function FeaturedProperties() {
 												<small className="text-muted">
 													{item.preview.suite}
 												</small>
-												<meta itemProp="name" content="Banheiros" />
-												<meta itemProp="value" content={item.preview.suite} />
 											</span>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
 											<span
-												itemProp="additionalProperty"
-												itemScope
-												itemType="https://schema.org/PropertyValue"
 											>
 												<i
 													className="mdi mdi-car fs-5 me-2 text-primary"
@@ -208,8 +178,6 @@ export default async function FeaturedProperties() {
 												<small className="text-muted">
 													{item.preview.parking}
 												</small>
-												<meta itemProp="name" content="Vagas de Garagem" />
-												<meta itemProp="value" content={item.preview.parking} />
 											</span>
 										</li>
 									</ul>
@@ -219,20 +187,11 @@ export default async function FeaturedProperties() {
 											<span className="text-muted">Preço</span>
 											<p
 												className="fw-medium mb-0"
-												itemProp="offers"
-												itemScope
-												itemType="https://schema.org/Offer"
 											>
 												{item.price === 0 ? (
 													"Consulte"
 												) : (
 													<>
-														<meta itemProp="priceCurrency" content="BRL" />
-														<meta itemProp="price" content={item.price} />
-														<meta
-															itemProp="availability"
-															content="https://schema.org/InStock"
-														/>
 														{formatPrice(item.price)}
 													</>
 												)}
