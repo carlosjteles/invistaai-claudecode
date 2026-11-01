@@ -2,7 +2,6 @@ import { League_Spartan } from "next/font/google";
 import Script from "next/script";
 import "../app/assets/css/bootstrap.purged.css";
 import "../app/assets/scss/style.scss";
-import "../app/assets/css/materialdesignicons.min.css";
 
 import GoogleAnalyticsClient from "./components/GoogleAnalyticsClient";
 
@@ -145,9 +144,9 @@ export default function RootLayout({ children }) {
 					src={`https://www.googletagmanager.com/gtag/js?id=${
 						process.env.NEXT_PUBLIC_GA_ID || "G-4BELWMGKF8"
 					}`}
-					strategy="afterInteractive"
+					strategy="lazyOnload"
 				/>
-				<Script id="gtag-init" strategy="afterInteractive">
+				<Script id="gtag-init" strategy="lazyOnload">
 					{`
                         window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}

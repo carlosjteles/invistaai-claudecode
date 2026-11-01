@@ -16,6 +16,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { contact } from "../storage/about";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
+import Mdi from "../components/Mdi";
 
 export const revalidate = 300;
 
@@ -316,7 +317,7 @@ export default function AboutUs() {
 										<meta itemProp="contactType" content="customer service" />
 										<meta itemProp="telephone" content={`+${contact.phone}`} />
 										Fale com um consultor{" "}
-										<i className="mdi mdi-arrow-right align-middle"></i>
+										<Mdi n="arrow-right" className="align-middle" />
 									</Link>
 								</div>
 							</div>

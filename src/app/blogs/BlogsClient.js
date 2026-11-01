@@ -11,6 +11,7 @@ import Pagination from "../components/Pagination";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 import { formatDate, formatDateISO } from "../helper/formatter";
+import Mdi from "../components/Mdi";
 
 export default function BlogsClient({
 	blogs,
@@ -307,7 +308,7 @@ export default function BlogsClient({
 																className="text-dark read-more"
 															>
 																Leia mais{" "}
-																<i className="mdi mdi-chevron-right align-middle"></i>
+																<Mdi n="chevron-right" className="align-middle" />
 															</Link>
 														</div>
 													</div>

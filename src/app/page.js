@@ -13,6 +13,7 @@ import TextAnimation from "./components/TextAnimation";
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
 import { contact } from "./storage/about";
+import Mdi from "./components/Mdi";
 
 export const revalidate = 300;
 
@@ -274,7 +275,7 @@ export default function Home() {
 								<div className="mt-4">
 									<Link href="/sobre" className="btn btn-pills btn-primary">
 										Saiba Mais{" "}
-										<i className="mdi mdi-arrow-right align-middle"></i>
+										<Mdi n="arrow-right" className="align-middle" />
 									</Link>
 								</div>
 							</div>

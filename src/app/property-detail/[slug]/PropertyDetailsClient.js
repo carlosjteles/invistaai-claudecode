@@ -31,6 +31,7 @@ import { contact } from "../../storage/about";
 
 import { formatPrice } from "../../helper/formatter";
 import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
+import Mdi from "../../components/Mdi";
 
 export default function PropertyDetailsClient({
 	propertyData,
@@ -337,10 +338,7 @@ export default function PropertyDetailsClient({
 								<ul className="list-unstyled row align-items-center justify-content-between mb-0 py-3">
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-arrow-expand-all fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="arrow-expand-all" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.area}</small>
 											</span>
@@ -349,10 +347,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-bed fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="bed" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.bedroom}</small>
 											</span>
@@ -361,10 +356,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-shower fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="shower" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.suite}</small>
 											</span>
@@ -373,10 +365,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-car fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="car" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.parking}</small>
 											</span>
@@ -488,22 +477,13 @@ export default function PropertyDetailsClient({
 																m²
 															</th>
 															<th scope="col" aria-label="Quartos">
-																<i
-																	className="mdi mdi-bed fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="bed" className="fs-5 me-2 text-muted" />
 															</th>
 															<th scope="col" aria-label="Banheiros">
-																<i
-																	className="mdi mdi-shower fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="shower" className="fs-5 me-2 text-muted" />
 															</th>
 															<th scope="col" aria-label="Vagas de Garagem">
-																<i
-																	className="mdi mdi-car fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="car" className="fs-5 me-2 text-muted" />
 															</th>
 														</tr>
 													</thead>

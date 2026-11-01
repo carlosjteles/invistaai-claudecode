@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getSiteName } from "../helper/utils";
+import Mdi from "./Mdi";
 
 export default function GetInTouch() {
 	return (
@@ -34,10 +35,7 @@ export default function GetInTouch() {
 							itemProp="url"
 						>
 							Fale com um consultor{" "}
-							<i
-								className="mdi mdi-arrow-right align-middle"
-								aria-hidden="true"
-							></i>
+							<Mdi n="arrow-right" className="align-middle" />
 						</Link>
 					</div>
 				</div>

@@ -11,6 +11,7 @@ import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
 
 import { formatPrice } from "../helper/formatter";
 import { getBaseUrl } from "../helper/utils";
+import Mdi from "./Mdi";
 
 const settings = {
 	container: ".tiny-slide-three",
@@ -23,8 +24,8 @@ const settings = {
 	autoplayTimeout: 3000,
 	navPosition: "bottom",
 	controlsText: [
-		'<i class="mdi mdi-chevron-left "></i>',
-		'<i class="mdi mdi-chevron-right"></i>',
+		'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/></svg>',
+		'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>',
 	],
 	nav: false,
 	speed: 400,
@@ -125,14 +126,14 @@ export default function RelatedPropertySlider({ propertyData }) {
 								>
 									<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
 										<li className="col-6 d-flex align-items-center m-0">
-											<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
+											<Mdi n="arrow-expand-all" className="fs-5 me-2 text-primary" />
 											<small className="text-muted">
 												{item.preview?.area}
 											</small>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
-											<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
+											<Mdi n="bed" className="fs-5 me-2 text-primary" />
 											<small className="text-muted">
 												{item.preview?.bedroom}
 											</small>
@@ -140,14 +141,14 @@ export default function RelatedPropertySlider({ propertyData }) {
 									</ul>
 									<ul className="list-unstyled pb-3 pt-0 border-bottom row">
 										<li className="col-6 d-flex align-items-center m-0">
-											<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
+											<Mdi n="shower" className="fs-5 me-2 text-primary" />
 											<small className="text-muted">
 												{item.preview?.suite}
 											</small>
 										</li>
 
 										<li className="col-6 d-flex align-items-center m-0">
-											<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
+											<Mdi n="car" className="fs-5 me-2 text-primary" />
 											<small className="text-muted">
 												{item.preview?.parking}
 											</small>
