@@ -37,6 +37,7 @@ export default function PropertyDetailsClient({
 	relatedProperties,
 	updatedLabel,
 	bairro = null,
+	incorporadora = null,
 }) {
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
 	const [openGallery, setOpenGallery] = React.useState(false);
@@ -312,6 +313,27 @@ export default function PropertyDetailsClient({
 								<h1 className="title mb-0">
 									{propertyData.name || propertyData.address}
 								</h1>
+								{(incorporadora || bairro) && (
+									<p className="text-muted mb-0 mt-1">
+										{incorporadora && (
+											<>
+												Incorporadora{" "}
+												<Link href={`/incorporadora/${incorporadora.slug}`} className="text-primary">
+													{incorporadora.nome}
+												</Link>
+											</>
+										)}
+										{incorporadora && bairro && " · "}
+										{bairro && (
+											<>
+												Mais imóveis{" "}
+												<Link href={`/bairro/${bairro.slug}`} className="text-primary">
+													{bairro.prep || bairro.nome}
+												</Link>
+											</>
+										)}
+									</p>
+								)}
 								<ul className="list-unstyled row align-items-center justify-content-between mb-0 py-3">
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">

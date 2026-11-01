@@ -129,6 +129,11 @@ export default function Footer({ showImage = false }) {
 													<i className="mdi mdi-chevron-right align-middle me-1"></i> Comparar imóveis
 												</Link>
 											</li>
+											<li>
+												<Link href="/incorporadoras" className="text-foot">
+													<i className="mdi mdi-chevron-right align-middle me-1"></i> Por incorporadora
+												</Link>
+											</li>
 										</ul>
 									</div>
 

@@ -24,9 +24,9 @@ async function getBairros() {
 		return await prisma.$queryRaw`
 			with ult as (select max(mes) mes from orulo.indice_m2)
 			select b.slug, b.nome, b.intro[1] as resumo,
-				(select count(*)::int from "Property" p where p.neighborhood = any(b.bairros)
+				(select count(*)::int from "Property" p where (p.neighborhood = any(b.bairros) or p.slug = any(b.extras))
 					and exists (select 1 from "PropertyImage" i where i."propertyId" = p.id)) as imoveis,
-				(select min(nullif(p.price, 0))::float from "Property" p where p.neighborhood = any(b.bairros)
+				(select min(nullif(p.price, 0))::float from "Property" p where (p.neighborhood = any(b.bairros) or p.slug = any(b.extras))
 					and exists (select 1 from "PropertyImage" i where i."propertyId" = p.id)) as preco_min,
 				(select i.mediana::float from orulo.indice_m2 i where i.mes = (select mes from ult) and i.bairro = any(b.bairros)
 					order by i.n desc limit 1) as m2
