@@ -363,6 +363,18 @@ export default function Navbar({
 							</li>
 
 							<li>
+								<Link href="/indice-preco-m2" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Preço do m²</span>
+								</Link>
+							</li>
+
+							<li>
+								<Link href="/comparar" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Comparar</span>
+								</Link>
+							</li>
+
+							<li>
 								<Link href="/blogs" className="sub-menu-item" itemProp="url">
 									<span itemProp="name">Notícias</span>
 								</Link>
