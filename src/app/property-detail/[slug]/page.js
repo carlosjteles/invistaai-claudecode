@@ -115,7 +115,18 @@ async function getBairro(neighborhood) {
 	if (!neighborhood) return null;
 	try {
 		const rows = await prisma.$queryRaw`
-			select slug, nome from conteudo.bairros where ativo and ${neighborhood} = any(bairros) order by ordem limit 1`;
+			select slug, nome, prep from conteudo.bairros where ativo and ${neighborhood} = any(bairros) order by ordem limit 1`;
+		return rows[0] || null;
+	} catch (e) {
+		return null;
+	}
+}
+
+async function getIncorporadora(nome) {
+	if (!nome) return null;
+	try {
+		const rows = await prisma.$queryRaw`
+			select slug, nome from conteudo.incorporadoras where ativo and nome = ${nome} limit 1`;
 		return rows[0] || null;
 	} catch (e) {
 		return null;
@@ -145,6 +156,7 @@ export default async function PropertyDetails({ params }) {
 	}
 
 	const bairro = await getBairro(propertyData.neighborhood);
+	const incorporadora = await getIncorporadora(propertyData.seo?.developer);
 
 	const relatedInclude = {
 		images: {
@@ -197,6 +209,7 @@ export default async function PropertyDetails({ params }) {
 			propertyData={propertyData}
 			relatedProperties={relatedProperties}
 			bairro={bairro}
+			incorporadora={incorporadora}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }

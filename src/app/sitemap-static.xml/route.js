@@ -16,6 +16,13 @@ export async function GET() {
 		bairros = [];
 	}
 
+	let incorporadoras = [];
+	try {
+		incorporadoras = await prisma.$queryRaw`select slug from conteudo.incorporadoras where ativo order by ordem`;
+	} catch (e) {
+		incorporadoras = [];
+	}
+
 	const urls = [
 		{
 			loc: baseUrl,
@@ -47,6 +54,16 @@ export async function GET() {
 			changeFrequency: "weekly",
 			priority: 0.8,
 		},
+		{
+			loc: `${baseUrl}/incorporadoras`,
+			changeFrequency: "weekly",
+			priority: 0.7,
+		},
+		...incorporadoras.map((i) => ({
+			loc: `${baseUrl}/incorporadora/${i.slug}`,
+			changeFrequency: "weekly",
+			priority: 0.7,
+		})),
 		...bairros.map((b) => ({
 			loc: `${baseUrl}/bairro/${b.slug}`,
 			changeFrequency: "weekly",
