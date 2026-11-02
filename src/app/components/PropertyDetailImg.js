@@ -25,6 +25,9 @@ export default function PropertyDetailImg({
 	const currentImage = images[currentImageIndex];
 	const firstImage = images.find((img, idx) => idx === 0);
 
+	// Sem fotos (imóvel recém-publicado aguardando a fila de fotos): não quebra a página
+	if (!firstImage) return null;
+
 	const handleMovePrev = () => {
 		setCurrentImageIndex(
 			(prevIndex) => (prevIndex + images.length - 1) % images.length

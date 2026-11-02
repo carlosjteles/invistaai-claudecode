@@ -199,6 +199,11 @@ export default async function PropertyDetails({ params }) {
 		},
 	});
 
+	// Se a única foto for a capa (perspectiva marcada como thumbnail), usa ela na galeria
+	if (propertyData && propertyData.images.length === 0) {
+		propertyData.images = await prisma.propertyImage.findMany({ where: { propertyId: propertyData.id } });
+	}
+
 	if (!propertyData) {
 		// Imóvel removido: redireciona (308) para a página do bairro ou para /imoveis
 		const destino = await getRedirect(params.slug);
