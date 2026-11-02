@@ -6,7 +6,7 @@ import { categories } from "../../storage/filters";
 
 import prisma from "../../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../../helper/utils";
 
 export const revalidate = 300;
 
@@ -273,7 +273,7 @@ export default async function PropertyDetails({ params }) {
 	return (
 		<PropertyDetailsClient
 			propertyData={propertyData}
-			relatedProperties={relatedProperties}
+			relatedProperties={ordenarPorEntrega(relatedProperties)}
 			bairro={bairro}
 			incorporadora={incorporadora}
 			historico={historico}
