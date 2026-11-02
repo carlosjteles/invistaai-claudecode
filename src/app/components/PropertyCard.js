@@ -25,13 +25,16 @@ export const entregaCurta = (d) => {
  * Card de imóvel usado na home, na lista, nos relacionados e nas páginas de bairro/incorporadora.
  * Nome, bairro, resumo (m², dorms, suítes, vagas), preço "a partir de" com R$/m², entrega e estágio.
  */
-export default function PropertyCard({ item, className = "" }) {
+export default function PropertyCard({ item, className = "", destaque = null }) {
 	const thumbnail = item.images?.[0] || null;
 	const nome = item.name || item.address;
 	const resumo = [item.preview?.area, item.preview?.bedroom, item.preview?.suite, item.preview?.parking]
 		.filter(Boolean)
 		.join(" · ");
-	const precoM2 = item.price > 0 && item.min_area > 0 ? Math.round(item.price / item.min_area) : 0;
+	// destaque: unidade em evidência nas páginas temáticas (ex.: a cobertura), com rótulo, preço e área próprios
+	const preco = destaque?.preco > 0 ? destaque.preco : item.price;
+	const areaRef = destaque?.preco > 0 ? destaque.area : item.min_area;
+	const precoM2 = preco > 0 && areaRef > 0 ? Math.round(preco / areaRef) : 0;
 	const estagio = ESTAGIO[item.category];
 	const entrega = item.category !== 4 ? entregaCurta(item.delivery_in) : null;
 
@@ -80,8 +83,9 @@ export default function PropertyCard({ item, className = "" }) {
 
 				<div className="pv2-rodape d-flex justify-content-between align-items-end">
 					<div>
-						<span className="pv2-rotulo">{item.price > 0 ? "A partir de" : "Preço"}</span>
-						<p className="pv2-preco mb-0">{item.price > 0 ? brl(item.price) : "Consulte"}</p>
+						{destaque?.rotulo && <span className="pv2-destaque">{destaque.rotulo}</span>}
+						<span className="pv2-rotulo">{preco > 0 ? "A partir de" : "Preço"}</span>
+						<p className="pv2-preco mb-0">{preco > 0 ? brl(preco) : "Consulte"}</p>
 						{precoM2 > 0 && <span className="pv2-m2">({brl(precoM2)}/m²)</span>}
 					</div>
 					<div className="text-end">

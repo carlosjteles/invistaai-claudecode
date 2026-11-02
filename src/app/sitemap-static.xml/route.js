@@ -40,6 +40,21 @@ export async function GET() {
 			priority: 0.9,
 		},
 		{
+			loc: `${baseUrl}/coberturas`,
+			changeFrequency: "weekly",
+			priority: 0.8,
+		},
+		{
+			loc: `${baseUrl}/gardens`,
+			changeFrequency: "weekly",
+			priority: 0.7,
+		},
+		{
+			loc: `${baseUrl}/investimento`,
+			changeFrequency: "weekly",
+			priority: 0.8,
+		},
+		{
 			loc: `${baseUrl}/indice-preco-m2`,
 			changeFrequency: "daily",
 			priority: 0.8,

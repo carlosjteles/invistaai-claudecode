@@ -64,3 +64,50 @@ export const categories = [
 		image: "/images/categories/investment.webp",
 	},
 ];
+
+/** Fases usadas nos filtros: "Lançamento" inclui os de breve lançamento (categoria 1). */
+export const fases = [
+	{ id: 2, label: "Lançamento" },
+	{ id: 3, label: "Em Construção" },
+	{ id: 4, label: "Pronto Novo" },
+];
+
+/** Tipos de unidade (lidos das plantas de cada imóvel). "cobertura" e "investimento" são grupos. */
+export const tiposUnidade = [
+	{ value: "apartamento", label: "Apartamento" },
+	{ value: "cobertura", label: "Coberturas e duplex (todas)" },
+	{ value: "cobertura-duplex", label: "Cobertura duplex" },
+	{ value: "cobertura-horizontal", label: "Cobertura horizontal" },
+	{ value: "duplex", label: "Duplex / triplex" },
+	{ value: "garden", label: "Garden" },
+	{ value: "investimento", label: "Investimento (studio, loft e NR)" },
+	{ value: "studio", label: "Studio" },
+	{ value: "loft", label: "Loft" },
+	{ value: "nr", label: "NR (não residencial)" },
+];
+
+export const TIPOS_GRUPO = {
+	cobertura: ["Cobertura Duplex", "Cobertura Horizontal", "Duplex", "Triplex"],
+	"cobertura-duplex": ["Cobertura Duplex"],
+	"cobertura-horizontal": ["Cobertura Horizontal"],
+	duplex: ["Duplex", "Triplex"],
+	garden: ["Garden"],
+	studio: ["Studio"],
+	loft: ["Loft"],
+	investimento: ["Studio", "Loft"],
+};
+
+/** Cartões da Home: 3 por fase + 2 por tipo de unidade. */
+export const homeCards = [
+	{ key: "lancamento", label: "Lançamentos", href: "/imoveis?categoria=2", categorias: [1, 2], image: "/images/categories/launch.webp" },
+	{ key: "obra", label: "Em Construção", href: "/imoveis?categoria=3", categorias: [3], image: "/images/categories/under-construction.webp" },
+	{ key: "pronto", label: "Prontos para Morar", href: "/imoveis?categoria=4", categorias: [4], image: "/images/categories/ready-new.webp" },
+	{
+		key: "cobertura",
+		label: "Coberturas e Duplex",
+		href: "/coberturas",
+		tipo: "cobertura",
+		image: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/85815/13.jpg",
+	},
+	{ key: "investimento", label: "Investimento e Renda", href: "/investimento", tipo: "investimento", image: "/images/categories/investment.webp" },
+];

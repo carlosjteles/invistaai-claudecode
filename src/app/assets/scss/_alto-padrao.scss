@@ -144,3 +144,19 @@
         &.ativo { background: $primary; border-color: $primary; color: #fff; }
     }
 }
+
+// Cartões da Home (fase e tipo): imagem com a mesma proporção para fotos locais e do banco
+.categories .categoria-img { aspect-ratio: 400 / 275; overflow: hidden; }
+.categories .categoria-img img { transition: transform 0.5s ease; }
+.categories:hover .categoria-img img { transform: scale(1.05); }
+
+// Selos de tipo de unidade (página do imóvel) e destaque da unidade no card
+.selos-tipo { display: flex; flex-wrap: wrap; gap: 6px; }
+.selo-tipo { font-family: var(--font-body); font-size: 13px; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba($accent, 0.5); color: darken($accent, 18%); background: rgba($accent, 0.08); }
+.pv2-destaque { display: block; font-family: var(--font-body); font-size: 13px; font-weight: 600; color: darken($accent, 18%); letter-spacing: 0.02em; margin-bottom: 2px; }
+
+// Filtros das páginas temáticas
+.filtro-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.filtro-chips a { font-family: var(--font-body); font-size: 14px; padding: 5px 14px; border-radius: 999px; border: 1px solid #d6dbe3; color: $dark; background: #fff; }
+.filtro-chips a:hover { border-color: $primary; }
+.filtro-chips a.ativo { background: $primary; border-color: $primary; color: #fff; }

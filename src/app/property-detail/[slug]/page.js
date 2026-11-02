@@ -155,6 +155,15 @@ async function getTabelaEm(externalId) {
 	}
 }
 
+async function getTipos(id) {
+	try {
+		const [r] = await prisma.$queryRaw`select conteudo.tipos_do_imovel(p) tipos from "Property" p where p.id = ${id}`;
+		return r?.tipos || [];
+	} catch (e) {
+		return [];
+	}
+}
+
 async function getBairrosAlerta() {
 	try {
 		return await prisma.$queryRaw`
@@ -186,12 +195,13 @@ export default async function PropertyDetails({ params }) {
 		notFound();
 	}
 
-	const [bairro, incorporadora, historico, tabelaEm, bairrosAlerta] = await Promise.all([
+	const [bairro, incorporadora, historico, tabelaEm, bairrosAlerta, tipos] = await Promise.all([
 		getBairro(propertyData.neighborhood),
 		getIncorporadora(propertyData.seo?.developer),
 		getHistorico(propertyData.id),
 		getTabelaEm(propertyData.external_id),
 		getBairrosAlerta(),
+		getTipos(propertyData.id),
 	]);
 	// Bairro do imóvel já marcado no alerta
 	const bairroDoImovel = bairrosAlerta.find(
@@ -254,6 +264,7 @@ export default async function PropertyDetails({ params }) {
 			tabelaEm={tabelaEm}
 			bairrosAlerta={bairrosAlerta.map((b) => ({ slug: b.slug, nome: b.nome }))}
 			bairroAlerta={bairroDoImovel?.slug || null}
+			tipos={tipos}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }

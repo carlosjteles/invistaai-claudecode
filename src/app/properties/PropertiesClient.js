@@ -12,7 +12,9 @@ import ScrollTop from "../components/ScrollTop";
 import {
 	bedrooms,
 	categories,
+	fases,
 	parkingSpaces,
+	tiposUnidade,
 	suites,
 } from "../storage/filters";
 
@@ -33,6 +35,7 @@ export default function PropertiesClient({
 	totalCount,
 	currentPage,
 	bairrosAlerta = [],
+	initialTipo = "",
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -42,7 +45,8 @@ export default function PropertiesClient({
 	const [searchTerm, setSearchTerm] = React.useState(
 		queryParams.get("q") || ""
 	);
-	const [category, setCategory] = React.useState(initialCategory);
+	const [category, setCategory] = React.useState(initialCategory === 1 ? 2 : initialCategory);
+	const [tipo, setTipo] = React.useState(initialTipo);
 	const [bedroom, setBedroom] = React.useState(
 		queryParams.get("quartos") || "all"
 	);
@@ -66,6 +70,7 @@ export default function PropertiesClient({
 		if (queryParams.size > 0) {
 			setSearchTerm("");
 			setCategory(0);
+			setTipo("");
 			setBedroom("all");
 			setParking("all");
 			setSuite("all");
@@ -81,6 +86,7 @@ export default function PropertiesClient({
 
 		if (searchTerm) params.set("q", searchTerm);
 		if (category !== 0) params.set("categoria", category);
+		if (tipo) params.set("tipo", tipo);
 		if (bedroom !== "all") params.set("quartos", bedroom);
 		if (parking !== "all") params.set("vagas", parking);
 		if (suite !== "all") params.set("suites", suite);
@@ -282,17 +288,34 @@ export default function PropertiesClient({
 								/>
 
 								<div className="mt-4">
-									<h6 className="mb-0">Categorias</h6>
+									<h6 className="mb-0">Fase</h6>
 									<select
 										className="form-select form-control border mt-2"
-										aria-label="Filtrar por Categorias"
+										aria-label="Filtrar por fase da obra"
 										name="categoria"
 										value={category}
 										onChange={(e) => setCategory(Number(e.target.value))}
 									>
-										<option value="">Selecione ...</option>
-										{categories.map((item) => (
+										<option value="0">Todas</option>
+										{fases.map((item) => (
 											<option key={item.id} value={item.id}>
+												{item.label}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className="mt-4">
+									<h6 className="mb-0">Tipo de unidade</h6>
+									<select
+										className="form-select form-control border mt-2"
+										aria-label="Filtrar por tipo de unidade"
+										name="tipo"
+										value={tipo}
+										onChange={(e) => setTipo(e.target.value)}
+									>
+										<option value="">Todos</option>
+										{tiposUnidade.map((item) => (
+											<option key={item.value} value={item.value}>
 												{item.label}
 											</option>
 										))}

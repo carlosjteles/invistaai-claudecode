@@ -36,6 +36,17 @@ import { formatPrice } from "../../helper/formatter";
 import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
 import Mdi from "../../components/Mdi";
 
+// Selos dos tipos de unidade do prédio, com link para a página temática
+const SELOS = {
+	"cobertura-duplex": ["Cobertura duplex", "/coberturas?tipo=cobertura-duplex"],
+	"cobertura-horizontal": ["Cobertura horizontal", "/coberturas?tipo=cobertura-horizontal"],
+	duplex: ["Duplex", "/coberturas?tipo=duplex"],
+	garden: ["Garden", "/gardens"],
+	studio: ["Studio", "/investimento?tipo=studio"],
+	loft: ["Loft", "/investimento?tipo=loft"],
+	nr: ["NR", "/investimento?tipo=nr"],
+};
+
 export default function PropertyDetailsClient({
 	propertyData,
 	relatedProperties,
@@ -46,6 +57,7 @@ export default function PropertyDetailsClient({
 	tabelaEm = null,
 	bairrosAlerta = [],
 	bairroAlerta = null,
+	tipos = [],
 }) {
 	const temSimulador = propertyData.price >= 600000;
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
@@ -353,6 +365,17 @@ export default function PropertyDetailsClient({
 											</>
 										)}
 									</p>
+								)}
+								{tipos.some((t) => SELOS[t]) && (
+									<div className="selos-tipo mt-2">
+										{tipos
+											.filter((t) => SELOS[t])
+											.map((t) => (
+												<Link key={t} href={SELOS[t][1]} className="selo-tipo">
+													{SELOS[t][0]}
+												</Link>
+											))}
+									</div>
 								)}
 								<ul className="list-unstyled row align-items-center justify-content-between mb-0 py-3">
 									<li className="col-6 col-md-auto ms-0">
