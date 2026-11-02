@@ -9,7 +9,7 @@ const cfg = {
 	h1: "Studios, lofts e NR para investir em São Paulo",
 	intro: [
 		"Studios, lofts e unidades NR (não residenciais) em lançamentos, obras e prédios prontos, pensados para quem quer comprar para alugar, inclusive por temporada. Cada card mostra a fase da obra, a metragem e o preço da unidade de investimento.",
-		"Antes de comprar para locação de curta temporada, confira na convenção do condomínio se esse uso é permitido. Nos imóveis NR ele costuma ser previsto; nos residenciais depende de autorização expressa. Nossa equipe confere isso para você.",
+		"Pensa em alugar por temporada (Airbnb e similares)? As regras variam de um condomínio para outro; fale com a nossa equipe para saber as de cada empreendimento.",
 	],
 	subtipos: [
 		{ value: "", label: "Todos" },

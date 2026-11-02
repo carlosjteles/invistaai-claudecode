@@ -166,6 +166,15 @@ async function getTipos(id) {
 	}
 }
 
+async function getAnaliseRenda(id) {
+	try {
+		const [r] = await prisma.$queryRaw`select conteudo.analise_renda(${id}::int) a`;
+		return r?.a || null;
+	} catch (e) {
+		return null;
+	}
+}
+
 async function getBairrosAlerta() {
 	try {
 		return await prisma.$queryRaw`
@@ -205,6 +214,11 @@ export default async function PropertyDetails({ params }) {
 		getBairrosAlerta(),
 		getTipos(propertyData.id),
 	]);
+	// Studios, lofts e NR: análise para quem compra para alugar
+	const analiseRenda = tipos.some((t) => ["studio", "loft", "nr"].includes(t))
+		? await getAnaliseRenda(propertyData.id)
+		: null;
+
 	// Bairro do imóvel já marcado no alerta
 	const bairroDoImovel = bairrosAlerta.find(
 		(b) => b.bairros.includes(propertyData.neighborhood) || b.extras.includes(propertyData.slug)
@@ -267,6 +281,7 @@ export default async function PropertyDetails({ params }) {
 			bairrosAlerta={bairrosAlerta.map((b) => ({ slug: b.slug, nome: b.nome }))}
 			bairroAlerta={bairroDoImovel?.slug || null}
 			tipos={tipos}
+			analiseRenda={analiseRenda}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }

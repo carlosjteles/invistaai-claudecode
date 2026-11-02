@@ -1406,6 +1406,7 @@ textarea.form-control{min-height: calc(1.5em + 0.75rem + calc(var(--bs-border-wi
 .opacity-50{opacity: 0.5 !important;}
 .opacity-75{opacity: 0.75 !important;}
 .overflow-hidden{overflow: hidden !important;}
+.d-inline{display: inline !important;}
 .d-inline-block{display: inline-block !important;}
 .d-block{display: block !important;}
 .d-grid{display: grid !important;}
