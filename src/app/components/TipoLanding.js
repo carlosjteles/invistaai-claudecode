@@ -28,8 +28,10 @@ const NOME_UNIDADE = {
 };
 
 /** Unidade em destaque no card: a mais barata do tipo procurado (ou a maior, se não houver preço). */
-function destaqueDo(item, tiposAceitos, ehNr) {
-	const unidades = (Array.isArray(item.typelogies) ? item.typelogies : []).filter((t) => tiposAceitos.includes(t?.type));
+function destaqueDo(item, tiposAceitos, ehNr, areaMax = 0) {
+	const unidades = (Array.isArray(item.typelogies) ? item.typelogies : []).filter(
+		(t) => tiposAceitos.includes(t?.type) && (!areaMax || (Number(t.private_area) || 0) <= areaMax)
+	);
 	if (!unidades.length) return ehNr ? { rotulo: "NR · não residencial" } : null;
 	const comPreco = unidades.filter((u) => Number(u.price) > 0).sort((a, b) => a.price - b.price);
 	const u = comPreco[0] || [...unidades].sort((a, b) => (b.private_area || 0) - (a.private_area || 0))[0];
@@ -74,7 +76,7 @@ export default async function TipoLanding({ cfg, searchParams = {} }) {
 
 	const aceitos = TIPOS_GRUPO[tipoBusca] || TIPOS_GRUPO[cfg.grupo] || [];
 	const nrSet = new Set(idsNr);
-	const cards = imoveis.map((item) => ({ item, destaque: destaqueDo(item, aceitos, nrSet.has(item.id)) }));
+	const cards = imoveis.map((item) => ({ item, destaque: destaqueDo(item, aceitos, nrSet.has(item.id), cfg.grupo === "investimento" ? 80 : 0) }));
 
 	const nomesBairros = [...new Set(imoveis.map((i) => i.neighborhood).filter(Boolean))];
 	const linksBairros = bairros.filter((b) => b.bairros.some((n) => nomesBairros.includes(n)));
