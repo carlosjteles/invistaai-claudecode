@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 import PropertyCard from "../../components/PropertyCard";
+import AlertaImoveis from "../../components/AlertaImoveis";
 
 import prisma from "../../../db/prisma";
 import { getBaseUrl, getSiteName } from "../../helper/utils";
@@ -274,6 +275,16 @@ export default async function BairroPage({ params }) {
 								</a>
 							</div>
 						</div>
+					</div>
+
+					<div className="mt-5">
+						<AlertaImoveis
+							bairros={[{ slug: bairro.slug, nome: bairro.nome }, ...outros]}
+							inicial={{ bairros: [bairro.slug] }}
+							titulo={`Receba os novos imóveis ${bairro.prep}`}
+							subtitulo={`Avisamos quando entrar um lançamento novo ou quando um preço baixar ${bairro.prep}, dentro do que você procura.`}
+							origem={`/bairro/${bairro.slug}`}
+						/>
 					</div>
 
 					{outros.length > 0 && (
