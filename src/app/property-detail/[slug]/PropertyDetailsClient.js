@@ -66,6 +66,17 @@ export default function PropertyDetailsClient({
 		return propertyData.images.filter((img) => img.type === "perspectives");
 	}, [propertyData.images]);
 
+	// Páginas no padrão novo já listam as plantas com preço no texto ("Plantas e preços");
+	// nelas a tabela de tipologias repetiria a mesma informação.
+	const temPlantasNoTexto = React.useMemo(
+		() =>
+			Array.isArray(propertyData.description) &&
+			propertyData.description.some(
+				(b) => b && typeof b === "object" && (b.title || "").startsWith("Plantas e preços")
+			),
+		[propertyData.description]
+	);
+
 	const typelogiesByType = React.useMemo(() => {
 		if (!propertyData.typelogies) return {};
 		return propertyData.typelogies.reduce((type, item) => {
@@ -449,7 +460,8 @@ export default function PropertyDetailsClient({
 									</>
 								)}
 
-								{typelogiesByType &&
+								{!temPlantasNoTexto &&
+									typelogiesByType &&
 									Object.keys(typelogiesByType).length > 0 && (
 										<div className="mb-4">
 											<h2 className="h4 mb-3 text-dark">
