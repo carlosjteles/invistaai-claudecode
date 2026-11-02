@@ -91,3 +91,14 @@
 @media (max-width: 767.98px) {
     .property-v2 .card-body .title { min-height: 0; }
 }
+
+// Página do imóvel: textos longos mais legíveis e preço no mesmo estilo dos cards
+.imovel-bloco {
+    p, li { color: #475569 !important; line-height: 1.7; }
+    li strong, p strong { color: $dark; }
+}
+.imovel-rotulo { display: block; font-size: 14px; color: $muted; margin-bottom: 2px; }
+.imovel-preco { font-family: var(--font-body); font-size: 28px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
+@media (max-width: 767.98px) {
+    .imovel-preco { font-size: 24px; }
+}

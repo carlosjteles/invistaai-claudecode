@@ -376,9 +376,9 @@ export default function PropertyDetailsClient({
 								{Array.isArray(propertyData.description) &&
 								typeof propertyData.description[0] === "object" ? (
 									propertyData.description.map((dataDescription, index) => (
-										<div key={index} className="mb-4">
+										<div key={index} className="mb-4 imovel-bloco">
 											{dataDescription.title && (
-												<h2 className="h5 mb-3 text-dark">
+												<h2 className="h4 mb-3 text-dark">
 													{dataDescription.title}
 												</h2>
 											)}
@@ -433,7 +433,7 @@ export default function PropertyDetailsClient({
 										{propertyData.attributes &&
 											propertyData.attributes.length > 0 && (
 												<>
-													<h2 className="h5 mb-3 text-dark">Características</h2>
+													<h2 className="h4 mb-3 text-dark">Características</h2>
 													<ul className="row list-unstyled">
 														{propertyData.attributes.map((attr, index) => (
 															<li
@@ -452,7 +452,7 @@ export default function PropertyDetailsClient({
 								{typelogiesByType &&
 									Object.keys(typelogiesByType).length > 0 && (
 										<div className="mb-4">
-											<h2 className="h5 mb-3 text-dark">
+											<h2 className="h4 mb-3 text-dark">
 												Tipologias Disponíveis
 											</h2>
 											{Object.entries(typelogiesByType).map(([type, items]) => (
@@ -606,16 +606,16 @@ export default function PropertyDetailsClient({
 
 						<div className="col-lg-4 col-md-5 col-12">
 							<div className="rounded-3 shadow bg-white sticky-bar p-4">
-								{propertyData.price > 0 && (
-									<h2 className="mb-3 h5">A partir de:</h2>
-								)}
+								<span className="imovel-rotulo">
+									{propertyData.price > 0 ? "A partir de" : "Preço"}
+								</span>
 
-								<div className="d-flex align-items-center justify-content-between">
-									<h3 className="mb-0 h5">
+								<div className="d-flex align-items-center justify-content-between gap-2">
+									<p className="imovel-preco mb-0">
 										{propertyData.price === 0
 											? "Consulte"
 											: formatPrice(propertyData.price)}
-									</h3>
+									</p>
 									<span className="badge bg-primary">
 										{
 											categories.find(
