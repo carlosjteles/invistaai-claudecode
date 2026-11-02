@@ -10,6 +10,8 @@ export async function GET() {
 	const baseUrl = getBaseUrl();
 
 	const properties = await prisma.property.findMany({
+		// Só imóveis que já têm fotos (os recém-publicados entram quando a fila de fotos termina)
+		where: { images: { some: {} } },
 		select: { slug: true, updatedAt: true },
 		orderBy: { updatedAt: "desc" },
 	});

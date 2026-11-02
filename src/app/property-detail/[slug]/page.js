@@ -31,6 +31,7 @@ export async function generateMetadata({ params }) {
 						alt: true,
 					},
 				},
+				_count: { select: { images: true } },
 			},
 		});
 
@@ -86,8 +87,9 @@ export async function generateMetadata({ params }) {
 			alternates: {
 				canonical: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 			},
+			// Sem fotos ainda (aguardando a fila): não indexar até as fotos chegarem
 			robots: {
-				index: true,
+				index: (propertyData._count?.images || 0) > 0,
 				follow: true,
 				"max-snippet": -1,
 				"max-image-preview": "large",
