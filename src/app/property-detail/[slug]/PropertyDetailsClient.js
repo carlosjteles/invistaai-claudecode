@@ -22,6 +22,7 @@ const FinancingSimulation = dynamic(
 
 import RelatedPropertySlider from "../../components/RelatedPropertySlider";
 import PriceHistory from "../../components/PriceHistory";
+import RendaAnalise from "../../components/RendaAnalise";
 import PaymentSimulator from "../../components/PaymentSimulator";
 import AlertaImoveis, { faixaAcima } from "../../components/AlertaImoveis";
 
@@ -58,6 +59,7 @@ export default function PropertyDetailsClient({
 	bairrosAlerta = [],
 	bairroAlerta = null,
 	tipos = [],
+	analiseRenda = null,
 }) {
 	const temSimulador = propertyData.price >= 600000;
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
@@ -598,6 +600,14 @@ export default function PropertyDetailsClient({
 										</div>
 									</div>
 								)}
+
+								<RendaAnalise
+									analise={analiseRenda}
+									nome={propertyData.name}
+									category={propertyData.category}
+									deliveryIn={propertyData.delivery_in}
+									phone={contact.phone}
+								/>
 
 								{temSimulador && (
 									<PaymentSimulator
