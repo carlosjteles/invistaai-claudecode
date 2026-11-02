@@ -79,6 +79,7 @@ export default async function Properties({ searchParams, params }) {
 	const minPrice = searchParams["preco-min"] || 0;
 	const maxPrice = searchParams["preco-max"] || 0;
 	let searchTerm = searchParams.q || "";
+	const tipo = /^[a-z-]{2,30}$/.test(searchParams.tipo || "") ? searchParams.tipo : "";
 
 	/** Set filters prisma */
 	const filterWhere = {};
@@ -102,8 +103,21 @@ export default async function Properties({ searchParams, params }) {
 		});
 	}
 
-	if (category !== 0) {
+	// "Lançamento" inclui os de breve lançamento
+	if (category === 2 || category === 1) {
+		filterAnd.push({ category: { in: [1, 2] } });
+	} else if (category !== 0) {
 		filterAnd.push({ category });
+	}
+
+	if (tipo) {
+		let ids = [];
+		try {
+			ids = (await prisma.$queryRaw`select id from conteudo.ids_por_tipo(${tipo}) id`).map((r) => r.id);
+		} catch (e) {
+			ids = [];
+		}
+		filterAnd.push({ id: { in: ids } });
 	}
 
 	if (bedroom !== "all") {
@@ -205,7 +219,7 @@ export default async function Properties({ searchParams, params }) {
 	});
 
 	/** Total pages */
-	const totalCount = await prisma.property.count({ where: filterWhere });
+	const totalCount = await prisma.property.count({ where: { ...filterWhere, images: { some: {} } } });
 	const totalPages = Math.ceil(totalCount / itemsPerPage);
 
 	let bairrosAlerta = [];
@@ -216,6 +230,7 @@ export default async function Properties({ searchParams, params }) {
 	return (
 		<PropertiesClient
 			bairrosAlerta={bairrosAlerta}
+			initialTipo={tipo}
 			initialCategory={category}
 			initialProperties={properties}
 			totalPages={totalPages}

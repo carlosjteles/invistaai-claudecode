@@ -121,6 +121,21 @@ export default function Footer({ showImage = false }) {
 												</Link>
 											</li>
 											<li>
+												<Link href="/coberturas" className="text-foot">
+													<Mdi n="chevron-right" className="align-middle me-1" /> Coberturas e duplex
+												</Link>
+											</li>
+											<li>
+												<Link href="/gardens" className="text-foot">
+													<Mdi n="chevron-right" className="align-middle me-1" /> Apartamentos garden
+												</Link>
+											</li>
+											<li>
+												<Link href="/investimento" className="text-foot">
+													<Mdi n="chevron-right" className="align-middle me-1" /> Studios, lofts e NR
+												</Link>
+											</li>
+											<li>
 												<Link href="/indice-preco-m2" className="text-foot">
 													<Mdi n="chevron-right" className="align-middle me-1" /> Preço do m² por bairro
 												</Link>

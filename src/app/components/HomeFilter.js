@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-import { categories, prices } from "../storage/filters";
+import { fases as categories, prices } from "../storage/filters";
 
 import { getBaseUrl } from "../helper/utils";
 
