@@ -167,8 +167,8 @@ export default function AlertaImoveis({
 							<label htmlFor="al-estagio" className="form-label small text-muted mb-1">Estágio</label>
 							<select id="al-estagio" className="form-select" value={form.estagio} onChange={(e) => set("estagio", e.target.value)}>
 								<option value="qualquer">Qualquer</option>
-								<option value="planta">Na planta / em obra</option>
-								<option value="pronto">Pronto para morar</option>
+								<option value="planta">Lançamento / em obras</option>
+								<option value="pronto">Pronto novo</option>
 							</select>
 						</div>
 

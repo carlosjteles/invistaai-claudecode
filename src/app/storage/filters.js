@@ -50,7 +50,7 @@ export const categories = [
 	},
 	{
 		id: 3,
-		label: "Em Construção",
+		label: "Em Obras",
 		image: "/images/categories/under-construction.webp",
 	},
 	{
@@ -68,7 +68,7 @@ export const categories = [
 /** Fases usadas nos filtros: "Lançamento" inclui os de breve lançamento (categoria 1). */
 export const fases = [
 	{ id: 2, label: "Lançamento" },
-	{ id: 3, label: "Em Construção" },
+	{ id: 3, label: "Em Obras" },
 	{ id: 4, label: "Pronto Novo" },
 ];
 
@@ -100,8 +100,8 @@ export const TIPOS_GRUPO = {
 /** Cartões da Home: 3 por fase + 2 por tipo de unidade. */
 export const homeCards = [
 	{ key: "lancamento", label: "Lançamentos", href: "/imoveis?categoria=2", categorias: [1, 2], image: "/images/categories/launch.webp" },
-	{ key: "obra", label: "Em Construção", href: "/imoveis?categoria=3", categorias: [3], image: "/images/categories/under-construction.webp" },
-	{ key: "pronto", label: "Prontos para Morar", href: "/imoveis?categoria=4", categorias: [4], image: "/images/categories/ready-new.webp" },
+	{ key: "obra", label: "Em Obras", href: "/imoveis?categoria=3", categorias: [3], image: "/images/categories/under-construction.webp" },
+	{ key: "pronto", label: "Prontos Novos", href: "/imoveis?categoria=4", categorias: [4], image: "/images/categories/ready-new.webp" },
 	{
 		key: "cobertura",
 		label: "Coberturas e Duplex",
@@ -109,5 +109,5 @@ export const homeCards = [
 		tipo: "cobertura",
 		image: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/85815/13.jpg",
 	},
-	{ key: "investimento", label: "Investimento e Renda", href: "/investimento", tipo: "investimento", image: "/images/categories/investment.webp" },
+	{ key: "investimento", label: "Renda", href: "/investimento", tipo: "investimento", image: "/images/categories/investment.webp" },
 ];

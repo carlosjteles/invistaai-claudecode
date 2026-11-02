@@ -38,7 +38,7 @@ export default async function Categories() {
 					<div className="section-title mb-4 pb-2">
 						<h2 className="title h4 mb-3">Encontre pelo momento da obra ou pelo tipo de imóvel</h2>
 						<p className="text-muted para-desc mb-0">
-							Lançamentos, obras e prontos para morar, além de coberturas e opções para investir e gerar renda.
+							Lançamentos, imóveis em obras e prontos novos, além de coberturas e opções para gerar renda.
 						</p>
 					</div>
 				</div>

@@ -13,8 +13,8 @@ import { TIPOS_GRUPO } from "../storage/filters";
 const FASES = [
 	{ value: "", label: "Todas as fases" },
 	{ value: "lancamento", label: "Lançamento", categorias: [1, 2] },
-	{ value: "obra", label: "Em construção", categorias: [3] },
-	{ value: "pronto", label: "Pronto para morar", categorias: [4] },
+	{ value: "obra", label: "Em obras", categorias: [3] },
+	{ value: "pronto", label: "Pronto novo", categorias: [4] },
 ];
 
 const NOME_UNIDADE = {
