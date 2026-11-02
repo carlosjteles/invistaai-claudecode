@@ -30,7 +30,7 @@ const CONVENCAO = {
  */
 export default function RendaAnalise({ analise, nome, category, deliveryIn, phone }) {
 	if (!analise) return null;
-	const { metro, polos = [], unidades = [], indice, convencao, nr } = analise;
+	const { metro, polos = [], unidades = [], indice, convencao } = analise;
 
 	const compacta = unidades[0];
 	const pm2 = compacta ? Number(compacta.price) / Number(compacta.private_area) : 0;
@@ -99,17 +99,23 @@ export default function RendaAnalise({ analise, nome, category, deliveryIn, phon
 				</p>
 			)}
 
-			<p className="mb-2">
-				<span className="imovel-rotulo d-inline me-1">Locação de curta temporada:</span>
-				<strong>{conv ? conv[0] : "a confirmar"}</strong>
-			</p>
-			<p>
-				{conv
-					? `${conv[1]}${convencao.obs ? ` ${convencao.obs}` : ""} Informação conferida pela nossa equipe em ${convencao.em}.`
-					: nr
-					? "Por ser uma unidade NR (não residencial), o projeto costuma prever uso para hospedagem e serviços, mas a permissão para Airbnb e similares depende da convenção do condomínio. Nossa equipe confere a regra deste empreendimento para você."
-					: "Em condomínio residencial, a locação por curta temporada só é possível se a convenção autorizar de forma expressa (entendimento do STJ de maio de 2026). Nossa equipe confere a regra deste empreendimento antes da compra."}
-			</p>
+			{conv ? (
+				<>
+					<p className="mb-2">
+						<span className="imovel-rotulo d-inline me-1">Locação de curta temporada:</span>
+						<strong>{conv[0]}</strong>
+					</p>
+					<p>
+						{conv[1]}
+						{convencao.obs ? ` ${convencao.obs}` : ""} Informação conferida pela nossa equipe em {convencao.em}.
+					</p>
+				</>
+			) : (
+				<p>
+					Pensa em alugar por temporada (Airbnb e similares)? Fale com a nossa equipe para saber as regras deste
+					condomínio.
+				</p>
+			)}
 
 			{entrega && (
 				<p>
