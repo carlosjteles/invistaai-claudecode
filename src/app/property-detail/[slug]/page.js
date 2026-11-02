@@ -133,6 +133,37 @@ async function getIncorporadora(nome) {
 	}
 }
 
+async function getHistorico(id) {
+	try {
+		return await prisma.$queryRaw`
+			select to_char(data, 'YYYY-MM-DD') data, preco::float8 preco
+			from conteudo.historico_preco where property_id = ${id} order by data`;
+	} catch (e) {
+		return [];
+	}
+}
+
+async function getTabelaEm(externalId) {
+	if (!externalId) return null;
+	try {
+		const rows = await prisma.$queryRaw`
+			select dados->>'tabela_atualizada_em' t from orulo.buildings where orulo_id = ${externalId} limit 1`;
+		const t = rows[0]?.t;
+		return /^\d{2}\/\d{2}\/\d{4}$/.test(t || "") ? t : null;
+	} catch (e) {
+		return null;
+	}
+}
+
+async function getBairrosAlerta() {
+	try {
+		return await prisma.$queryRaw`
+			select slug, nome, bairros, coalesce(extras, '{}') extras from conteudo.bairros where ativo order by ordem`;
+	} catch (e) {
+		return [];
+	}
+}
+
 export default async function PropertyDetails({ params }) {
 	const propertyData = await prisma.property.findUnique({
 		where: { slug: params.slug },
@@ -155,8 +186,17 @@ export default async function PropertyDetails({ params }) {
 		notFound();
 	}
 
-	const bairro = await getBairro(propertyData.neighborhood);
-	const incorporadora = await getIncorporadora(propertyData.seo?.developer);
+	const [bairro, incorporadora, historico, tabelaEm, bairrosAlerta] = await Promise.all([
+		getBairro(propertyData.neighborhood),
+		getIncorporadora(propertyData.seo?.developer),
+		getHistorico(propertyData.id),
+		getTabelaEm(propertyData.external_id),
+		getBairrosAlerta(),
+	]);
+	// Bairro do imóvel já marcado no alerta
+	const bairroDoImovel = bairrosAlerta.find(
+		(b) => b.bairros.includes(propertyData.neighborhood) || b.extras.includes(propertyData.slug)
+	);
 
 	const relatedInclude = {
 		images: {
@@ -210,6 +250,10 @@ export default async function PropertyDetails({ params }) {
 			relatedProperties={relatedProperties}
 			bairro={bairro}
 			incorporadora={incorporadora}
+			historico={historico}
+			tabelaEm={tabelaEm}
+			bairrosAlerta={bairrosAlerta.map((b) => ({ slug: b.slug, nome: b.nome }))}
+			bairroAlerta={bairroDoImovel?.slug || null}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }

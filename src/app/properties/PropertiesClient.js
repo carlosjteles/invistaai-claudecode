@@ -24,6 +24,7 @@ import { getBaseUrl } from "../helper/utils";
 import Pagination from "../components/Pagination";
 import Mdi from "../components/Mdi";
 import PropertyCard from "../components/PropertyCard";
+import AlertaImoveis from "../components/AlertaImoveis";
 
 export default function PropertiesClient({
 	initialProperties,
@@ -31,6 +32,7 @@ export default function PropertiesClient({
 	totalPages,
 	totalCount,
 	currentPage,
+	bairrosAlerta = [],
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -425,6 +427,14 @@ export default function PropertiesClient({
 								</div>
 							</div>
 						)}
+					</div>
+
+					<div className="mt-100 mt-60">
+						<AlertaImoveis
+							bairros={bairrosAlerta}
+							titulo="Não achou o imóvel certo? Crie um alerta"
+							origem="/imoveis"
+						/>
 					</div>
 				</div>
 			</section>

@@ -21,6 +21,9 @@ const FinancingSimulation = dynamic(
 );
 
 import RelatedPropertySlider from "../../components/RelatedPropertySlider";
+import PriceHistory from "../../components/PriceHistory";
+import PaymentSimulator from "../../components/PaymentSimulator";
+import AlertaImoveis, { faixaAcima } from "../../components/AlertaImoveis";
 
 const YoutubeEmbed = dynamic(() => import("../../components/YoutubeEmbed"), {
 	ssr: false,
@@ -39,7 +42,12 @@ export default function PropertyDetailsClient({
 	updatedLabel,
 	bairro = null,
 	incorporadora = null,
+	historico = [],
+	tabelaEm = null,
+	bairrosAlerta = [],
+	bairroAlerta = null,
 }) {
+	const temSimulador = propertyData.price >= 600000;
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
 	const [openGallery, setOpenGallery] = React.useState(false);
 	React.useEffect(() => {
@@ -568,8 +576,21 @@ export default function PropertyDetailsClient({
 									</div>
 								)}
 
+								{temSimulador && (
+									<PaymentSimulator
+										name={propertyData.name}
+										price={propertyData.price}
+										typelogies={propertyData.typelogies}
+										deliveryIn={propertyData.delivery_in}
+										category={propertyData.category}
+										phone={contact.phone}
+									/>
+								)}
+
+								<PriceHistory historico={historico} tabelaEm={tabelaEm} />
+
 								{propertyData.description_embed && (
-									<div className="card map border-0 mt-2">
+									<div className="card map border-0 mt-4">
 										<div className="card-body p-0">
 											<iframe
 												src={propertyData.description_embed}
@@ -636,6 +657,12 @@ export default function PropertyDetailsClient({
 											<span className="small">{propertyData.release_in}</span>
 										</div>
 									)}
+									{tabelaEm && (
+										<div className="d-flex align-items-center justify-content-between mt-2">
+											<span className="small text-muted">Tabela atualizada</span>
+											<span className="small">{tabelaEm}</span>
+										</div>
+									)}
 								</div>
 
 								<div className="d-flex mt-3 gap-2">
@@ -660,6 +687,12 @@ export default function PropertyDetailsClient({
 									</Link>
 								</div>
 
+								{temSimulador && (
+									<a href="#simulador" className="btn btn-soft-primary w-100 small mt-2">
+										Simular pagamento
+									</a>
+								)}
+
 								<Link
 									href={`/comparar?imoveis=${propertyData.slug}`}
 									className="btn btn-soft-primary w-100 small mt-2"
@@ -674,6 +707,20 @@ export default function PropertyDetailsClient({
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div className="container mt-100 mt-60">
+					<AlertaImoveis
+						bairros={bairrosAlerta}
+						inicial={{
+							bairros: bairroAlerta ? [bairroAlerta] : [],
+							precoMax: faixaAcima(propertyData.price),
+							estagio: propertyData.category === 4 ? "pronto" : "qualquer",
+						}}
+						titulo={`Quer opções parecidas com o ${propertyData.name}?`}
+						subtitulo="Crie um alerta: avisamos quando entrar um imóvel novo ou quando um preço baixar dentro do que você procura."
+						origem={`/imovel/${propertyData.slug}`}
+					/>
 				</div>
 
 				{relatedProperties && relatedProperties.length > 0 && (

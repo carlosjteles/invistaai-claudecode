@@ -102,3 +102,45 @@
 @media (max-width: 767.98px) {
     .imovel-preco { font-size: 24px; }
 }
+
+// Histórico de preço (página do imóvel)
+.historico-preco {
+    .hp-linha { stroke: $primary; stroke-width: 2.5; stroke-linejoin: round; }
+    .hp-ponto { fill: #fff; stroke: $accent; stroke-width: 2.5; }
+    .hp-eixo { stroke: #e2e8f0; stroke-width: 1; }
+    .hp-rotulo { font-family: var(--font-body); font-size: 13px; fill: $muted; }
+    .hp-alta { color: #15803d; font-weight: 600; }
+    .hp-baixa { color: #b45309; font-weight: 600; }
+}
+
+// Simulador de pagamento (página do imóvel)
+.simulador-pagamento {
+    scroll-margin-top: 90px;
+    .form-label { font-family: var(--font-body); }
+    .sim-resultado {
+        background: $light;
+        border: 1px solid rgba($accent, 0.25);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-family: var(--font-body);
+        font-size: 15px;
+    }
+    .sim-resultado li + li { border-top: 1px dashed #e5e0d8; }
+}
+
+// Alerta de imóveis
+.alerta-imoveis {
+    border-top: 3px solid $accent;
+    scroll-margin-top: 90px;
+    .form-label, .form-control, .form-select { font-family: var(--font-body); }
+    .alerta-chip {
+        border: 1px solid #d6dbe3;
+        border-radius: 999px;
+        background: #fff;
+        color: $dark;
+        padding: 4px 14px;
+        font-size: 14px;
+        &:hover { border-color: $primary; }
+        &.ativo { background: $primary; border-color: $primary; color: #fff; }
+    }
+}

@@ -208,8 +208,14 @@ export default async function Properties({ searchParams, params }) {
 	const totalCount = await prisma.property.count({ where: filterWhere });
 	const totalPages = Math.ceil(totalCount / itemsPerPage);
 
+	let bairrosAlerta = [];
+	try {
+		bairrosAlerta = await prisma.$queryRaw`select slug, nome from conteudo.bairros where ativo order by ordem`;
+	} catch (e) {}
+
 	return (
 		<PropertiesClient
+			bairrosAlerta={bairrosAlerta}
 			initialCategory={category}
 			initialProperties={properties}
 			totalPages={totalPages}
