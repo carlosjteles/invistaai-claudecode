@@ -8,7 +8,7 @@ import PropertyCard from "../../components/PropertyCard";
 import AlertaImoveis from "../../components/AlertaImoveis";
 
 import prisma from "../../../db/prisma";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../../helper/utils";
 import { contact } from "../../storage/about";
 
 export const revalidate = 3600;
@@ -68,7 +68,7 @@ async function getDados(slug) {
 		getIndice(bairro.bairros),
 		getOutros(slug),
 	]);
-	return { bairro, imoveis, indice, outros };
+	return { bairro, imoveis: ordenarPorEntrega(imoveis), indice, outros };
 }
 
 export async function generateMetadata({ params }) {

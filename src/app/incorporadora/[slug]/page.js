@@ -7,7 +7,7 @@ import ScrollTop from "../../components/ScrollTop";
 import PropertyCard from "../../components/PropertyCard";
 
 import prisma from "../../../db/prisma";
-import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../../helper/utils";
 import { contact } from "../../storage/about";
 
 export const revalidate = 3600;
@@ -56,7 +56,7 @@ async function getDados(slug) {
 		getOutras(slug),
 		getBairros(),
 	]);
-	return { inc, imoveis, outras, bairros };
+	return { inc, imoveis: ordenarPorEntrega(imoveis), outras, bairros };
 }
 
 export async function generateMetadata({ params }) {

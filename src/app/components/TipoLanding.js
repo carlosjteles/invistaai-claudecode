@@ -7,7 +7,7 @@ import PropertyCard from "./PropertyCard";
 import AlertaImoveis from "./AlertaImoveis";
 
 import prisma from "../../db/prisma";
-import { getBaseUrl } from "../helper/utils";
+import { getBaseUrl, ordenarPorEntrega } from "../helper/utils";
 import { TIPOS_GRUPO } from "../storage/filters";
 
 const FASES = [
@@ -64,15 +64,15 @@ export default async function TipoLanding({ cfg, searchParams = {} }) {
 		prisma.$queryRaw`select slug, nome, bairros from conteudo.bairros where ativo order by ordem`.catch(() => []),
 	]);
 
-	const imoveis = await prisma.property.findMany({
+	const imoveisBrutos = await prisma.property.findMany({
 		where: {
 			id: { in: idsTipo },
 			images: { some: {} },
 			...(fase.categorias ? { category: { in: fase.categorias } } : {}),
 		},
 		include: { images: { where: { thumbnail: true }, select: { src: true, alt: true }, take: 1 } },
-		orderBy: [{ category: "asc" }, { price: "desc" }],
 	});
+	const imoveis = ordenarPorEntrega(imoveisBrutos);
 
 	const aceitos = TIPOS_GRUPO[tipoBusca] || TIPOS_GRUPO[cfg.grupo] || [];
 	const nrSet = new Set(idsNr);

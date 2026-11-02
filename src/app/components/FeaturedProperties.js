@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
 import { formatPrice } from "../helper/formatter";
-import { getBaseUrl } from "../helper/utils";
+import { getBaseUrl, ordenarPorEntrega } from "../helper/utils";
 
 import prisma from "../../db/prisma";
 import Mdi from "./Mdi";
@@ -13,7 +13,7 @@ import PropertyCard from "./PropertyCard";
 export const revalidate = 300;
 
 export default async function FeaturedProperties() {
-	const propertyData = await prisma.property.findMany({
+	const todos = await prisma.property.findMany({
 		where: {
 			images: {
 				some: {},
@@ -35,12 +35,7 @@ export default async function FeaturedProperties() {
 	});
 
 	// Entrega mais distante primeiro (lançamentos à frente, prontos por último)
-	const dataEntrega = (d) => {
-		const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(d || "");
-		return m ? Number(`${m[3]}${m[2]}${m[1]}`) : 0;
-	};
-	propertyData.sort((a, b) => dataEntrega(b.delivery_in) - dataEntrega(a.delivery_in) || b.price - a.price);
-	propertyData.splice(12);
+	const propertyData = ordenarPorEntrega(todos).slice(0, 12);
 
 	if (!propertyData || propertyData.length === 0) {
 		return null;

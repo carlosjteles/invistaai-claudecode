@@ -2,7 +2,7 @@ import PropertiesClient from "./PropertiesClient";
 
 import prisma from "../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../helper/utils";
+import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../helper/utils";
 
 import { categories } from "../storage/filters";
 
@@ -201,7 +201,8 @@ export default async function Properties({ searchParams, params }) {
 		filterWhere.AND = filterAnd;
 	}
 
-	const properties = await prisma.property.findMany({
+	// Entrega mais distante primeiro (a data é texto dd/mm/aaaa, então a ordenação é feita aqui)
+	const todos = await prisma.property.findMany({
 		where: { ...filterWhere, images: { some: {} } },
 		include: {
 			images: {
@@ -211,12 +212,8 @@ export default async function Properties({ searchParams, params }) {
 				take: 1,
 			},
 		},
-		orderBy: {
-			id: "desc",
-		},
-		skip: (page - 1) * itemsPerPage,
-		take: itemsPerPage,
 	});
+	const properties = ordenarPorEntrega(todos).slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
 	/** Total pages */
 	const totalCount = await prisma.property.count({ where: { ...filterWhere, images: { some: {} } } });
