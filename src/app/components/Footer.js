@@ -44,7 +44,7 @@ export default function Footer({ showImage = false }) {
 								<div className="row">
 									<div className="col-lg-4 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
 										<Link href="/" className="logo-footer" aria-label={`${getSiteName()} – página inicial`}>
-											<Image src="/images/logo-light.svg" width={124} height={24} alt={getSiteName()} />
+											<Image src="/images/logo-light.svg" width={162} height={36} alt={getSiteName()} />
 										</Link>
 										<p className="mt-4">
 											Apartamentos de alto padrão em São Paulo: lançamentos, obras e

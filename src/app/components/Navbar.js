@@ -200,16 +200,16 @@ export default function Navbar({
 							<span className="logo-light-mode">
 								<Image
 									src="/images/logo-dark.svg"
-									width={124}
-									height={24}
+									width={162}
+									height={36}
 									className="l-dark"
 									alt={`Logo escuro ${getSiteName()}`}
 									itemProp="logo"
 								/>
 								<Image
 									src="/images/logo-light.svg"
-									width={124}
-									height={24}
+									width={162}
+									height={36}
 									className="l-light"
 									alt={`Logo claro ${getSiteName()}`}
 									itemProp="logo"
@@ -217,8 +217,8 @@ export default function Navbar({
 							</span>
 							<Image
 								src="/images/logo-light.svg"
-								width={124}
-								height={24}
+								width={162}
+								height={36}
 								className="logo-dark-mode"
 								alt={`Logo escuro 2 ${getSiteName()}`}
 								itemProp="logo"
@@ -236,16 +236,16 @@ export default function Navbar({
 
 							<Image
 								src="/images/logo-dark.svg"
-								width={124}
-								height={24}
+								width={162}
+								height={36}
 								className="logo-light-mode"
 								alt={`Logo claro ${getSiteName()}`}
 								itemProp="logo"
 							/>
 							<Image
 								src="/images/logo-light.svg"
-								width={124}
-								height={24}
+								width={162}
+								height={36}
 								className="logo-dark-mode"
 								alt={`Logo escuro ${getSiteName()}`}
 								itemProp="logo"
