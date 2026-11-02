@@ -63,3 +63,31 @@
     h4, .h4, .fs-4 { font-size: 22px !important; }
     .title-heading .heading { font-size: 34px !important; line-height: 1.2; }
 }
+
+// Card de imóvel v2 (nome, bairro, resumo, preço com R$/m², entrega e estágio)
+.property-v2 {
+    .pv2-local { font-size: 15px; color: $muted; margin-top: 2px; }
+    .pv2-resumo { font-size: 15px; color: $dark; margin-top: 12px; }
+    .pv2-rodape { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba($dark, 0.08); gap: 12px; }
+    .pv2-rotulo { display: block; font-size: 14px; color: $muted; }
+    .pv2-preco { font-size: 24px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
+    .pv2-m2 { display: block; font-size: 13px; color: $muted; }
+    .pv2-entrega { font-size: 14px; color: $muted; strong { color: $dark; } }
+    .pv2-estagio {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $primary;
+        border: 1px solid rgba($primary, 0.35);
+        border-radius: 999px;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
+    .pv2-estagio-1, .pv2-estagio-2 { color: darken($accent, 12%); border-color: rgba($accent, 0.5); }
+    .pv2-estagio-4 { color: #15803d; border-color: rgba(#15803d, 0.35); }
+}
+@media (max-width: 767.98px) {
+    .property-v2 .card-body .title { min-height: 0; }
+}

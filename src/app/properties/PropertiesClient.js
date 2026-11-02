@@ -23,6 +23,7 @@ import { getBaseUrl } from "../helper/utils";
 
 import Pagination from "../components/Pagination";
 import Mdi from "../components/Mdi";
+import PropertyCard from "../components/PropertyCard";
 
 export default function PropertiesClient({
 	initialProperties,
@@ -394,111 +395,7 @@ export default function PropertiesClient({
 												<meta itemProp="url" content={itemUrl} />
 												<meta itemProp="name" content={item.name} />
 
-												<div
-													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
-												>
-
-													{thumbnail && (
-														<div className="property-image position-relative overflow-hidden shadow">
-															<Image
-																src={thumbnail.src}
-																width={0}
-																height={0}
-																sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
-																quality={60}
-																className="img-fluid"
-																alt={thumbnail.alt}
-															/>
-															<ul className="list-unstyled property-icon">
-																<li>
-																	<Link
-																		href={`/imovel/${item.slug}`}
-																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		aria-label={`Ver detalhes do imóvel ${
-																			item.name || item.address
-																		}`}
-																	>
-																		<FiHome
-																			className="icons"
-																			aria-hidden="true"
-																		/>
-																	</Link>
-																</li>
-																<li className="mt-1">
-																	<Link
-																		href={`/imovel/${item.slug}?openGallery=true`}
-																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		aria-label={`Ver galeria de fotos do imóvel ${
-																			item.name || item.address
-																		}`}
-																	>
-																		<FiCamera
-																			className="icons"
-																			aria-hidden="true"
-																		/>
-																	</Link>
-																</li>
-															</ul>
-														</div>
-													)}
-
-													<div className="card-body content p-4">
-														<Link
-															href={`/imovel/${item.slug}`}
-															className="title fs-5 text-dark fw-medium"
-														>
-															{item.name || item.address}
-														</Link>
-
-														<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-															<li className="col-6 d-flex align-items-center m-0">
-																<Mdi n="arrow-expand-all" className="fs-5 me-2 text-primary" />
-																<small className="text-muted">
-																	{item.preview.area}
-																</small>
-															</li>
-
-															<li className="col-6 d-flex align-items-center m-0">
-																<Mdi n="bed" className="fs-5 me-2 text-primary" />
-																<small className="text-muted">
-																	{item.preview.bedroom}
-																</small>
-															</li>
-														</ul>
-														<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-															<li className="col-6 d-flex align-items-center m-0">
-																<Mdi n="shower" className="fs-5 me-2 text-primary" />
-																<small className="text-muted">
-																	{item.preview.suite}
-																</small>
-															</li>
-
-															<li className="col-6 d-flex align-items-center m-0">
-																<Mdi n="car" className="fs-5 me-2 text-primary" />
-																<small className="text-muted">
-																	{item.preview.parking}
-																</small>
-															</li>
-														</ul>
-
-														<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
-															<li className="list-inline-item mb-0">
-																<span className="text-muted">Preço</span>
-																<p
-																	className="fw-medium mb-0"
-																>
-																	{item.price === 0 ? (
-																		"Consulte"
-																	) : (
-																		<>
-																			{formatPrice(item.price)}
-																		</>
-																	)}
-																</p>
-															</li>
-														</ul>
-													</div>
-												</div>
+												<PropertyCard item={item} />
 											</div>
 										);
 									})}
