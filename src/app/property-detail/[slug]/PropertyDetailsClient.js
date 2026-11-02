@@ -66,6 +66,17 @@ export default function PropertyDetailsClient({
 		return propertyData.images.filter((img) => img.type === "perspectives");
 	}, [propertyData.images]);
 
+	// Páginas no padrão novo já listam as plantas com preço no texto ("Plantas e preços");
+	// nelas a tabela de tipologias repetiria a mesma informação.
+	const temPlantasNoTexto = React.useMemo(
+		() =>
+			Array.isArray(propertyData.description) &&
+			propertyData.description.some(
+				(b) => b && typeof b === "object" && (b.title || "").startsWith("Plantas e preços")
+			),
+		[propertyData.description]
+	);
+
 	const typelogiesByType = React.useMemo(() => {
 		if (!propertyData.typelogies) return {};
 		return propertyData.typelogies.reduce((type, item) => {
@@ -449,7 +460,8 @@ export default function PropertyDetailsClient({
 									</>
 								)}
 
-								{typelogiesByType &&
+								{!temPlantasNoTexto &&
+									typelogiesByType &&
 									Object.keys(typelogiesByType).length > 0 && (
 										<div className="mb-4">
 											<h2 className="h4 mb-3 text-dark">
@@ -509,74 +521,49 @@ export default function PropertyDetailsClient({
 										</div>
 									)}
 
-								{(buildingDocumentsImages.length > 0 ||
-									hasValidYoutubeVideo) && (
+								{(buildingDocumentsImages.length > 0 || hasValidYoutubeVideo) && (
 									<div className="mb-4">
-										<ul className="nav nav-pills nav-justified mb-0">
-											<li className="nav-item">
-												<a
-													className={`nav-link ${
-														activeTab === "plantas" ? "active" : ""
-													}`}
-													aria-current="page"
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														setActiveTab("plantas");
-													}}
-												>
-													Plantas
-												</a>
-											</li>
-											<li className="nav-item">
-												<a
-													className={`nav-link ${
-														activeTab === "video" ? "active" : ""
-													}`}
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														setActiveTab("video");
-													}}
-												>
-													Video
-												</a>
-											</li>
-										</ul>
-										<div className="tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom">
-											{activeTab === "plantas" && (
-												<div
-													className="tab-pane fade show active"
-													role="tabpanel"
-													id="tab-plantas"
-												>
-													{buildingDocumentsImages.length > 0 ? (
-														<BuildingDocumentsSlider
-															images={buildingDocumentsImages}
-														/>
-													) : (
-														<div className="text-center py-5">
-															<span className="text-muted">Indisponível</span>
-														</div>
-													)}
-												</div>
-											)}
-
-											{activeTab === "video" && (
-												<div
-													className="tab-pane fade show active"
-													role="tabpanel"
-													id="tab-video"
-												>
-													{hasValidYoutubeVideo ? (
-														<YoutubeEmbed video={propertyData.video} />
-													) : (
-														<div className="text-center py-5">
-															<span className="text-muted">Indisponível</span>
-														</div>
-													)}
-												</div>
-											)}
+										{/* Só mostra as abas que têm conteúdo; com uma só, vira um título simples */}
+										{buildingDocumentsImages.length > 0 && hasValidYoutubeVideo ? (
+											<ul className="nav nav-pills nav-justified mb-0">
+												{[
+													["plantas", "Plantas"],
+													["video", "Vídeo"],
+												].map(([aba, rotulo]) => (
+													<li className="nav-item" key={aba}>
+														<a
+															className={`nav-link ${activeTab === aba ? "active" : ""}`}
+															href="#"
+															onClick={(e) => {
+																e.preventDefault();
+																setActiveTab(aba);
+															}}
+														>
+															{rotulo}
+														</a>
+													</li>
+												))}
+											</ul>
+										) : (
+											<h2 className="h4 mb-3 text-dark">
+												{buildingDocumentsImages.length > 0 ? "Plantas" : "Vídeo"}
+											</h2>
+										)}
+										<div
+											className={
+												buildingDocumentsImages.length > 0 && hasValidYoutubeVideo
+													? "tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom"
+													: ""
+											}
+										>
+											{buildingDocumentsImages.length > 0 &&
+												(activeTab === "plantas" || !hasValidYoutubeVideo) && (
+													<BuildingDocumentsSlider images={buildingDocumentsImages} />
+												)}
+											{hasValidYoutubeVideo &&
+												(activeTab === "video" || buildingDocumentsImages.length === 0) && (
+													<YoutubeEmbed video={propertyData.video} />
+												)}
 										</div>
 									</div>
 								)}
