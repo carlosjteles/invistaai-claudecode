@@ -3,16 +3,40 @@ import Image from "next/image";
 
 import { FiHome, FiCamera } from "../assets/icons/vander";
 
-import { formatPrice } from "../helper/formatter";
-import Mdi from "./Mdi";
+const ESTAGIO = {
+	1: "Breve lançamento",
+	2: "Lançamento",
+	3: "Em construção",
+	4: "Pronto para morar",
+	5: "Investimento",
+};
+const MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-/** Card de imóvel (mesmo visual dos cards da home e da lista), para páginas renderizadas no servidor. */
-export default function PropertyCard({ item }) {
+const brl = (v) =>
+	new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(v);
+
+/** "30/04/2028" -> "Abr/28" */
+export const entregaCurta = (d) => {
+	const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(d || "");
+	return m ? `${MESES[Number(m[2]) - 1]}/${m[3].slice(2)}` : null;
+};
+
+/**
+ * Card de imóvel usado na home, na lista, nos relacionados e nas páginas de bairro/incorporadora.
+ * Nome, bairro, resumo (m², dorms, suítes, vagas), preço "a partir de" com R$/m², entrega e estágio.
+ */
+export default function PropertyCard({ item, className = "" }) {
 	const thumbnail = item.images?.[0] || null;
 	const nome = item.name || item.address;
+	const resumo = [item.preview?.area, item.preview?.bedroom, item.preview?.suite, item.preview?.parking]
+		.filter(Boolean)
+		.join(" · ");
+	const precoM2 = item.price > 0 && item.min_area > 0 ? Math.round(item.price / item.min_area) : 0;
+	const estagio = ESTAGIO[item.category];
+	const entrega = item.category !== 4 ? entregaCurta(item.delivery_in) : null;
 
 	return (
-		<div className="card property border-0 shadow position-relative overflow-hidden rounded-3">
+		<div className={`card property property-v2 border-0 shadow position-relative overflow-hidden rounded-3 ${className}`}>
 			{thumbnail && (
 				<div className="property-image position-relative overflow-hidden shadow">
 					<Image
@@ -48,45 +72,27 @@ export default function PropertyCard({ item }) {
 			)}
 
 			<div className="card-body content p-4">
-				<Link href={`/imovel/${item.slug}`} className="title fs-5 text-dark fw-medium">
+				<Link href={`/imovel/${item.slug}`} className="title text-dark">
 					{item.name}
 				</Link>
+				{item.neighborhood && <p className="pv2-local mb-0">{item.neighborhood}, São Paulo – SP</p>}
+				{resumo && <p className="pv2-resumo mb-0">{resumo}</p>}
 
-				<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-					<li className="col-6 d-flex align-items-center m-0">
-						<span>
-							<Mdi n="arrow-expand-all" className="fs-5 me-2 text-primary" />
-							<small className="text-muted">{item.preview?.area}</small>
-						</span>
-					</li>
-					<li className="col-6 d-flex align-items-center m-0">
-						<span>
-							<Mdi n="bed" className="fs-5 me-2 text-primary" />
-							<small className="text-muted">{item.preview?.bedroom}</small>
-						</span>
-					</li>
-				</ul>
-				<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-					<li className="col-6 d-flex align-items-center m-0">
-						<span>
-							<Mdi n="shower" className="fs-5 me-2 text-primary" />
-							<small className="text-muted">{item.preview?.suite}</small>
-						</span>
-					</li>
-					<li className="col-6 d-flex align-items-center m-0">
-						<span>
-							<Mdi n="car" className="fs-5 me-2 text-primary" />
-							<small className="text-muted">{item.preview?.parking}</small>
-						</span>
-					</li>
-				</ul>
-
-				<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
-					<li className="list-inline-item mb-0">
-						<span className="text-muted">Preço</span>
-						<p className="fw-medium mb-0">{item.price ? formatPrice(item.price) : "Consulte"}</p>
-					</li>
-				</ul>
+				<div className="pv2-rodape d-flex justify-content-between align-items-end">
+					<div>
+						<span className="pv2-rotulo">{item.price > 0 ? "A partir de" : "Preço"}</span>
+						<p className="pv2-preco mb-0">{item.price > 0 ? brl(item.price) : "Consulte"}</p>
+						{precoM2 > 0 && <span className="pv2-m2">({brl(precoM2)}/m²)</span>}
+					</div>
+					<div className="text-end">
+						{entrega && (
+							<p className="pv2-entrega mb-1">
+								Entrega: <strong>{entrega}</strong>
+							</p>
+						)}
+						{estagio && <span className={`pv2-estagio pv2-estagio-${item.category}`}>{estagio}</span>}
+					</div>
+				</div>
 			</div>
 		</div>
 	);
