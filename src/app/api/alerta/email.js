@@ -9,7 +9,7 @@ export const esc = (s) =>
 export const brl = (v) =>
 	new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(Number(v));
 
-const ESTAGIO = { qualquer: "qualquer estágio", planta: "na planta / em obra", pronto: "pronto para morar" };
+const ESTAGIO = { qualquer: "qualquer estágio", planta: "lançamento / em obras", pronto: "pronto novo" };
 
 /** Texto curto do perfil do alerta: "Itaim Bibi, Jardins · até R$ 5 milhões · 3+ dorms · na planta" */
 export const perfilTexto = (a, nomesBairros = []) =>

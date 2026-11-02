@@ -6,8 +6,8 @@ import { FiHome, FiCamera } from "../assets/icons/vander";
 const ESTAGIO = {
 	1: "Breve lançamento",
 	2: "Lançamento",
-	3: "Em construção",
-	4: "Pronto para morar",
+	3: "Em obras",
+	4: "Pronto novo",
 	5: "Investimento",
 };
 const MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];

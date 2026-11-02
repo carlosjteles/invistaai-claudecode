@@ -364,7 +364,7 @@ export default function Navbar({
 
 							<li>
 								<Link href="/investimento" className="sub-menu-item" itemProp="url">
-									<span itemProp="name">Investimento</span>
+									<span itemProp="name">Renda</span>
 								</Link>
 							</li>
 
