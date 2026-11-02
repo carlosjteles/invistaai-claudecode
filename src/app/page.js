@@ -69,7 +69,7 @@ export default function Home() {
 		dateModified: new Date().toISOString().split("T")[0],
 		primaryImageOfPage: {
 			"@type": "ImageObject",
-			url: `${getBaseUrl()}/images/bg/home.webp`,
+			url: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/76146/10.jpg",
 		},
 		speakable: {
 			"@type": "SpeakableSpecification",
@@ -157,8 +157,8 @@ export default function Home() {
 						id="home"
 					>
 						<Image
-							src="/images/bg/home.webp"
-							alt={`Lobby de empreendimento de alto padrão em São Paulo - ${getSiteName()}`}
+							src="https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/76146/10.jpg"
+							alt={`Salão de festas de empreendimento de alto padrão em São Paulo - ${getSiteName()}`}
 							fill
 							priority
 							fetchPriority="high"
