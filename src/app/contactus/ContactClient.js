@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import ReCAPTCHA from "react-google-recaptcha";
+import Turnstile from "../components/Turnstile";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -34,7 +34,10 @@ export default function ContactClient() {
 	const [subject, setSubject] = React.useState("");
 	const [message, setMessage] = React.useState("");
 
-	const recaptchaRef = React.useRef(null);
+	const verificacaoRef = React.useRef(null);
+	const [token, setToken] = React.useState("");
+	const [site, setSite] = React.useState(""); // armadilha para robôs (campo escondido)
+	const inicio = React.useRef(Date.now());
 
 	const { data, error, loading } = useSelector((state) => state.contact);
 
@@ -65,14 +68,12 @@ export default function ContactClient() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const recaptchaToken = recaptchaRef.current.getValue();
-
-		if (!recaptchaToken) {
+		if (!token) {
 			Swal.fire({
-				icon: "error",
-				title: "Por favor, marque o captcha antes de enviar.",
+				icon: "info",
+				title: "Aguarde um instante: estamos confirmando que você não é um robô.",
 				showConfirmButton: false,
-				timer: 1500,
+				timer: 2000,
 			});
 			return;
 		}
@@ -82,12 +83,14 @@ export default function ContactClient() {
 			email,
 			subject,
 			message,
-			recaptcha: recaptchaToken,
+			turnstile: token,
+			site,
+			tempo: Date.now() - inicio.current,
 		};
 
 		dispatch(sendEmail(formData));
 
-		recaptchaRef.current.reset();
+		verificacaoRef.current?.reset();
 	};
 
 	const contactJsonLd = {
@@ -311,13 +314,11 @@ export default function ContactClient() {
 										</div>
 
 										<div className="col-12 mb-3">
-											<ReCAPTCHA
-												ref={recaptchaRef}
-												size="normal"
-												sitekey={
-													process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY
-												}
-											/>
+											<Turnstile ref={verificacaoRef} onToken={setToken} />
+											<div className="d-none" aria-hidden="true">
+												<label htmlFor="ct-site">Site</label>
+												<input id="ct-site" tabIndex={-1} autoComplete="off" value={site} onChange={(e) => setSite(e.target.value)} />
+											</div>
 										</div>
 									</div>
 									<div className="row">
