@@ -51,9 +51,6 @@ export default function Footer({ showImage = false }) {
 											imóveis prontos selecionados, com acompanhamento de corretor do
 											primeiro contato à entrega das chaves.
 										</p>
-										<p className="small mb-0">
-											{contact.broker.name} · Corretor de imóveis · CRECI-SP {contact.broker.creci}
-										</p>
 											{hasSocial && (
 												<ul className="list-unstyled social-icon foot-social-icon mb-0 mt-4">
 													{contact.social.linkedin && (
@@ -193,21 +190,21 @@ export default function Footer({ showImage = false }) {
 										<h2 className="footer-head h5">Contato</h2>
 
 										<div className="d-flex mt-4">
-											<AiOutlineWhatsApp className="fea icon-sm text-primary mt-1 me-3" />
+											<AiOutlineWhatsApp className="fea icon-sm text-accent mt-1 me-3" />
 											<Link href={`https://wa.me/${contact.phone}`} className="text-foot" target="_blank" rel="noopener noreferrer">
 												{formatPhone(contact.phone)} (WhatsApp)
 											</Link>
 										</div>
 
 										<div className="d-flex mt-3">
-											<FiMail className="fea icon-sm text-primary mt-1 me-3" />
+											<FiMail className="fea icon-sm text-accent mt-1 me-3" />
 											<Link href={`mailto:${contact.email}`} className="text-foot">
 												{contact.email}
 											</Link>
 										</div>
 
 										<div className="d-flex mt-3">
-											<FiMapPin className="fea icon-sm text-primary mt-1 me-3" />
+											<FiMapPin className="fea icon-sm text-accent mt-1 me-3" />
 											<div>
 												<p className="mb-2">
 													{contact.address.street}
@@ -217,7 +214,7 @@ export default function Footer({ showImage = false }) {
 													<br />
 													CEP {contact.address.zip}
 												</p>
-												<Link href={contact.map} className="text-primary" rel="noopener noreferrer" target="_blank">
+												<Link href={contact.map} className="text-accent text-decoration-underline" rel="noopener noreferrer" target="_blank">
 													Ver no Google Maps
 												</Link>
 											</div>
@@ -255,8 +252,7 @@ export default function Footer({ showImage = false }) {
 										<Link href="#" className="text-reset" onClick={scrollToTop}>
 											{getSiteName()}
 										</Link>
-										. Todos os direitos reservados. {contact.broker.name} · CRECI-SP{" "}
-										{contact.broker.creci}
+										. Todos os direitos reservados. Creci-SP {contact.broker.creci}
 									</p>
 									<p className="small mb-0 opacity-75">
 										Imagens meramente ilustrativas. Preços, plantas e prazos
