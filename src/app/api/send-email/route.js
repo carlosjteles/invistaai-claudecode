@@ -2,10 +2,22 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 import { getSiteName } from "@/app/helper/utils";
+import prisma from "@/db/prisma";
 
 // Verificação anti-robô do Cloudflare Turnstile (a chave secreta fica só na Vercel: TURNSTILE_SECRET_KEY)
+async function chaveSecreta() {
+	if (process.env.TURNSTILE_SECRET_KEY) return process.env.TURNSTILE_SECRET_KEY;
+	// Sem variável na Vercel: usa a chave guardada no banco (conteudo.config, sem acesso público)
+	try {
+		const [r] = await prisma.$queryRaw`select valor from conteudo.config where chave = 'turnstile_secret'`;
+		return r?.valor || "";
+	} catch (e) {
+		return "";
+	}
+}
+
 async function validarTurnstile(token, ip) {
-	const secret = process.env.TURNSTILE_SECRET_KEY;
+	const secret = await chaveSecreta();
 	if (!secret) {
 		console.error("TURNSTILE_SECRET_KEY não configurada");
 		return false;

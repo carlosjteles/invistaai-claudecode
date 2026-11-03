@@ -2,7 +2,7 @@
 import React from "react";
 
 // Chave pública do widget Turnstile (Cloudflare). Pode ser trocada pela variável NEXT_PUBLIC_TURNSTILE_SITE_KEY.
-export const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAAFxV9417i_lhbsDC";
+export const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAAFxV94l7i_lhbsDC";
 
 const SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
