@@ -291,6 +291,8 @@ export default async function PropertyDetails({ params }) {
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }
 			)}
+			publishedISO={new Date(propertyData.createdAt).toISOString()}
+			modifiedISO={new Date(propertyData.updatedAt).toISOString()}
 		/>
 	);
 }

@@ -1,0 +1,138 @@
+// Helpers para montar o JSON-LD das páginas de imóvel.
+// O conteúdo já existe na página; aqui a gente só traduz para o vocabulário
+// que o Google e os modelos de busca entendem.
+
+const semTags = (texto) =>
+	String(texto || "")
+		.replace(/<br\s*\/?>/gi, " ")
+		.replace(/<[^>]+>/g, "")
+		.replace(/&nbsp;/g, " ")
+		.replace(/\s+/g, " ")
+		.trim();
+
+/**
+ * Extrai as perguntas e respostas dos blocos de descrição.
+ * O padrão gravado é "<strong>Pergunta?</strong><br>Resposta".
+ */
+export function faqDoDescription(description) {
+	if (!Array.isArray(description)) return [];
+
+	const blocos = description.filter(
+		(bloco) =>
+			bloco &&
+			typeof bloco === "object" &&
+			/pergunta|frequen|d[úu]vida/i.test(String(bloco.title || "")),
+	);
+
+	const perguntas = [];
+	for (const bloco of blocos) {
+		const linhas = [
+			...(Array.isArray(bloco.content) ? bloco.content : []),
+			...(Array.isArray(bloco.list) ? bloco.list : []),
+		];
+
+		for (const linha of linhas) {
+			if (typeof linha !== "string") continue;
+			const m = linha.match(/<strong>(.*?)<\/strong>\s*(?:<br\s*\/?>)?([\s\S]*)/i);
+			if (!m) continue;
+			const q = semTags(m[1]);
+			const a = semTags(m[2]);
+			if (q.length > 5 && a.length > 5) perguntas.push({ q, a });
+		}
+	}
+
+	// o Google ignora duplicadas; melhor não mandar
+	const vistas = new Set();
+	return perguntas.filter((p) => {
+		const chave = p.q.toLowerCase();
+		if (vistas.has(chave)) return false;
+		vistas.add(chave);
+		return true;
+	});
+}
+
+/** Lê as coordenadas do iframe do Google Maps guardado em description_embed. */
+export function coordsDoEmbed(embed) {
+	const m = String(embed || "").match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+	if (!m) return null;
+	return { lat: Number(m[1]), lon: Number(m[2]) };
+}
+
+const numero = (v) => {
+	const n = Number(v);
+	return Number.isFinite(n) && n > 0 ? n : null;
+};
+
+/**
+ * Cada tipologia vira uma Apartment com a planta dentro.
+ * É o dado que diferencia o site: área, dormitórios e preço por planta.
+ */
+export function plantasSchema(typelogies, nomeImovel) {
+	if (!Array.isArray(typelogies)) return [];
+
+	return typelogies
+		.map((t) => {
+			if (!t || typeof t !== "object") return null;
+			const area = numero(t.private_area);
+			const dorms = numero(t.bedrooms);
+			const banhos = numero(t.bathrooms);
+			const suites = numero(t.suites);
+			const vagas = numero(t.parking);
+			const preco = numero(t.price);
+			if (!area && !dorms) return null;
+
+			const rotulo = [t.type, area ? `${area} m²` : null, dorms ? `${dorms} dorms` : null]
+				.filter(Boolean)
+				.join(" · ");
+
+			const planta = {
+				"@type": "FloorPlan",
+				name: rotulo,
+				...(area && {
+					floorSize: { "@type": "QuantitativeValue", value: area, unitCode: "MTK" },
+				}),
+				...(dorms && { numberOfBedrooms: dorms }),
+				...(banhos && { numberOfBathroomsTotal: banhos }),
+				...(dorms && { numberOfRooms: dorms }),
+			};
+
+			return {
+				"@type": "Apartment",
+				name: nomeImovel ? `${nomeImovel} — ${rotulo}` : rotulo,
+				...(area && {
+					floorSize: { "@type": "QuantitativeValue", value: area, unitCode: "MTK" },
+				}),
+				...(dorms && { numberOfRooms: dorms, numberOfBedrooms: dorms }),
+				...(banhos && { numberOfBathroomsTotal: banhos }),
+				accommodationFloorPlan: planta,
+				...((suites || vagas || preco) && {
+					additionalProperty: [
+						suites && { "@type": "PropertyValue", name: "Suítes", value: suites },
+						vagas && { "@type": "PropertyValue", name: "Vagas", value: vagas },
+						preco && {
+							"@type": "PropertyValue",
+							name: "Preço",
+							value: preco,
+							unitText: "BRL",
+						},
+					].filter(Boolean),
+				}),
+			};
+		})
+		.filter(Boolean)
+		.slice(0, 25);
+}
+
+/** Itens de lazer viram amenidades marcadas. */
+export function amenidadesSchema(attributes) {
+	if (!Array.isArray(attributes)) return [];
+	return attributes
+		.map((a) => semTags(a))
+		.filter((a) => a.length > 1)
+		.slice(0, 40)
+		.map((nome) => ({
+			"@type": "LocationFeatureSpecification",
+			name: nome,
+			value: true,
+		}));
+}
