@@ -237,21 +237,26 @@ export function nomeSemIncorporadora(nome, dev) {
 
 /**
  * Título da página de imóvel. O Google corta por volta de 60 caracteres, então
- * a metragem entra primeiro e o bairro e a marca só se couberem — é a informação
- * que a pessoa digita na busca ("apartamento 3 dormitórios 120 m² em Pinheiros").
+ * entram primeiro a metragem e os dormitórios — o que a pessoa digita na busca.
+ * A marca fica de fora quando o espaço rende mais com dado: o nome do site já
+ * aparece sozinho no resultado, acima do título.
  */
-export function tituloImovel({ nome, dev, area, bairro, site }) {
+export function tituloImovel({ nome, dev, area, dorms, bairro, site }) {
 	const base = nomeSemIncorporadora(nome, dev) || "Imóvel";
 	const temBairro =
 		bairro && base.toLowerCase().includes(String(bairro).toLowerCase());
+	const ondeFica = !temBairro && bairro ? ` em ${bairro}` : "";
 
 	const comArea = area ? `${base} — ${area}` : base;
-	const comBairro = !temBairro && bairro ? `${comArea} em ${bairro}` : comArea;
-	const marca = site ? ` | ${site}` : "";
+	const comDorms = dorms ? `${comArea}, ${dorms}` : comArea;
 
-	if ((comBairro + marca).length <= 60) return comBairro + marca;
-	if (comBairro.length <= 62) return comBairro;
-	if ((comArea + marca).length <= 60) return comArea + marca;
-	if (comArea.length <= 62) return comArea;
-	return base;
+	// Da versão mais informativa para a mais enxuta, sempre dentro do limite.
+	const opcoes = [
+		comDorms + ondeFica,
+		comArea + ondeFica,
+		comDorms,
+		comArea,
+	];
+	for (const t of opcoes) if (t.length <= 60) return site && t.length + site.length + 3 <= 60 ? `${t} | ${site}` : t;
+	return comArea.length <= 65 ? comArea : base;
 }

@@ -51,8 +51,8 @@ export async function generateMetadata({ params }) {
 			nome: propertyData.name || propertyData.address,
 			dev: propertyData.seo?.developer,
 			area: propertyData.preview?.area,
+			dorms: propertyData.preview?.bedroom,
 			bairro: propertyData.neighborhood,
-			site: getSiteName(),
 		});
 
 		const mainImage =
