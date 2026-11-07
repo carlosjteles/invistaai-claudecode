@@ -301,3 +301,46 @@ export function perguntasComparativas({ nome, analise, preco, area, entregaEm })
 
 	return perguntas;
 }
+
+/** Nome do empreendimento sem o sufixo da incorporadora. */
+export function nomeSemIncorporadora(nome, dev) {
+	const bruto = String(nome || "").trim();
+	if (!dev) return bruto;
+	const limpo = bruto
+		// aceita "Nome - Tegra" e também "Nome - Tegra/Exto"
+		.replace(
+			new RegExp(
+				`\\s*[-–—|]\\s*${dev.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^-–—|]*$`,
+				"i",
+			),
+			"",
+		)
+		.trim();
+	return limpo || bruto;
+}
+
+/**
+ * Título da página de imóvel. O Google corta por volta de 60 caracteres, então
+ * entram primeiro a metragem e os dormitórios — o que a pessoa digita na busca.
+ * A marca fica de fora quando o espaço rende mais com dado: o nome do site já
+ * aparece sozinho no resultado, acima do título.
+ */
+export function tituloImovel({ nome, dev, area, dorms, bairro, site }) {
+	const base = nomeSemIncorporadora(nome, dev) || "Imóvel";
+	const temBairro =
+		bairro && base.toLowerCase().includes(String(bairro).toLowerCase());
+	const ondeFica = !temBairro && bairro ? ` em ${bairro}` : "";
+
+	const comArea = area ? `${base} — ${area}` : base;
+	const comDorms = dorms ? `${comArea}, ${dorms}` : comArea;
+
+	// Da versão mais informativa para a mais enxuta, sempre dentro do limite.
+	const opcoes = [
+		comDorms + ondeFica,
+		comArea + ondeFica,
+		comDorms,
+		comArea,
+	];
+	for (const t of opcoes) if (t.length <= 60) return site && t.length + site.length + 3 <= 60 ? `${t} | ${site}` : t;
+	return comArea.length <= 65 ? comArea : base;
+}
