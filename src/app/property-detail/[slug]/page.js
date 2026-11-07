@@ -219,10 +219,11 @@ export default async function PropertyDetails({ params }) {
 		getBairrosAlerta(),
 		getTipos(propertyData.id),
 	]);
-	// Studios, lofts e NR: análise para quem compra para alugar
-	const analiseRenda = tipos.some((t) => ["studio", "loft", "nr"].includes(t))
-		? await getAnaliseRenda(propertyData.id)
-		: null;
+	// Metrô, polos de demanda e preço do m² do bairro: vale para todo imóvel.
+	const analise = await getAnaliseRenda(propertyData.id);
+	// Studios, lofts e NR ganham também a leitura de rentabilidade.
+	const ehRenda = tipos.some((t) => ["studio", "loft", "nr"].includes(t));
+	const analiseRenda = ehRenda ? analise : null;
 
 	// Bairro do imóvel já marcado no alerta
 	const bairroDoImovel = bairrosAlerta.find(
@@ -287,6 +288,7 @@ export default async function PropertyDetails({ params }) {
 			bairroAlerta={bairroDoImovel?.slug || null}
 			tipos={tipos}
 			analiseRenda={analiseRenda}
+			analise={analise}
 			updatedLabel={new Date(propertyData.updatedAt).toLocaleDateString(
 				"pt-BR",
 				{ timeZone: "America/Sao_Paulo" }
