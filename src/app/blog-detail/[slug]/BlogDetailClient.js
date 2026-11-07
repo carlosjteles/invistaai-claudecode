@@ -10,6 +10,7 @@ import ScrollTop from "../../components/ScrollTop";
 
 import { formatDate, formatDateISO } from "../../helper/formatter";
 import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { faqDeBlocos } from "../../helper/schema";
 
 import Swal from "sweetalert2";
 import Mdi from "../../components/Mdi";
@@ -105,6 +106,22 @@ export default function BlogDetailClient({
 		articleBody: articleBody,
 	};
 
+	// O post já traz uma seção "Perguntas frequentes" na tela; aqui ela ganha marcação.
+	const faqSchema = React.useMemo(() => {
+		const perguntas = faqDeBlocos(content);
+		if (perguntas.length === 0) return null;
+		return {
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"@id": `${getBaseUrl()}/blog/${blogPost.slug}#faq`,
+			mainEntity: perguntas.map((p) => ({
+				"@type": "Question",
+				name: p.q,
+				acceptedAnswer: { "@type": "Answer", text: p.a },
+			})),
+		};
+	}, [content, blogPost.slug]);
+
 	const breadcrumbSchema = {
 		"@context": "https://schema.org",
 		"@type": "BreadcrumbList",
@@ -146,6 +163,15 @@ export default function BlogDetailClient({
 					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
 				}}
 			/>
+			{faqSchema && (
+				<script
+					id="blog-faq-schema"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+					}}
+				/>
+			)}
 
 			<Navbar
 				navClass="defaultscroll sticky"

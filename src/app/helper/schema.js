@@ -344,3 +344,40 @@ export function tituloImovel({ nome, dev, area, dorms, bairro, site }) {
 	for (const t of opcoes) if (t.length <= 60) return site && t.length + site.length + 3 <= 60 ? `${t} | ${site}` : t;
 	return comArea.length <= 65 ? comArea : base;
 }
+
+/**
+ * FAQ a partir dos blocos planos do blog ("BlogContent"): um bloco 'title' com
+ * "Perguntas frequentes" seguido de blocos 'text' no formato
+ * "<strong>Pergunta?</strong><br>Resposta", até o próximo 'title'.
+ */
+export function faqDeBlocos(blocos) {
+	if (!Array.isArray(blocos)) return [];
+	const perguntas = [];
+	let dentro = false;
+
+	for (const bloco of blocos) {
+		if (!bloco || typeof bloco !== "object") continue;
+		const tipo = String(bloco.type || "");
+		const valor = typeof bloco.value === "string" ? bloco.value : "";
+
+		if (tipo === "title") {
+			dentro = /pergunta|frequen|d[úu]vida/i.test(semTags(valor));
+			continue;
+		}
+		if (!dentro || tipo !== "text") continue;
+
+		const m = valor.match(/<strong>(.*?)<\/strong>\s*(?:<br\s*\/?>)?([\s\S]*)/i);
+		if (!m) continue;
+		const q = semTags(m[1]);
+		const a = semTags(m[2]);
+		if (q.length > 5 && a.length > 5) perguntas.push({ q, a });
+	}
+
+	const vistas = new Set();
+	return perguntas.filter((p) => {
+		const chave = p.q.toLowerCase();
+		if (vistas.has(chave)) return false;
+		vistas.add(chave);
+		return true;
+	});
+}
