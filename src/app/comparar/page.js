@@ -18,6 +18,7 @@ export const metadata = {
 	keywords: ["comparar imóveis", "comparador de imóveis", "comparar lançamentos São Paulo", "preço por m²"],
 	alternates: { canonical: `${getBaseUrl()}/comparar` },
 	openGraph: {
+		locale: "pt_BR",
 		title: `Comparar imóveis lado a lado | ${getSiteName()}`,
 		description: "Compare até 3 empreendimentos lado a lado: metragem, preço por m², suítes, vagas, lazer e entrega.",
 		url: `${getBaseUrl()}/comparar`,

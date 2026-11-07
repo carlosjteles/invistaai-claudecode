@@ -17,6 +17,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/contato`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Entre em Contato | ${getSiteName()}`,
 		description:
 			"Fale com nossa equipe especializada para encontrar seu imóvel ideal em São Paulo.",

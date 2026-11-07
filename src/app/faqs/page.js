@@ -24,6 +24,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/perguntas-frequentes`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Perguntas Frequentes | ${getSiteName()}`,
 		description:
 			"Encontre respostas para as principais dúvidas sobre imóveis e nossos serviços.",

@@ -23,6 +23,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/imoveis`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Imóveis à Venda em São Paulo | ${getSiteName()}`,
 		description:
 			"Explore nossa seleção de apartamentos, studios e imóveis em São Paulo com o melhor custo-benefício.",

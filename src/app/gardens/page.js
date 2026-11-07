@@ -20,7 +20,8 @@ export const metadata = {
 	description:
 		"Apartamentos garden à venda em São Paulo, em lançamentos, obras e prontos de alto padrão. Metragem e preço do garden, atualizados toda semana.",
 	alternates: { canonical: `${getBaseUrl()}${cfg.path}` },
-	openGraph: { title: cfg.h1, url: `${getBaseUrl()}${cfg.path}`, type: "website" },
+	openGraph: {
+			locale: "pt_BR", title: cfg.h1, url: `${getBaseUrl()}${cfg.path}`, type: "website" },
 };
 
 export default function Page({ searchParams }) {

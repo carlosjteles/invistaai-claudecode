@@ -69,6 +69,7 @@ export async function generateMetadata({ params }) {
 				propertyData.seo?.keywords ||
 				`imóvel, ${category}, ${propertyData.neighborhood}`,
 			openGraph: {
+				locale: "pt_BR",
 				title: tituloPagina,
 				description: propertyData.seo?.description,
 				type: "article",
