@@ -20,6 +20,18 @@ async function credenciaisEmail() {
 	return { user, pass };
 }
 
+// Para onde vai o aviso de contato. O Gmail exige que o remetente seja a conta
+// autenticada, então só o destinatário é configurável: variável na Vercel,
+// depois conteudo.config (email_to) e, por último, a caixa do Carlos.
+async function destinatario(remetente) {
+	if (process.env.EMAIL_TO) return process.env.EMAIL_TO;
+	try {
+		const [r] = await prisma.$queryRaw`select valor from conteudo.config where chave = 'email_to'`;
+		if (r?.valor) return r.valor;
+	} catch (e) {}
+	return remetente || "carlosjteles@gmail.com";
+}
+
 async function chaveSecreta() {
 	if (process.env.TURNSTILE_SECRET_KEY) return process.env.TURNSTILE_SECRET_KEY;
 	// Sem variável na Vercel: usa a chave guardada no banco (conteudo.config, sem acesso público)
@@ -284,7 +296,7 @@ export async function POST(request) {
 
 	const mailOptions = {
 		from: cred.user,
-		to: cred.user,
+		to: await destinatario(cred.user),
 		subject: `Formulário ${getSiteName()} - Contato ${name}`,
 		replyTo: email,
 		html: template,
