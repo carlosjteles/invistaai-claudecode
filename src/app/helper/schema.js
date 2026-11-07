@@ -300,6 +300,8 @@ export function perguntasComparativas({ nome, analise, preco, area, entregaEm })
 	}
 
 	return perguntas;
+}
+
 /** Nome do empreendimento sem o sufixo da incorporadora. */
 export function nomeSemIncorporadora(nome, dev) {
 	const bruto = String(nome || "").trim();
