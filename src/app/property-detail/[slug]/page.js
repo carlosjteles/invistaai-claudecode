@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 
 import PropertyDetailsClient from "./PropertyDetailsClient";
 
+import { tituloImovel } from "../../helper/schema";
 import { categories } from "../../storage/filters";
 
 import prisma from "../../../db/prisma";
@@ -45,15 +46,22 @@ export async function generateMetadata({ params }) {
 		const category =
 			categories.find((cat) => cat.id === propertyData.category)?.label || "";
 
+		// Título montado a partir dos dados: nome, metragem e bairro cabem em 60 caracteres.
+		const tituloPagina = tituloImovel({
+			nome: propertyData.name || propertyData.address,
+			dev: propertyData.seo?.developer,
+			area: propertyData.preview?.area,
+			bairro: propertyData.neighborhood,
+			site: getSiteName(),
+		});
+
 		const mainImage =
 			propertyData.images && propertyData.images.length > 0
 				? propertyData.images[0].src
 				: undefined;
 
 		return {
-			title:
-				propertyData.seo?.title ||
-				`${propertyData.name || propertyData.address} | ${getSiteName()}`,
+			title: tituloPagina,
 			description:
 				propertyData.seo?.description ||
 				`${propertyData.preview?.area} com ${propertyData.preview?.bedroom} em ${propertyData.neighborhood}`,
@@ -61,8 +69,7 @@ export async function generateMetadata({ params }) {
 				propertyData.seo?.keywords ||
 				`imóvel, ${category}, ${propertyData.neighborhood}`,
 			openGraph: {
-				title:
-					propertyData.seo?.title || propertyData.name || propertyData.address,
+				title: tituloPagina,
 				description: propertyData.seo?.description,
 				type: "article",
 				url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
@@ -79,8 +86,7 @@ export async function generateMetadata({ params }) {
 			},
 			twitter: {
 				card: "summary_large_image",
-				title:
-					propertyData.seo?.title || propertyData.name || propertyData.address,
+				title: tituloPagina,
 				description: propertyData.seo?.description,
 				images: mainImage ? [mainImage] : [],
 			},

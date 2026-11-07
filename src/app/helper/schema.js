@@ -217,3 +217,41 @@ export function maisRecente(itens) {
 		.filter((t) => Number.isFinite(t));
 	return datas.length ? new Date(Math.max(...datas)).toISOString() : null;
 }
+
+/** Nome do empreendimento sem o sufixo da incorporadora. */
+export function nomeSemIncorporadora(nome, dev) {
+	const bruto = String(nome || "").trim();
+	if (!dev) return bruto;
+	const limpo = bruto
+		// aceita "Nome - Tegra" e também "Nome - Tegra/Exto"
+		.replace(
+			new RegExp(
+				`\\s*[-–—|]\\s*${dev.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^-–—|]*$`,
+				"i",
+			),
+			"",
+		)
+		.trim();
+	return limpo || bruto;
+}
+
+/**
+ * Título da página de imóvel. O Google corta por volta de 60 caracteres, então
+ * a metragem entra primeiro e o bairro e a marca só se couberem — é a informação
+ * que a pessoa digita na busca ("apartamento 3 dormitórios 120 m² em Pinheiros").
+ */
+export function tituloImovel({ nome, dev, area, bairro, site }) {
+	const base = nomeSemIncorporadora(nome, dev) || "Imóvel";
+	const temBairro =
+		bairro && base.toLowerCase().includes(String(bairro).toLowerCase());
+
+	const comArea = area ? `${base} — ${area}` : base;
+	const comBairro = !temBairro && bairro ? `${comArea} em ${bairro}` : comArea;
+	const marca = site ? ` | ${site}` : "";
+
+	if ((comBairro + marca).length <= 60) return comBairro + marca;
+	if (comBairro.length <= 62) return comBairro;
+	if ((comArea + marca).length <= 60) return comArea + marca;
+	if (comArea.length <= 62) return comArea;
+	return base;
+}
