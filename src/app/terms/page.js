@@ -24,6 +24,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/termos-e-condicoes`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Termos e Condições | ${getSiteName()}`,
 		description:
 			"Conheça os termos e condições de uso da nossa plataforma imobiliária.",

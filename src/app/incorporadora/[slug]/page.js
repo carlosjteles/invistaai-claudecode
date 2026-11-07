@@ -74,6 +74,7 @@ export async function generateMetadata({ params }) {
 		description,
 		alternates: { canonical: url },
 		openGraph: {
+			locale: "pt_BR",
 			title,
 			description,
 			url,

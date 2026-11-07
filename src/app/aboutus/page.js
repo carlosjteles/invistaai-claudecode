@@ -35,6 +35,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/sobre`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
 		description:
 			"Conectamos pessoas e capital a oportunidades imobiliárias em São Paulo com curadoria rigorosa e dados de mercado.",

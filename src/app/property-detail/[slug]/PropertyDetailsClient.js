@@ -42,6 +42,7 @@ import {
 	plantasSchema,
 	amenidadesSchema,
 	perguntasComparativas,
+	nomeSemIncorporadora,
 } from "../../helper/schema";
 import Mdi from "../../components/Mdi";
 
@@ -178,22 +179,24 @@ export default function PropertyDetailsClient({
 			.trim();
 	}, [propertyData.description]);
 
-	const coords = coordsDoEmbed(propertyData.description_embed);
-	const plantas = plantasSchema(
-		propertyData.typelogies,
-		propertyData.name || propertyData.address,
+	// "Lux 590 Itaim Bibi - Lux" vira "Lux 590 Itaim Bibi": é o nome do
+	// empreendimento, tanto nos textos quanto na entidade do schema.
+	const nomeCurto = React.useMemo(
+		() =>
+			nomeSemIncorporadora(
+				propertyData.name || propertyData.address,
+				propertyData.seo?.developer,
+			),
+		[propertyData.name, propertyData.address, propertyData.seo],
 	);
+
+	const coords = coordsDoEmbed(propertyData.description_embed);
+	const plantas = plantasSchema(propertyData.typelogies, nomeCurto);
 	const amenidades = amenidadesSchema(propertyData.attributes);
 	const perguntasTexto = React.useMemo(
 		() => faqDoDescription(propertyData.description),
 		[propertyData.description],
 	);
-	// "Lux 590 Itaim Bibi - Lux" vira "Lux 590 Itaim Bibi" nos textos corridos.
-	const nomeCurto = React.useMemo(() => {
-		const bruto = propertyData.name || propertyData.address || "";
-		const dev = propertyData.seo?.developer;
-		return dev ? bruto.replace(new RegExp(`\\s*[-–]\\s*${dev}\\s*$`, "i"), "").trim() || bruto : bruto;
-	}, [propertyData.name, propertyData.address, propertyData.seo]);
 
 	// Perguntas geradas dos números do imóvel: preço do m² x bairro, metrô, polos.
 	const perguntasDados = React.useMemo(
@@ -222,7 +225,7 @@ export default function PropertyDetailsClient({
 		// isto é um empreendimento residencial, com plantas e amenidades.
 		"@type": ["Product", "ApartmentComplex"],
 		"@id": `${paginaUrl}#empreendimento`,
-		name: propertyData.name || propertyData.address,
+		name: nomeCurto,
 		description: normalizedDescription.slice(0, 5000),
 		image: perspectiveImages.slice(0, 10).map((img) => img.src),
 		identifier: propertyData.id,

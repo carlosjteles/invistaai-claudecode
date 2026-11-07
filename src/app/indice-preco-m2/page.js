@@ -61,6 +61,7 @@ export async function generateMetadata() {
 		keywords: ["preço do m² São Paulo", "preço metro quadrado por bairro", "valor do m² São Paulo", "índice preço m²", "lançamentos São Paulo preço"],
 		alternates: { canonical: `${getBaseUrl()}${URL}` },
 		openGraph: {
+			locale: "pt_BR",
 			title,
 			description,
 			url: `${getBaseUrl()}${URL}`,

@@ -24,6 +24,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/politica-de-privacidade`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Política de Privacidade | ${getSiteName()}`,
 		description:
 			"Entenda como coletamos e protegemos seus dados em conformidade com a LGPD.",

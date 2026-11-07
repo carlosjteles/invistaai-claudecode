@@ -25,7 +25,8 @@ export const metadata = {
 	description:
 		"Coberturas duplex, horizontais, duplex e triplex à venda em São Paulo, em lançamentos, obras e prontos. Metragem e preço da cobertura, atualizados toda semana.",
 	alternates: { canonical: `${getBaseUrl()}${cfg.path}` },
-	openGraph: { title: cfg.h1, url: `${getBaseUrl()}${cfg.path}`, type: "website" },
+	openGraph: {
+			locale: "pt_BR", title: cfg.h1, url: `${getBaseUrl()}${cfg.path}`, type: "website" },
 };
 
 export default function Page({ searchParams }) {
