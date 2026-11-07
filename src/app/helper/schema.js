@@ -2,6 +2,9 @@
 // O conteúdo já existe na página; aqui a gente só traduz para o vocabulário
 // que o Google e os modelos de busca entendem.
 
+import { contact } from "../storage/about";
+import { getBaseUrl, getSiteName } from "./utils";
+
 const semTags = (texto) =>
 	String(texto || "")
 		.replace(/<br\s*\/?>/gi, " ")
@@ -135,4 +138,82 @@ export function amenidadesSchema(attributes) {
 			name: nome,
 			value: true,
 		}));
+}
+
+/** Identificador único do corretor, para as páginas se referirem à mesma pessoa. */
+export const AUTOR_ID = () => `${getBaseUrl()}/#corretor`;
+
+/** Quem responde pelo conteúdo das páginas. Igual em todo o site. */
+export function autorPessoa() {
+	return {
+		"@type": "Person",
+		"@id": AUTOR_ID(),
+		name: contact.broker.name,
+		jobTitle: "Corretor de imóveis",
+		identifier: `CRECI-SP ${contact.broker.creci}`,
+		worksFor: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+		knowsAbout: [
+			"Imóveis de alto padrão em São Paulo",
+			"Lançamentos imobiliários",
+			"Investimento em imóveis para renda",
+		],
+	};
+}
+
+/** FAQPage a partir de uma lista [{ q, a }]. Devolve null quando não há perguntas. */
+export function faqPageSchema(url, perguntas) {
+	const itens = (perguntas || []).filter((p) => p && p.q && p.a);
+	if (itens.length === 0) return null;
+	return {
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		"@id": `${url}#faq`,
+		mainEntity: itens.map((p) => ({
+			"@type": "Question",
+			name: semTags(p.q),
+			acceptedAnswer: { "@type": "Answer", text: semTags(p.a) },
+		})),
+	};
+}
+
+/**
+ * Nó de página com autoria e datas. `tipo` costuma ser CollectionPage
+ * nas listagens e WebPage nas demais.
+ */
+export function paginaSchema({
+	url,
+	tipo = "WebPage",
+	nome,
+	descricao,
+	modificadoEm = null,
+	publicadoEm = null,
+	imagem = null,
+	entidadePrincipal = null,
+}) {
+	return {
+		"@context": "https://schema.org",
+		"@type": tipo,
+		"@id": `${url}#pagina`,
+		url,
+		name: nome,
+		...(descricao && { description: descricao }),
+		inLanguage: "pt-BR",
+		...(imagem && { primaryImageOfPage: imagem }),
+		...(entidadePrincipal && { mainEntity: entidadePrincipal }),
+		...(publicadoEm && { datePublished: publicadoEm }),
+		...(modificadoEm && { dateModified: modificadoEm }),
+		author: autorPessoa(),
+		reviewedBy: { "@id": AUTOR_ID() },
+		publisher: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+	};
+}
+
+/** Data de modificação mais recente de uma lista de imóveis, em ISO. */
+export function maisRecente(itens) {
+	const datas = (itens || [])
+		.map((i) => i && (i.updatedAt || i.createdAt))
+		.filter(Boolean)
+		.map((d) => new Date(d).getTime())
+		.filter((t) => Number.isFinite(t));
+	return datas.length ? new Date(Math.max(...datas)).toISOString() : null;
 }
