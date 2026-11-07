@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBaseUrl } from "../helper/utils";
+import { lastmodDe } from "../helper/sitemap";
 import prisma from "../../db/prisma";
 
 export const revalidate = 86400;
@@ -7,7 +8,24 @@ export const revalidate = 86400;
 export async function GET() {
 	const baseUrl = getBaseUrl();
 
-	const today = new Date();
+	// Páginas que listam imóveis mudam quando o catálogo muda; as institucionais
+	// e legais, não. Dizer que tudo mudou hoje, todo dia, faz o Google deixar de
+	// confiar no lastmod deste arquivo.
+	let ultimoImovel = null;
+	try {
+		const r = await prisma.property.aggregate({ _max: { updatedAt: true } });
+		ultimoImovel = r?._max?.updatedAt || null;
+	} catch (e) {
+		ultimoImovel = null;
+	}
+
+	const SEM_CATALOGO = new Set([
+		"/sobre",
+		"/contato",
+		"/perguntas-frequentes",
+		"/politica-de-privacidade",
+		"/termos-e-condicoes",
+	]);
 
 	let bairros = [];
 	try {
@@ -123,7 +141,9 @@ export async function GET() {
 					(url) =>
 						`<url>
 							<loc>${url.loc}</loc>
-							<lastmod>${today.toISOString()}</lastmod>
+							<lastmod>${lastmodDe(
+								SEM_CATALOGO.has(url.loc.replace(baseUrl, "")) ? null : ultimoImovel
+							)}</lastmod>
 							<changefreq>${url.changeFrequency}</changefreq>
 							<priority>${url.priority.toFixed(1)}</priority>
 						</url>`
