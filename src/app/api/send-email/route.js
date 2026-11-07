@@ -5,6 +5,21 @@ import { getSiteName } from "@/app/helper/utils";
 import prisma from "@/db/prisma";
 
 // Verificação anti-robô do Cloudflare Turnstile (a chave secreta fica só na Vercel: TURNSTILE_SECRET_KEY)
+// Credenciais do Gmail: variáveis da Vercel ou, se faltarem, conteudo.config (email_user / email_pass)
+async function credenciaisEmail() {
+	let user = process.env.EMAIL_USER || "";
+	let pass = process.env.EMAIL_PASS || "";
+	try {
+		const rows = await prisma.$queryRaw`select chave, valor from conteudo.config where chave in ('email_user', 'email_pass')`;
+		const cfg = Object.fromEntries(rows.map((r) => [r.chave, r.valor]));
+		if (cfg.email_user && cfg.email_pass) {
+			user = cfg.email_user;
+			pass = cfg.email_pass;
+		}
+	} catch (e) {}
+	return { user, pass };
+}
+
 async function chaveSecreta() {
 	if (process.env.TURNSTILE_SECRET_KEY) return process.env.TURNSTILE_SECRET_KEY;
 	// Sem variável na Vercel: usa a chave guardada no banco (conteudo.config, sem acesso público)
@@ -94,12 +109,22 @@ export async function POST(request) {
 		);
 	}
 
+	// Guarda a mensagem no banco antes de tudo: o contato não se perde mesmo se o e-mail falhar
+	let contatoId = null;
+	try {
+		const [c] = await prisma.$queryRaw`
+			insert into conteudo.contatos (nome, email, assunto, mensagem, ip)
+			values (${name}, ${email}, ${String(subject).slice(0, 200)}, ${message}, ${ip || null})
+			returning id`;
+		contatoId = c?.id ?? null;
+	} catch (e) {
+		console.error("contato (banco):", e?.message);
+	}
+
+	const cred = await credenciaisEmail();
 	const transporter = nodemailer.createTransport({
 		service: "gmail",
-		auth: {
-			user: process.env.EMAIL_USER,
-			pass: process.env.EMAIL_PASS,
-		},
+		auth: { user: cred.user, pass: cred.pass },
 	});
 
 	const template = `
@@ -258,8 +283,8 @@ export async function POST(request) {
     `;
 
 	const mailOptions = {
-		from: process.env.EMAIL_USER,
-		to: process.env.EMAIL_USER,
+		from: cred.user,
+		to: cred.user,
 		subject: `Formulário ${getSiteName()} - Contato ${name}`,
 		replyTo: email,
 		html: template,
@@ -267,13 +292,17 @@ export async function POST(request) {
 
 	try {
 		await transporter.sendMail(mailOptions);
-		return NextResponse.json(
-			{ message: "E-mail enviado com sucesso!" },
-			{ status: 200 }
-		);
+		if (contatoId) await prisma.$executeRaw`update conteudo.contatos set enviado = true where id = ${contatoId}`.catch(() => {});
+		return NextResponse.json({ message: "Mensagem enviada! Retornaremos em breve." }, { status: 200 });
 	} catch (error) {
+		console.error("contato (e-mail):", error?.message);
+		if (contatoId) {
+			await prisma.$executeRaw`update conteudo.contatos set erro = ${String(error?.message || "erro").slice(0, 300)} where id = ${contatoId}`.catch(() => {});
+			// A mensagem ficou salva: para o cliente, o envio foi recebido
+			return NextResponse.json({ message: "Mensagem enviada! Retornaremos em breve." }, { status: 200 });
+		}
 		return NextResponse.json(
-			{ message: "Falha ao enviar e-mail" },
+			{ error: "Não foi possível enviar agora. Fale com a gente pelo WhatsApp." },
 			{ status: 500 }
 		);
 	}

@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 
+import prisma from "@/db/prisma";
+
 import { getBaseUrl } from "@/app/helper/utils";
 import { contact } from "@/app/storage/about";
 
@@ -28,18 +30,23 @@ export const whatsLink = (numero, texto) => {
 	return `https://wa.me/${n}?text=${encodeURIComponent(texto)}`;
 };
 
-const transporter = () =>
-	nodemailer.createTransport({
-		service: "gmail",
-		auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-	});
+// Credenciais do Gmail: conteudo.config (email_user / email_pass) ou variáveis da Vercel
+async function credenciais() {
+	try {
+		const rows = await prisma.$queryRaw`select chave, valor from conteudo.config where chave in ('email_user', 'email_pass')`;
+		const cfg = Object.fromEntries(rows.map((r) => [r.chave, r.valor]));
+		if (cfg.email_user && cfg.email_pass) return { user: cfg.email_user, pass: cfg.email_pass };
+	} catch (e) {}
+	return { user: process.env.EMAIL_USER || "", pass: process.env.EMAIL_PASS || "" };
+}
 
 export async function enviarEmail({ para, assunto, html, responderPara }) {
-	if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return false;
+	const cred = await credenciais();
+	if (!cred.user || !cred.pass) return false;
 	try {
-		await transporter().sendMail({
-			from: `InvistaAí <${process.env.EMAIL_USER}>`,
-			to: para || process.env.EMAIL_USER,
+		await nodemailer.createTransport({ service: "gmail", auth: cred }).sendMail({
+			from: `InvistaAí <${cred.user}>`,
+			to: para || cred.user,
 			replyTo: responderPara || contact.email,
 			subject: assunto,
 			html,
