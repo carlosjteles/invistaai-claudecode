@@ -35,6 +35,12 @@ import { contact } from "../../storage/about";
 
 import { formatPrice } from "../../helper/formatter";
 import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
+import {
+	faqDoDescription,
+	coordsDoEmbed,
+	plantasSchema,
+	amenidadesSchema,
+} from "../../helper/schema";
 import Mdi from "../../components/Mdi";
 
 // Selos dos tipos de unidade do prédio, com link para a página temática
@@ -60,6 +66,8 @@ export default function PropertyDetailsClient({
 	bairroAlerta = null,
 	tipos = [],
 	analiseRenda = null,
+	publishedISO = null,
+	modifiedISO = null,
 }) {
 	const temSimulador = propertyData.price >= 600000;
 	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
@@ -167,9 +175,25 @@ export default function PropertyDetailsClient({
 			.trim();
 	}, [propertyData.description]);
 
+	const coords = coordsDoEmbed(propertyData.description_embed);
+	const plantas = plantasSchema(
+		propertyData.typelogies,
+		propertyData.name || propertyData.address,
+	);
+	const amenidades = amenidadesSchema(propertyData.attributes);
+	const perguntas = React.useMemo(
+		() => faqDoDescription(propertyData.description),
+		[propertyData.description],
+	);
+	const paginaUrl = `${getBaseUrl()}/imovel/${propertyData.slug}`;
+	const autorId = `${getBaseUrl()}/#corretor`;
+
 	const propertySchema = {
 		"@context": "https://schema.org",
-		"@type": "Product",
+		// Product mantém a oferta com preço; ApartmentComplex diz ao Google que
+		// isto é um empreendimento residencial, com plantas e amenidades.
+		"@type": ["Product", "ApartmentComplex"],
+		"@id": `${paginaUrl}#empreendimento`,
 		name: propertyData.name || propertyData.address,
 		description: normalizedDescription.slice(0, 5000),
 		image: perspectiveImages.slice(0, 10).map((img) => img.src),
@@ -254,7 +278,76 @@ export default function PropertyDetailsClient({
 					]
 				: []),
 		].filter(Boolean),
+		address: {
+			"@type": "PostalAddress",
+			streetAddress: propertyData.seo?.street,
+			addressLocality: propertyData.seo?.city,
+			addressRegion: propertyData.seo?.state,
+			postalCode: propertyData.seo?.zip,
+			addressCountry: "BR",
+		},
+		...(coords && {
+			geo: {
+				"@type": "GeoCoordinates",
+				latitude: coords.lat,
+				longitude: coords.lon,
+			},
+		}),
+		...(plantas.length > 0 && {
+			containsPlace: plantas,
+			numberOfAccommodationUnits: {
+				"@type": "QuantitativeValue",
+				value: plantas.length,
+			},
+		}),
+		...(amenidades.length > 0 && { amenityFeature: amenidades }),
 	};
+
+	// Autoria: quem responde pelo conteúdo da página, com CRECI.
+	const autorSchema = {
+		"@type": "Person",
+		"@id": autorId,
+		name: contact.broker.name,
+		jobTitle: "Corretor de imóveis",
+		identifier: `CRECI-SP ${contact.broker.creci}`,
+		worksFor: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+		knowsAbout: [
+			"Imóveis de alto padrão em São Paulo",
+			"Lançamentos imobiliários",
+			"Investimento em imóveis para renda",
+		],
+	};
+
+	const paginaSchema = {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"@id": `${paginaUrl}#pagina`,
+		url: paginaUrl,
+		name: propertyData.seo?.title || propertyData.name,
+		description: propertyData.seo?.description,
+		inLanguage: "pt-BR",
+		primaryImageOfPage: perspectiveImages[0]?.src,
+		mainEntity: { "@id": `${paginaUrl}#empreendimento` },
+		...(publishedISO && { datePublished: publishedISO }),
+		...(modifiedISO && { dateModified: modifiedISO }),
+		author: autorSchema,
+		reviewedBy: { "@id": autorId },
+		publisher: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+	};
+
+	const faqSchema =
+		perguntas.length > 0
+			? {
+					"@context": "https://schema.org",
+					"@type": "FAQPage",
+					"@id": `${paginaUrl}#faq`,
+					mainEntity: perguntas.map((p) => ({
+						"@type": "Question",
+						name: p.q,
+						acceptedAnswer: { "@type": "Answer", text: p.a },
+					})),
+				}
+			: null;
 
 	const breadcrumbSchema = {
 		"@context": "https://schema.org",
@@ -304,6 +397,24 @@ export default function PropertyDetailsClient({
 					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
 				}}
 			/>
+
+			<script
+				id="page-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(paginaSchema).replace(/</g, "\\u003c"),
+				}}
+			/>
+
+			{faqSchema && (
+				<script
+					id="faq-schema"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+					}}
+				/>
+			)}
 
 			<Navbar
 				navClass="defaultscroll sticky"
@@ -637,11 +748,24 @@ export default function PropertyDetailsClient({
 									</div>
 								)}
 
-								<p className="text-muted small mt-4 mb-0">
-									{updatedLabel && <>Página atualizada em {updatedLabel}. </>}
-									Responsável: {contact.broker.name}, corretor de imóveis –
-									CRECI {contact.broker.creci}.
-								</p>
+								<div className="border rounded-3 p-3 mt-4">
+									<p className="fw-semibold mb-1">
+										{contact.broker.name}
+										<span className="text-muted fw-normal">
+											{" "}
+											· CRECI-SP {contact.broker.creci}
+										</span>
+									</p>
+									<p className="text-muted small mb-1">
+										Corretor de imóveis especializado em lançamentos e imóveis
+										de alto padrão em São Paulo. Responsável pelas informações
+										desta página.
+									</p>
+									<p className="text-muted small mb-0">
+										{updatedLabel && <>Página atualizada em {updatedLabel}.</>}
+										{tabelaEm && <> Tabela do empreendimento de {tabelaEm}.</>}
+									</p>
+								</div>
 							</div>
 						</div>
 
