@@ -6,10 +6,12 @@ import Footer from "../../components/Footer";
 import ScrollTop from "../../components/ScrollTop";
 import PropertyCard from "../../components/PropertyCard";
 import AlertaImoveis from "../../components/AlertaImoveis";
+import AutorPagina from "../../components/AutorPagina";
 
 import prisma from "../../../db/prisma";
 import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../../helper/utils";
 import { contact } from "../../storage/about";
+import { faqPageSchema, paginaSchema, maisRecente } from "../../helper/schema";
 
 export const revalidate = 3600;
 
@@ -142,6 +144,7 @@ export default async function BairroPage({ params }) {
 	const listSchema = {
 		"@context": "https://schema.org",
 		"@type": "ItemList",
+		"@id": `${url}#lista`,
 		name: `Apartamentos de alto padrão ${bairro.prep}`,
 		numberOfItems: imoveis.length,
 		itemListElement: imoveis.map((i, idx) => ({
@@ -151,12 +154,29 @@ export default async function BairroPage({ params }) {
 			name: i.name,
 		})),
 	};
+	const modificadoISO = maisRecente(imoveis);
+	const atualizadoLabel = modificadoISO
+		? new Date(modificadoISO).toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" })
+		: null;
+
+	const faqSchema = faqPageSchema(url, faq);
+	const pageSchema = paginaSchema({
+		url,
+		tipo: "CollectionPage",
+		nome: `Apartamentos de alto padrão ${bairro.prep}`,
+		descricao: `${imoveis.length} empreendimentos de alto padrão ${bairro.prep}, com preço, plantas e previsão de entrega.`,
+		modificadoEm: modificadoISO,
+		entidadePrincipal: { "@id": `${url}#lista` },
+	});
+
 	const whatsapp = `https://wa.me/${contact.phone}?text=${encodeURIComponent(`Olá! Vi os imóveis ${bairro.prep} no site da InvistaAí e gostaria de mais informações.`)}`;
 
 	return (
 		<>
 			<script id="bairro-breadcrumb" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
 			<script id="bairro-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listSchema).replace(/</g, "\\u003c") }} />
+			<script id="bairro-pagina" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema).replace(/</g, "\\u003c") }} />
+			{faqSchema && <script id="bairro-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />}
 
 			<Navbar navClass="defaultscroll sticky" logolight={true} menuClass="navigation-menu nav-center nav-light" />
 
@@ -265,6 +285,10 @@ export default async function BairroPage({ params }) {
 									<p className="text-muted mb-0">{f.a}</p>
 								</div>
 							))}
+							<AutorPagina
+								descricao={`Corretor de imóveis especializado em lançamentos e imóveis de alto padrão em São Paulo. Acompanha pessoalmente os empreendimentos ${bairro.prep} e responde pelas informações desta página.`}
+								atualizadoEm={atualizadoLabel}
+							/>
 						</div>
 						<div className="col-lg-4">
 							<div className="card border-0 shadow rounded-3 p-4">

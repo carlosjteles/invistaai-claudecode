@@ -6,6 +6,7 @@ import ScrollTop from "../components/ScrollTop";
 
 import prisma from "../../db/prisma";
 import { getBaseUrl, getSiteName } from "../helper/utils";
+import { paginaSchema } from "../helper/schema";
 
 export const revalidate = 3600;
 
@@ -40,9 +41,33 @@ export default async function IncorporadorasPage() {
 		],
 	};
 
+	const urlPagina = `${getBaseUrl()}/incorporadoras`;
+	const listSchema = {
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		"@id": `${urlPagina}#lista`,
+		name: "Incorporadoras de alto padrão em São Paulo",
+		numberOfItems: lista.length,
+		itemListElement: lista.map((i, idx) => ({
+			"@type": "ListItem",
+			position: idx + 1,
+			url: `${getBaseUrl()}/incorporadora/${i.slug}`,
+			name: i.nome,
+		})),
+	};
+	const pageSchema = paginaSchema({
+		url: urlPagina,
+		tipo: "CollectionPage",
+		nome: "Incorporadoras de alto padrão em São Paulo",
+		descricao: "As incorporadoras cujos empreendimentos de alto padrão acompanhamos em São Paulo.",
+		entidadePrincipal: { "@id": `${urlPagina}#lista` },
+	});
+
 	return (
 		<>
 			<script id="inc-list-breadcrumb" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
+			<script id="incs-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listSchema).replace(/</g, "\\u003c") }} />
+			<script id="incs-pagina" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema).replace(/</g, "\\u003c") }} />
 			<Navbar navClass="defaultscroll sticky" logolight={true} menuClass="navigation-menu nav-center nav-light" />
 
 			<section className="bg-half-170 d-table w-100" style={{ backgroundImage: "url('/images/bg/properties.webp')" }}>

@@ -5,10 +5,12 @@ import Footer from "./Footer";
 import ScrollTop from "./ScrollTop";
 import PropertyCard from "./PropertyCard";
 import AlertaImoveis from "./AlertaImoveis";
+import AutorPagina from "./AutorPagina";
 
 import prisma from "../../db/prisma";
 import { getBaseUrl, ordenarPorEntrega } from "../helper/utils";
 import { TIPOS_GRUPO } from "../storage/filters";
+import { paginaSchema, maisRecente } from "../helper/schema";
 
 const FASES = [
 	{ value: "", label: "Todas as fases" },
@@ -101,6 +103,7 @@ export default async function TipoLanding({ cfg, searchParams = {} }) {
 	const lista = {
 		"@context": "https://schema.org",
 		"@type": "ItemList",
+		"@id": `${url}#lista`,
 		name: cfg.h1,
 		numberOfItems: imoveis.length,
 		itemListElement: imoveis.slice(0, 50).map((i, idx) => ({
@@ -111,9 +114,23 @@ export default async function TipoLanding({ cfg, searchParams = {} }) {
 		})),
 	};
 
+	const modificadoISO = maisRecente(imoveis);
+	const atualizadoLabel = modificadoISO
+		? new Date(modificadoISO).toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" })
+		: null;
+	const pagina = paginaSchema({
+		url,
+		tipo: "CollectionPage",
+		nome: cfg.h1,
+		descricao: (Array.isArray(cfg.intro) ? cfg.intro[0] : cfg.intro) || cfg.h1,
+		modificadoEm: modificadoISO,
+		entidadePrincipal: { "@id": `${url}#lista` },
+	});
+
 	return (
 		<>
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb).replace(/</g, "\\u003c") }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pagina).replace(/</g, "\\u003c") }} />
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(lista).replace(/</g, "\\u003c") }} />
 
 			<Navbar navClass="defaultscroll sticky" logolight={true} menuClass="navigation-menu nav-center nav-light" />
@@ -212,6 +229,12 @@ export default async function TipoLanding({ cfg, searchParams = {} }) {
 							titulo={cfg.alertaTitulo}
 							origem={cfg.path}
 						/>
+					</div>
+
+					<div className="row">
+						<div className="col-lg-8">
+							<AutorPagina atualizadoEm={atualizadoLabel} />
+						</div>
 					</div>
 				</div>
 			</section>

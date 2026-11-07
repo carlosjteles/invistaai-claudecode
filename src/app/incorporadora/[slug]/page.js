@@ -9,6 +9,8 @@ import PropertyCard from "../../components/PropertyCard";
 import prisma from "../../../db/prisma";
 import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../../helper/utils";
 import { contact } from "../../storage/about";
+import AutorPagina from "../../components/AutorPagina";
+import { paginaSchema, maisRecente } from "../../helper/schema";
 
 export const revalidate = 3600;
 
@@ -107,16 +109,50 @@ export default async function IncorporadoraPage({ params }) {
 	const listSchema = {
 		"@context": "https://schema.org",
 		"@type": "ItemList",
+		"@id": `${url}#lista`,
 		name: `Empreendimentos ${inc.nome} em São Paulo`,
 		numberOfItems: imoveis.length,
 		itemListElement: imoveis.map((i, idx) => ({ "@type": "ListItem", position: idx + 1, url: `${getBaseUrl()}/imovel/${i.slug}`, name: i.name })),
 	};
+
+	// A incorporadora como entidade própria, com os empreendimentos ligados a ela.
+	const orgSchema = {
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"@id": `${url}#incorporadora`,
+		name: inc.nome,
+		url,
+		areaServed: { "@type": "City", name: "São Paulo", addressRegion: "SP", addressCountry: "BR" },
+		makesOffer: imoveis.slice(0, 50).map((i) => ({
+			"@type": "Offer",
+			name: i.name,
+			url: `${getBaseUrl()}/imovel/${i.slug}`,
+			...(i.price > 0 && { price: Number(i.price).toFixed(2), priceCurrency: "BRL" }),
+		})),
+	};
+
+	const modificadoISO = maisRecente(imoveis);
+	const atualizadoLabel = modificadoISO
+		? new Date(modificadoISO).toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" })
+		: null;
+
+	const pageSchema = paginaSchema({
+		url,
+		tipo: "CollectionPage",
+		nome: `Empreendimentos ${inc.nome} em São Paulo`,
+		descricao: `${imoveis.length} empreendimentos da ${inc.nome} em São Paulo, com preço, plantas e previsão de entrega.`,
+		modificadoEm: modificadoISO,
+		entidadePrincipal: { "@id": `${url}#incorporadora` },
+	});
+
 	const whatsapp = `https://wa.me/${contact.phone}?text=${encodeURIComponent(`Olá! Vi os empreendimentos da ${inc.nome} no site da InvistaAí e gostaria de mais informações.`)}`;
 
 	return (
 		<>
 			<script id="inc-breadcrumb" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
 			<script id="inc-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listSchema).replace(/</g, "\\u003c") }} />
+			<script id="inc-organizacao" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema).replace(/</g, "\\u003c") }} />
+			<script id="inc-pagina" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema).replace(/</g, "\\u003c") }} />
 
 			<Navbar navClass="defaultscroll sticky" logolight={true} menuClass="navigation-menu nav-center nav-light" />
 
@@ -192,6 +228,15 @@ export default async function IncorporadoraPage({ params }) {
 								<PropertyCard item={item} />
 							</div>
 						))}
+					</div>
+
+					<div className="row">
+						<div className="col-lg-8">
+							<AutorPagina
+								descricao={`Corretor de imóveis especializado em lançamentos e imóveis de alto padrão em São Paulo. Acompanha os empreendimentos da ${inc.nome} e responde pelas informações desta página.`}
+								atualizadoEm={atualizadoLabel}
+							/>
+						</div>
 					</div>
 
 					{linksBairros.length > 0 && (
