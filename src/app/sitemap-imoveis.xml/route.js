@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../db/prisma";
 
 import { getBaseUrl } from "../helper/utils";
-import { lastmodDe } from "../helper/sitemap";
+import { lastmodDe } from "../helper/lastmod";
 
 export const revalidate = 300;
 

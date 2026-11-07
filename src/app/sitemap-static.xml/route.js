@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBaseUrl } from "../helper/utils";
-import { lastmodDe } from "../helper/sitemap";
+import { lastmodDe } from "../helper/lastmod";
 import prisma from "../../db/prisma";
 
 export const revalidate = 86400;
