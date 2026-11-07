@@ -23,6 +23,7 @@ const FinancingSimulation = dynamic(
 import RelatedPropertySlider from "../../components/RelatedPropertySlider";
 import PriceHistory from "../../components/PriceHistory";
 import RendaAnalise from "../../components/RendaAnalise";
+import Proximidades from "../../components/Proximidades";
 import PaymentSimulator from "../../components/PaymentSimulator";
 import AlertaImoveis, { faixaAcima } from "../../components/AlertaImoveis";
 
@@ -40,6 +41,7 @@ import {
 	coordsDoEmbed,
 	plantasSchema,
 	amenidadesSchema,
+	perguntasComparativas,
 } from "../../helper/schema";
 import Mdi from "../../components/Mdi";
 
@@ -66,6 +68,7 @@ export default function PropertyDetailsClient({
 	bairroAlerta = null,
 	tipos = [],
 	analiseRenda = null,
+	analise = null,
 	publishedISO = null,
 	modifiedISO = null,
 }) {
@@ -181,10 +184,35 @@ export default function PropertyDetailsClient({
 		propertyData.name || propertyData.address,
 	);
 	const amenidades = amenidadesSchema(propertyData.attributes);
-	const perguntas = React.useMemo(
+	const perguntasTexto = React.useMemo(
 		() => faqDoDescription(propertyData.description),
 		[propertyData.description],
 	);
+	// "Lux 590 Itaim Bibi - Lux" vira "Lux 590 Itaim Bibi" nos textos corridos.
+	const nomeCurto = React.useMemo(() => {
+		const bruto = propertyData.name || propertyData.address || "";
+		const dev = propertyData.seo?.developer;
+		return dev ? bruto.replace(new RegExp(`\\s*[-–]\\s*${dev}\\s*$`, "i"), "").trim() || bruto : bruto;
+	}, [propertyData.name, propertyData.address, propertyData.seo]);
+
+	// Perguntas geradas dos números do imóvel: preço do m² x bairro, metrô, polos.
+	const perguntasDados = React.useMemo(
+		() =>
+			perguntasComparativas({
+				nome: nomeCurto,
+				analise,
+				preco: propertyData.price,
+				area: Number(propertyData.min_area) || 0,
+				entregaEm: propertyData.delivery_in,
+			}),
+		[nomeCurto, propertyData.price, propertyData.min_area, propertyData.delivery_in, analise],
+	);
+	// O FAQPage só pode conter o que está visível na página, então é a mesma lista.
+	const vistas = new Set(perguntasTexto.map((p) => p.q.toLowerCase()));
+	const perguntas = [
+		...perguntasTexto,
+		...perguntasDados.filter((p) => !vistas.has(p.q.toLowerCase())),
+	];
 	const paginaUrl = `${getBaseUrl()}/imovel/${propertyData.slug}`;
 	const autorId = `${getBaseUrl()}/#corretor`;
 
@@ -276,6 +304,24 @@ export default function PropertyDetailsClient({
 							value: propertyData.release_in,
 						},
 					]
+				: []),
+			...(analise?.metro?.nome
+				? [
+						{
+							"@type": "PropertyValue",
+							name: `Distância até ${analise.metro.nome}`,
+							value: analise.metro.dist,
+							unitCode: "MTR",
+						},
+					]
+				: []),
+			...(Array.isArray(analise?.polos)
+				? analise.polos.slice(0, 5).map((polo) => ({
+						"@type": "PropertyValue",
+						name: `Distância até ${polo.nome}`,
+						value: polo.dist,
+						unitCode: "MTR",
+					}))
 				: []),
 		].filter(Boolean),
 		address: {
@@ -709,6 +755,24 @@ export default function PropertyDetailsClient({
 													<YoutubeEmbed video={propertyData.video} />
 												)}
 										</div>
+									</div>
+								)}
+
+								{!analiseRenda && (
+									<Proximidades analise={analise} nome={nomeCurto} />
+								)}
+
+								{perguntasDados.length > 0 && (
+									<div className="mb-4">
+										<h2 className="h4 mb-3 text-dark">
+											Preço e localização do {nomeCurto}
+										</h2>
+										{perguntasDados.map((p) => (
+											<div className="mb-3" key={p.q}>
+												<h3 className="h6 fw-semibold mb-1">{p.q}</h3>
+												<p className="text-muted mb-0">{p.a}</p>
+											</div>
+										))}
 									</div>
 								)}
 

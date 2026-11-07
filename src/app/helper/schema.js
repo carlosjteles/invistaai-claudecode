@@ -217,3 +217,87 @@ export function maisRecente(itens) {
 		.filter((t) => Number.isFinite(t));
 	return datas.length ? new Date(Math.max(...datas)).toISOString() : null;
 }
+
+const brl = (v) =>
+	new Intl.NumberFormat("pt-BR", {
+		style: "currency",
+		currency: "BRL",
+		maximumFractionDigits: 0,
+	}).format(Number(v));
+
+const metros = (m) =>
+	m >= 1000
+		? `${(m / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} km`
+		: `${m} m`;
+
+/**
+ * Perguntas geradas a partir dos números do próprio imóvel: preço do m² contra a
+ * mediana do bairro e distância do metrô. São as buscas de quem já está decidindo,
+ * e nenhuma resposta aqui é opinião — tudo sai do banco.
+ */
+export function perguntasComparativas({ nome, analise, preco, area, entregaEm }) {
+	if (!nome) return [];
+	const perguntas = [];
+
+	const mediana = Number(analise?.indice?.mediana) || 0;
+	const bairro = analise?.indice?.bairro || null;
+	const amostra = Number(analise?.indice?.n) || 0;
+	const precoM2 = preco > 0 && area > 0 ? preco / area : 0;
+
+	if (precoM2 > 0 && mediana > 0 && bairro) {
+		const dif = Math.round(((precoM2 - mediana) / mediana) * 100);
+		const comoEsta =
+			dif <= -5
+				? `${Math.abs(dif)}% abaixo`
+				: dif >= 5
+					? `${dif}% acima`
+					: "praticamente na média";
+		perguntas.push({
+			q: `O ${nome} está caro ou barato para ${bairro}?`,
+			a:
+				`A menor unidade do ${nome} sai a ${brl(precoM2)} o m². A mediana de imóveis novos ` +
+				`em ${bairro} é de ${brl(mediana)} o m², calculada sobre ${amostra} ` +
+				`${amostra === 1 ? "empreendimento" : "empreendimentos"} que acompanhamos. ` +
+				`O ${nome} está ${comoEsta}${dif <= -5 || dif >= 5 ? " dessa mediana" : ""}. ` +
+				`Metragem, andar e acabamento explicam boa parte da diferença, então vale comparar unidades semelhantes.`,
+		});
+	}
+
+	if (analise?.metro?.nome && analise.metro.dist) {
+		const d = analise.metro.dist;
+		const caminhada = Math.max(1, Math.round(d / 80));
+		perguntas.push({
+			q: `O ${nome} fica perto do metrô?`,
+			a:
+				`A estação mais próxima é o ${analise.metro.nome}, a ${metros(d)} em linha reta, ` +
+				`cerca de ${caminhada} minutos a pé. ` +
+				(d <= 800
+					? "É uma distância curta, que costuma pesar no preço de revenda e na procura por locação."
+					: d <= 1500
+						? "É uma caminhada média; muita gente prefere ir de carro ou por aplicativo nos dias de chuva."
+						: "Não é uma distância de caminhada no dia a dia, então considere carro ou aplicativo."),
+		});
+	}
+
+	const polos = Array.isArray(analise?.polos) ? analise.polos.slice(0, 3) : [];
+	if (polos.length > 0) {
+		perguntas.push({
+			q: `O que tem perto do ${nome}?`,
+			a:
+				`Os pontos de maior movimento no entorno são ` +
+				polos
+					.map((p) => `${p.nome}, a ${metros(p.dist)}`)
+					.join("; ") +
+				`. As distâncias são em linha reta, a partir do endereço do empreendimento.`,
+		});
+	}
+
+	if (entregaEm) {
+		perguntas.push({
+			q: `Quando o ${nome} fica pronto?`,
+			a: `A previsão de entrega informada pela incorporadora é ${entregaEm}. Prazos de obra podem mudar, e a data vale como referência da tabela mais recente.`,
+		});
+	}
+
+	return perguntas;
+}
