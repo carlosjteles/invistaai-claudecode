@@ -129,8 +129,28 @@ export default function Home() {
 		sameAs,
 	};
 
+	// Nome do site: é daqui que o Google tira o rótulo exibido acima do título
+	// nos resultados de busca, no lugar do domínio.
+	const websiteJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"@id": `${getBaseUrl()}/#site`,
+		name: getSiteName(),
+		alternateName: ["InvistaAi", "Invista AI", "invistaai.com"],
+		url: getBaseUrl(),
+		inLanguage: "pt-BR",
+		publisher: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+	};
+
 	return (
 		<>
+			<script
+				id="website-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c"),
+				}}
+			/>
 			<script
 				id="homepage-schema"
 				type="application/ld+json"
