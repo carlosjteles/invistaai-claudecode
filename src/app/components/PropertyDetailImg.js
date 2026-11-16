@@ -63,12 +63,14 @@ export default function PropertyDetailImg({
 					title={firstImage.alt}
 					aria-label={`Ver imagem: ${firstImage.alt}`}
 				>
+					{/* Sem `unoptimized`: o Next redimensiona, converte para WebP e passa
+					    a valer o minimumCacheTTL do next.config. No original, esta foto
+					    saía do Storage em tamanho cheio para aparecer em meia tela. */}
 					<Image
-						unoptimized
 						src={firstImage.src}
 						width={0}
 						height={0}
-						sizes="100vw"
+						sizes="(min-width: 768px) 50vw, 100vw"
 						priority
 						className="img-fluid rounded-3 shadow"
 						alt={firstImage.alt || `Imóvel: vista principal`}
@@ -93,12 +95,15 @@ export default function PropertyDetailImg({
 								title={img.alt}
 								aria-label={`Ver imagem: ${img.alt || `Vista ${idx + 2}`}`}
 							>
+								{/* Miniatura: ocupa um quarto da tela no desktop e metade no
+								    celular. Antes baixava o arquivo original inteiro para
+								    aparecer deste tamanho. */}
 								<Image
-									unoptimized
 									src={img.src}
 									width={0}
 									height={0}
-									sizes="100vw"
+									sizes="(min-width: 768px) 25vw, 50vw"
+									loading="lazy"
 									className="img-fluid rounded-3 shadow"
 									alt={img.alt || `Imóvel: vista ${idx + 2}`}
 									itemProp="contentUrl"
