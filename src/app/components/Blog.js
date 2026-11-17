@@ -98,8 +98,7 @@ export default async function Blog() {
 											src={imageSrc}
 											width={0}
 											height={0}
-											sizes="100vw"
-											style={{ width: "100%", height: "auto" }}
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
 											className="img-fluid"
 											alt={item.title}
 										/>
@@ -128,6 +127,9 @@ export default async function Blog() {
 										<p className="text-muted mt-2" itemProp="abstract">
 											{item.description}
 										</p>
+
+										{/* empurra o "Leia mais" para a base: resumos de tamanhos diferentes continuam alinhados */}
+										<div className="blog-espaco" aria-hidden="true" />
 
 										<Link
 											href={`/blog/${item.slug}`}
