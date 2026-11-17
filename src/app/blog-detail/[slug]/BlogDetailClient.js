@@ -418,7 +418,6 @@ export default function BlogDetailClient({
 																		width={0}
 																		height={0}
 																		sizes="100vw"
-																		style={{ width: "100%", height: "auto" }}
 																		className="img-fluid"
 																		alt={item.title}
 																		itemProp="image"
@@ -456,6 +455,9 @@ export default function BlogDetailClient({
 																	>
 																		{item.description}
 																	</p>
+
+																	{/* empurra o "Leia mais" para a base: resumos de tamanhos diferentes continuam alinhados */}
+																	<div className="blog-espaco" aria-hidden="true" />
 
 																	<Link
 																		href={`/blog/${item.slug}`}

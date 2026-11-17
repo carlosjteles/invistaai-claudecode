@@ -6,11 +6,22 @@
 /*         Blog                  */
 /*===============================*/
 .blog {
+    // cards da mesma linha com a mesma altura: imagem fixa e "Leia mais" na base.
+    // Escopado em &.card para não pegar os itens da barra lateral, que usam .blog sem ser card.
+    &.card { height: 100%; }
     .blog-image {
         img {
             transition: all 0.5s ease;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
         }
     }
+    .card-body { display: flex; flex-direction: column; }
+    // o .p-4 interno é quem distribui título, resumo e "Leia mais"
+    .card-body > div { flex: 1 1 auto; display: flex; flex-direction: column; }
+    // cresce para empurrar o "Leia mais" para baixo, sem encostar no resumo
+    .blog-espaco { flex: 1 1 auto; min-height: 12px; }
     .blog-image {
         .blog-tag{
             position: absolute;
