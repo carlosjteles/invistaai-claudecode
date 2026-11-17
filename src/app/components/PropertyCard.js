@@ -81,12 +81,16 @@ export default function PropertyCard({ item, className = "", destaque = null }) 
 				{item.neighborhood && <p className="pv2-local mb-0">{item.neighborhood}, São Paulo – SP</p>}
 				{resumo && <p className="pv2-resumo mb-0">{resumo}</p>}
 
+				{/* empurra o rodapé para a base do card: todos os cards de uma linha alinham preço e entrega */}
+				<div className="pv2-espaco" aria-hidden="true" />
+
 				<div className="pv2-rodape d-flex justify-content-between align-items-end">
 					<div>
 						{destaque?.rotulo && <span className="pv2-destaque">{destaque.rotulo}</span>}
 						<span className="pv2-rotulo">{preco > 0 ? "A partir de" : "Preço"}</span>
 						<p className="pv2-preco mb-0">{preco > 0 ? brl(preco) : "Consulte"}</p>
-						{precoM2 > 0 && <span className="pv2-m2">({brl(precoM2)}/m²)</span>}
+						{/* sem R$/m² a linha continua ocupando espaço, senão o card sobe em relação aos vizinhos */}
+						<span className="pv2-m2">{precoM2 > 0 ? `(${brl(precoM2)}/m²)` : " "}</span>
 					</div>
 					<div className="text-end">
 						{entrega && (

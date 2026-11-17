@@ -66,9 +66,14 @@
 
 // Card de imóvel v2 (nome, bairro, resumo, preço com R$/m², entrega e estágio)
 .property-v2 {
+    // ocupa toda a altura da coluna para que os rodapés dos cards fiquem na mesma linha
+    height: 100%;
+    .card-body { display: flex; flex-direction: column; }
     .pv2-local { font-size: 15px; color: $muted; margin-top: 2px; }
     .pv2-resumo { font-size: 15px; color: $dark; margin-top: 12px; }
-    .pv2-rodape { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba($dark, 0.08); gap: 12px; }
+    // cresce para empurrar o rodapé para baixo, mas nunca encosta no conteúdo acima
+    .pv2-espaco { flex: 1 1 auto; min-height: 16px; }
+    .pv2-rodape { padding-top: 14px; border-top: 1px solid rgba($dark, 0.08); gap: 12px; }
     .pv2-rotulo { display: block; font-size: 14px; color: $muted; }
     .pv2-preco { font-size: 24px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
     .pv2-m2 { display: block; font-size: 13px; color: $muted; }
