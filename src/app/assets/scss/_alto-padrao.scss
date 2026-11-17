@@ -74,6 +74,15 @@
     // cresce para empurrar o rodapé para baixo, mas nunca encosta no conteúdo acima
     .pv2-espaco { flex: 1 1 auto; min-height: 16px; }
     .pv2-rodape { padding-top: 14px; border-top: 1px solid rgba($dark, 0.08); gap: 12px; }
+}
+
+// "Você também pode gostar": no tiny-slider cada slide tem a altura do próprio
+// conteúdo, então o height:100% do card não encontra altura definida no pai e vira auto.
+// Tornando a trilha um flex container, os slides esticam e o rodapé volta a alinhar.
+.tiny-slide-three {
+    .tns-slider { display: flex; align-items: stretch; }
+    // o tiny-slider define a largura de cada slide inline; sem isto eles encolhem
+    .tiny-slide { height: auto; flex-shrink: 0; padding: 0.5rem; }
     .pv2-rotulo { display: block; font-size: 14px; color: $muted; }
     .pv2-preco { font-size: 24px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
     .pv2-m2 { display: block; font-size: 13px; color: $muted; }

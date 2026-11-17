@@ -72,7 +72,9 @@ export default function RelatedPropertySlider({ propertyData }) {
 						<meta itemProp="url" content={`${getBaseUrl()}/imovel/${item.slug}`} />
 						<meta itemProp="name" content={item.name} />
 
-						<PropertyCard item={item} className="m-2" />
+						{/* o respiro entre os cards vem do padding do .tiny-slide, não de margem
+						    no card: com margem, o card de altura 100% estouraria o slide */}
+						<PropertyCard item={item} />
 					</div>
 				);
 			});
