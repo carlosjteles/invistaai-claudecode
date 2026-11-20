@@ -223,7 +223,12 @@ export default function PropertyDetailsClient({
 		"@context": "https://schema.org",
 		// Product mantém a oferta com preço; ApartmentComplex diz ao Google que
 		// isto é um empreendimento residencial, com plantas e amenidades.
-		"@type": ["Product", "ApartmentComplex"],
+		// Sem preço não há offers, e um Product sem offers/review/aggregateRating
+		// é erro crítico no Rich Results: nesse caso fica só o ApartmentComplex.
+		"@type":
+			propertyData.price > 0
+				? ["Product", "ApartmentComplex"]
+				: "ApartmentComplex",
 		"@id": `${paginaUrl}#empreendimento`,
 		name: nomeCurto,
 		description: normalizedDescription.slice(0, 5000),
