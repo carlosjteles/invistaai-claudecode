@@ -2,8 +2,9 @@ import Link from "next/link";
 
 import { getIndicadores } from "../helper/indicadores";
 
-// Quantas vezes o grupo é repetido na trilha. Cada grupo ocupa 100vw, então
-// a animação desloca exatamente 100vw e o laço fecha sem emenda.
+// Cópias do grupo na trilha. A animação desloca a largura de um grupo e
+// reinicia, então bastam 2 para o laço não mostrar vazio; 4 dá margem.
+// O SCSS não depende deste número — só precisa que seja 2 ou mais.
 const REPETICOES = 4;
 
 export default async function FaixaIndicadores() {
