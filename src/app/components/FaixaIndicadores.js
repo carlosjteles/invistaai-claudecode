@@ -26,6 +26,20 @@ export default async function FaixaIndicadores() {
 					<>
 						<span className="fi-rotulo">{item.rotulo}</span>
 						<span className="fi-valor">{item.valor_texto}</span>
+						{/* O valor do mês fica no texto, não no title: celular não tem
+						    hover, então em title ele seria invisível para a maior
+						    parte dos visitantes. */}
+						{item.valor2_texto && (
+							<>
+								<span className="fi-sep" aria-hidden="true">
+									·
+								</span>
+								<span className="fi-valor2">{item.valor2_texto}</span>
+								{item.rotulo2 && (
+									<span className="fi-rotulo2">{item.rotulo2}</span>
+								)}
+							</>
+						)}
 					</>
 				);
 

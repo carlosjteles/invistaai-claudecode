@@ -294,3 +294,16 @@ select
    and i.valor_texto is not null;
 
 grant select on conteudo.indicadores_faixa to anon, authenticated;
+
+-- ============================================================
+-- Segundo valor (variação do mês) visível no texto da faixa.
+-- O title não serve: celular não tem hover.
+--   IPCA mensal  -> série 433, conferida por consistência
+--                   (compondo 12 meses dela dá os 4,63% da 13522)
+--   INCC mensal  -> já vinha no payload da 7456
+-- As colunas novas vão no FIM da lista da view: create or replace
+-- aceita acrescentar coluna, só não aceita inserir no meio.
+-- ============================================================
+alter table conteudo.indicadores
+    add column if not exists valor2_texto text,
+    add column if not exists rotulo2      text;

@@ -10,7 +10,7 @@ async function buscar() {
 		// A view entrega as linhas já prontas para exibir: ela filtra as
 		// inativas e monta a contagem de dias do Copom na hora da leitura.
 		return await prisma.$queryRaw`
-            select rotulo, valor_texto, detalhe, url
+            select rotulo, valor_texto, valor2_texto, rotulo2, detalhe, url
               from conteudo.indicadores_faixa
              order by ordem
         `;

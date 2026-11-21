@@ -98,6 +98,21 @@ body {
         color: $accent;
     }
 
+    // segundo valor: presente e legível, mas sem competir com o principal
+    .fi-sep {
+        color: rgba($white, 0.35);
+    }
+
+    .fi-valor2 {
+        font-weight: 600;
+        font-size: 13px;
+        color: rgba($white, 0.9);
+    }
+
+    .fi-rotulo2 {
+        font-size: 11px;
+        color: rgba($white, 0.6);
+    }
 }
 
 // Valor literal, sem calc, sem porcentagem e sem var(): são justamente os
