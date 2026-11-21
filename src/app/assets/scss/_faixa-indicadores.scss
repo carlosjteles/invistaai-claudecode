@@ -53,8 +53,18 @@ body {
         will-change: transform;
     }
 
-    // pausa ao passar o mouse, para dar tempo de ler o número
-    &:hover .fi-trilha,
+    // Pausa ao passar o mouse, para dar tempo de ler o número — mas só onde
+    // existe mouse de verdade. No touch o `:hover` gruda: encostar o dedo na
+    // faixa aplica o estado e nada o remove depois, então a animação ficava
+    // pausada para sempre. O `hover: hover` exclui celular e tablet.
+    @media (hover: hover) and (pointer: fine) {
+        &:hover .fi-trilha {
+            animation-play-state: paused;
+        }
+    }
+
+    // Teclado continua pausando em qualquer aparelho: aqui o foco sai quando
+    // o usuário navega para fora, diferente do hover no touch.
     &:focus-within .fi-trilha {
         animation-play-state: paused;
     }
