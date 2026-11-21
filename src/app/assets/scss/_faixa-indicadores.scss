@@ -1,0 +1,161 @@
+//
+// faixa-indicadores.scss
+//
+
+/*********************************/
+/*   Faixa de indicadores        */
+/*===============================*/
+
+// Alturas da faixa. Elas aparecem em três lugares que precisam concordar:
+// a própria faixa, o deslocamento do #topnav e o padding do body. Por isso
+// ficam em variáveis — mudar a altura aqui ajusta os três.
+$fi-altura: 40px;
+$fi-altura-mobile: 36px;
+
+// Quantas cópias do grupo a trilha tem. PRECISA ser igual ao REPETICOES de
+// FaixaIndicadores.js: a animação desloca 1/N da trilha, que é exatamente a
+// largura de um grupo. É assim que o laço fecha sem emenda tanto no desktop
+// (grupo = 100vw) quanto no celular (grupo = largura do conteúdo).
+$fi-repeticoes: 4;
+
+// O #topnav é `position: fixed; top: 0`. Com a faixa acima dele, o menu desce
+// a altura da faixa e o body ganha o mesmo espaço, para o hero não ficar
+// escondido embaixo. Sem isto a faixa cobriria o topo da imagem do hero.
+body {
+    padding-top: $fi-altura;
+}
+
+#topnav {
+    top: $fi-altura;
+}
+
+.faixa-indicadores {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    // acima do #topnav (999) para continuar visível com o menu fixo
+    z-index: 1000;
+    height: $fi-altura;
+    background-color: $primary;
+    overflow: hidden;
+    font-family: $font-family-secondary;
+
+    .fi-trilha {
+        display: flex;
+        height: 100%;
+        width: max-content;
+        // lento de propósito: um grupo inteiro leva 45s para atravessar. A
+        // faixa fica em todas as páginas, movimento rápido viraria distração.
+        animation: fi-desliza 45s linear infinite;
+        will-change: transform;
+    }
+
+    // pausa ao passar o mouse, para dar tempo de ler o número
+    &:hover .fi-trilha,
+    &:focus-within .fi-trilha {
+        animation-play-state: paused;
+    }
+
+    // Cada grupo ocupa exatamente uma largura de tela. Como a trilha desloca
+    // 100vw, o grupo seguinte entra na posição do anterior e o laço não tem
+    // emenda, independente do número de indicadores.
+    .fi-grupo {
+        flex: 0 0 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .fi-item {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 7px;
+        white-space: nowrap;
+        padding: 0 10px;
+        font-size: 13px;
+        line-height: 1;
+        color: rgba($white, 0.92);
+        text-decoration: none;
+    }
+
+    .fi-link:hover .fi-valor {
+        color: $white;
+        text-decoration: underline;
+    }
+
+    .fi-rotulo {
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: rgba($white, 0.68);
+    }
+
+    .fi-valor {
+        font-weight: 700;
+        font-size: 14px;
+        color: $accent;
+    }
+
+    .fi-referencia {
+        font-size: 11px;
+        color: rgba($white, 0.55);
+    }
+}
+
+@keyframes fi-desliza {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        // 1/N da trilha = a largura de um grupo, qualquer que seja ela
+        transform: translate3d(calc(-100% / #{$fi-repeticoes}), 0, 0);
+    }
+}
+
+// Quem pediu menos movimento no sistema recebe a faixa parada, com o primeiro
+// grupo visível. Nenhum indicador é perdido: o grupo tem todos eles.
+@media (prefers-reduced-motion: reduce) {
+    .faixa-indicadores .fi-trilha {
+        animation: none;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-top: $fi-altura-mobile;
+    }
+
+    #topnav {
+        top: $fi-altura-mobile;
+    }
+
+    .faixa-indicadores {
+        height: $fi-altura-mobile;
+
+        .fi-grupo {
+            // na tela estreita os 4 indicadores não cabem lado a lado, então o
+            // grupo passa a ter a largura do próprio conteúdo e desliza inteiro
+            flex: 0 0 auto;
+            justify-content: flex-start;
+            gap: 4px;
+        }
+
+        .fi-trilha {
+            // conteúdo mais estreito: o mesmo tempo deixaria a faixa lenta
+            // demais no celular
+            animation-duration: 28s;
+        }
+
+        .fi-item {
+            font-size: 12px;
+            padding: 0 12px;
+        }
+
+        .fi-valor {
+            font-size: 13px;
+        }
+    }
+}

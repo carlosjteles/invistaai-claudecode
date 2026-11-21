@@ -3,6 +3,7 @@ import Script from "next/script";
 import "../app/assets/css/bootstrap.purged.css";
 import "../app/assets/scss/style.scss";
 
+import FaixaIndicadores from "./components/FaixaIndicadores";
 import GoogleAnalyticsClient from "./components/GoogleAnalyticsClient";
 
 import { Providers } from "./providers";
@@ -173,6 +174,10 @@ export default function RootLayout({ children }) {
 				/>
 			</head>
 			<body className={`${heading.variable} ${body.variable}`}>
+				{/* Fica acima do #topnav, que é fixo e transparente sobre o hero.
+				    Aqui no layout a faixa aparece em todas as páginas de uma vez,
+				    inclusive nas que vierem depois, sem tocar em cada uma. */}
+				<FaixaIndicadores />
 				<Providers>
 					<GoogleAnalyticsClient />
 					{children}
