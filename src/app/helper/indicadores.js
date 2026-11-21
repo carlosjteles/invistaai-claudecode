@@ -7,10 +7,11 @@ import prisma from "../../db/prisma";
 // do request do usuário, então uma lentidão do Banco Central não afeta a página.
 async function buscar() {
 	try {
+		// A view entrega as linhas já prontas para exibir: ela filtra as
+		// inativas e monta a contagem de dias do Copom na hora da leitura.
 		return await prisma.$queryRaw`
-            select rotulo, valor_texto, detalhe, url, referencia
-              from conteudo.indicadores
-             where ativo and valor_texto is not null
+            select rotulo, valor_texto, detalhe, url
+              from conteudo.indicadores_faixa
              order by ordem
         `;
 	} catch (erro) {

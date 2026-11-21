@@ -249,3 +249,48 @@ create policy indicadores_leitura_publica on conteudo.indicadores
 -- ============================================================
 select cron.schedule('indicadores-mercado', '20 9,13,19 * * *',
                      'select conteudo.atualizar_indicadores()');
+
+-- ============================================================
+-- Faixa enxuta: rótulo + valor, sem a linha de referência.
+-- A tabela guarda o fato (a data do Copom); a view monta o texto.
+-- A contagem de dias é calculada a cada leitura, para não ficar
+-- desatualizada se a coleta falhar num dia.
+-- ============================================================
+update conteudo.indicadores set rotulo = 'Copom' where chave = 'copom_proxima';
+
+create or replace view conteudo.indicadores_faixa as
+with copom as (
+    select c.data_decisao,
+           c.data_decisao - (now() at time zone 'America/Sao_Paulo')::date as dias
+      from conteudo.copom_calendario c
+     where c.data_decisao >= (now() at time zone 'America/Sao_Paulo')::date
+     order by c.data_decisao
+     limit 1
+)
+select
+    i.chave,
+    i.rotulo,
+    case
+        when i.chave <> 'copom_proxima' then i.valor_texto
+        else (select case dias when 0 then 'hoje'
+                               when 1 then 'amanhã'
+                               else 'em ' || dias || ' dias'
+                     end
+                from copom)
+    end as valor_texto,
+    -- O detalhe já nomeia o mês de referência, então não repetir aqui. No
+    -- Copom a faixa mostra só a contagem, então a data precisa vir no detalhe
+    -- — senão ela não aparece em lugar nenhum.
+    case
+        when i.chave <> 'copom_proxima' then i.detalhe
+        else (select 'Próxima decisão de juros do Copom: '
+                     || to_char(data_decisao, 'DD/MM/YYYY')
+                from copom)
+    end as detalhe,
+    i.url,
+    i.ordem
+  from conteudo.indicadores i
+ where i.ativo
+   and i.valor_texto is not null;
+
+grant select on conteudo.indicadores_faixa to anon, authenticated;

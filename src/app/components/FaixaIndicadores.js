@@ -26,9 +26,6 @@ export default async function FaixaIndicadores() {
 					<>
 						<span className="fi-rotulo">{item.rotulo}</span>
 						<span className="fi-valor">{item.valor_texto}</span>
-						{item.referencia && (
-							<span className="fi-referencia">{item.referencia}</span>
-						)}
 					</>
 				);
 
