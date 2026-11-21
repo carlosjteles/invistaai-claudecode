@@ -47,10 +47,29 @@ body {
         display: flex;
         height: 100%;
         width: max-content;
-        // lento de propósito: um grupo inteiro leva 45s para atravessar. A
-        // faixa fica em todas as páginas, movimento rápido viraria distração.
-        animation: fi-desliza 45s linear infinite;
-        will-change: transform;
+    }
+
+    // A animação só EXISTE onde há permissão para movimento. Antes ela era
+    // declarada sempre e desligada depois com `animation: none` dentro de
+    // prefers-reduced-motion — e aquele atalho zera todos os longhands,
+    // inclusive iteration-count, que volta a 1. O bloco do celular, que vem
+    // depois, devolvia nome e duração mas não o `infinite`: a faixa dava uma
+    // volta e parava. Declarando só aqui dentro, não há o que ressuscitar
+    // pela metade.
+    @media (prefers-reduced-motion: no-preference) {
+        .fi-trilha {
+            // lento de propósito: um grupo inteiro leva 45s para atravessar.
+            // A faixa fica em todas as páginas, movimento rápido distrai.
+            animation: fi-desliza 45s linear infinite;
+            will-change: transform;
+        }
+
+        // o celular desloca a largura do próprio grupo, que lá é outra
+        @media (max-width: 767px) {
+            .fi-trilha {
+                animation: fi-desliza-mobile 36s linear infinite;
+            }
+        }
     }
 
     // Pausa ao passar o mouse, para dar tempo de ler o número — mas só onde
@@ -148,11 +167,31 @@ body {
     }
 }
 
-// Quem pediu menos movimento no sistema recebe a faixa parada, com o primeiro
-// grupo visível. Nenhum indicador é perdido: o grupo tem todos eles.
+// Quem pediu menos movimento no sistema não recebe animação nenhuma — ela
+// nem é declarada, acima. Mas parada a faixa mostraria só os dois primeiros
+// indicadores e os outros dois ficariam inalcançáveis, então ela vira uma
+// tira de rolagem horizontal: a pessoa arrasta e vê todos, no tempo dela.
+// As cópias do grupo saem, senão a rolagem repetiria o mesmo conteúdo.
 @media (prefers-reduced-motion: reduce) {
-    .faixa-indicadores .fi-trilha {
-        animation: none;
+    .faixa-indicadores {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .fi-grupo {
+            flex: 0 0 auto;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 0 4px;
+
+            &:not(:first-child) {
+                display: none;
+            }
+        }
     }
 }
 
@@ -174,11 +213,8 @@ body {
             flex: 0 0 $fi-grupo-mobile;
         }
 
-        .fi-trilha {
-            // keyframe próprio: desloca 200vw, a largura do grupo no celular
-            animation-name: fi-desliza-mobile;
-            animation-duration: 36s;
-        }
+        // a animação do celular está declarada junto da desktop, dentro do
+        // bloco de prefers-reduced-motion: no-preference
 
         .fi-item {
             font-size: 12px;
