@@ -2,8 +2,9 @@ import Link from "next/link";
 
 import { getIndicadores } from "../helper/indicadores";
 
-// Quantas vezes o grupo é repetido na trilha. Cada grupo ocupa 100vw, então
-// a animação desloca exatamente 100vw e o laço fecha sem emenda.
+// Cópias do grupo na trilha. A animação desloca a largura de um grupo e
+// reinicia, então bastam 2 para o laço não mostrar vazio; 4 dá margem.
+// O SCSS não depende deste número — só precisa que seja 2 ou mais.
 const REPETICOES = 4;
 
 export default async function FaixaIndicadores() {
@@ -25,8 +26,19 @@ export default async function FaixaIndicadores() {
 					<>
 						<span className="fi-rotulo">{item.rotulo}</span>
 						<span className="fi-valor">{item.valor_texto}</span>
-						{item.referencia && (
-							<span className="fi-referencia">{item.referencia}</span>
+						{/* O valor do mês fica no texto, não no title: celular não tem
+						    hover, então em title ele seria invisível para a maior
+						    parte dos visitantes. */}
+						{item.valor2_texto && (
+							<>
+								<span className="fi-sep" aria-hidden="true">
+									·
+								</span>
+								<span className="fi-valor2">{item.valor2_texto}</span>
+								{item.rotulo2 && (
+									<span className="fi-rotulo2">{item.rotulo2}</span>
+								)}
+							</>
 						)}
 					</>
 				);

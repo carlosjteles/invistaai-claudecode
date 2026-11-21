@@ -12,11 +12,13 @@
 $fi-altura: 40px;
 $fi-altura-mobile: 36px;
 
-// Quantas cópias do grupo a trilha tem. PRECISA ser igual ao REPETICOES de
-// FaixaIndicadores.js: a animação desloca 1/N da trilha, que é exatamente a
-// largura de um grupo. É assim que o laço fecha sem emenda tanto no desktop
-// (grupo = 100vw) quanto no celular (grupo = largura do conteúdo).
-$fi-repeticoes: 4;
+// Largura de um grupo. A animação desloca exatamente este valor, então o
+// grupo seguinte entra na posição do anterior e o laço não tem emenda.
+// Fica em vw (medida absoluta) de propósito: porcentagem em transform se
+// resolve contra o próprio elemento, cuja largura é `max-content` e depende
+// dos filhos — circular, e com suporte irregular dentro de calc().
+$fi-grupo: 100vw;
+$fi-grupo-mobile: 200vw;
 
 // O #topnav é `position: fixed; top: 0`. Com a faixa acima dele, o menu desce
 // a altura da faixa e o body ganha o mesmo espaço, para o hero não ficar
@@ -57,11 +59,8 @@ body {
         animation-play-state: paused;
     }
 
-    // Cada grupo ocupa exatamente uma largura de tela. Como a trilha desloca
-    // 100vw, o grupo seguinte entra na posição do anterior e o laço não tem
-    // emenda, independente do número de indicadores.
     .fi-grupo {
-        flex: 0 0 100vw;
+        flex: 0 0 $fi-grupo;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -99,19 +98,43 @@ body {
         color: $accent;
     }
 
-    .fi-referencia {
+    // segundo valor: presente e legível, mas sem competir com o principal
+    .fi-sep {
+        color: rgba($white, 0.35);
+    }
+
+    .fi-valor2 {
+        font-weight: 600;
+        font-size: 13px;
+        color: rgba($white, 0.9);
+    }
+
+    .fi-rotulo2 {
         font-size: 11px;
-        color: rgba($white, 0.55);
+        color: rgba($white, 0.6);
     }
 }
 
+// Valor literal, sem calc, sem porcentagem e sem var(): são justamente os
+// três construtos que falham silenciosamente em transform e deixam a
+// animação rodando sem sair do lugar.
 @keyframes fi-desliza {
     from {
         transform: translate3d(0, 0, 0);
     }
     to {
-        // 1/N da trilha = a largura de um grupo, qualquer que seja ela
-        transform: translate3d(calc(-100% / #{$fi-repeticoes}), 0, 0);
+        transform: translate3d(-$fi-grupo, 0, 0);
+    }
+}
+
+// O celular tem keyframe próprio porque o grupo tem outra largura: a animação
+// precisa deslocar exatamente a largura do grupo, senão o laço dá um salto.
+@keyframes fi-desliza-mobile {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-$fi-grupo-mobile, 0, 0);
     }
 }
 
@@ -136,17 +159,15 @@ body {
         height: $fi-altura-mobile;
 
         .fi-grupo {
-            // na tela estreita os 4 indicadores não cabem lado a lado, então o
-            // grupo passa a ter a largura do próprio conteúdo e desliza inteiro
-            flex: 0 0 auto;
-            justify-content: flex-start;
-            gap: 4px;
+            // os 4 indicadores não cabem numa tela estreita, então o grupo
+            // ocupa duas larguras de tela e mostra cerca de dois por vez
+            flex: 0 0 $fi-grupo-mobile;
         }
 
         .fi-trilha {
-            // conteúdo mais estreito: o mesmo tempo deixaria a faixa lenta
-            // demais no celular
-            animation-duration: 28s;
+            // keyframe próprio: desloca 200vw, a largura do grupo no celular
+            animation-name: fi-desliza-mobile;
+            animation-duration: 36s;
         }
 
         .fi-item {
