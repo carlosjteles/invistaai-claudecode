@@ -4,6 +4,7 @@ import React from "react";
 import { NumericFormat } from "react-number-format";
 
 import Swal from "sweetalert2";
+import Mdi from "./Mdi";
 
 export default function FinancingSimulation() {
 	const [currentStep, setCurrentStep] = React.useState(1);
@@ -1253,7 +1254,7 @@ export default function FinancingSimulation() {
 								className="btn btn-sm btn-outline-secondary position-absolute top-0 start-0 m-3"
 								onClick={clearForm}
 							>
-								<i className="mdi mdi-arrow-left"></i> Voltar
+								<Mdi n="arrow-left" /> Voltar
 							</button>
 
 							<div className="text-center py-4 mt-5">
@@ -1304,7 +1305,7 @@ export default function FinancingSimulation() {
 									className="btn btn-lg btn-primary mt-4 d-flex align-items-center mx-auto"
 									onClick={openWhatsapp}
 								>
-									<i className="mdi mdi-whatsapp me-2"></i> Falar com o Corretor
+									<Mdi n="whatsapp" className="me-2" /> Falar com o Corretor
 								</button>
 							</div>
 						</div>

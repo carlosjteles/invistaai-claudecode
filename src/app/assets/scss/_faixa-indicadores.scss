@@ -1,0 +1,241 @@
+//
+// faixa-indicadores.scss
+//
+
+/*********************************/
+/*   Faixa de indicadores        */
+/*===============================*/
+
+// Alturas da faixa. Elas aparecem em três lugares que precisam concordar:
+// a própria faixa, o deslocamento do #topnav e o padding do body. Por isso
+// ficam em variáveis — mudar a altura aqui ajusta os três.
+$fi-altura: 40px;
+$fi-altura-mobile: 36px;
+
+// Largura de um grupo. A animação desloca exatamente este valor, então o
+// grupo seguinte entra na posição do anterior e o laço não tem emenda.
+// Fica em vw (medida absoluta) de propósito: porcentagem em transform se
+// resolve contra o próprio elemento, cuja largura é `max-content` e depende
+// dos filhos — circular, e com suporte irregular dentro de calc().
+$fi-grupo: 100vw;
+$fi-grupo-mobile: 200vw;
+
+// O #topnav é `position: fixed; top: 0`. Com a faixa acima dele, o menu desce
+// a altura da faixa e o body ganha o mesmo espaço, para o hero não ficar
+// escondido embaixo. Sem isto a faixa cobriria o topo da imagem do hero.
+body {
+    padding-top: $fi-altura;
+}
+
+#topnav {
+    top: $fi-altura;
+}
+
+.faixa-indicadores {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    // acima do #topnav (999) para continuar visível com o menu fixo
+    z-index: 1000;
+    height: $fi-altura;
+    background-color: $primary;
+    overflow: hidden;
+    font-family: $font-family-secondary;
+
+    .fi-trilha {
+        display: flex;
+        height: 100%;
+        width: max-content;
+    }
+
+    // A animação só EXISTE onde há permissão para movimento. Antes ela era
+    // declarada sempre e desligada depois com `animation: none` dentro de
+    // prefers-reduced-motion — e aquele atalho zera todos os longhands,
+    // inclusive iteration-count, que volta a 1. O bloco do celular, que vem
+    // depois, devolvia nome e duração mas não o `infinite`: a faixa dava uma
+    // volta e parava. Declarando só aqui dentro, não há o que ressuscitar
+    // pela metade.
+    @media (prefers-reduced-motion: no-preference) {
+        .fi-trilha {
+            // lento de propósito: um grupo inteiro leva 45s para atravessar.
+            // A faixa fica em todas as páginas, movimento rápido distrai.
+            animation: fi-desliza 45s linear infinite;
+            will-change: transform;
+        }
+
+        // o celular desloca a largura do próprio grupo, que lá é outra
+        @media (max-width: 767px) {
+            .fi-trilha {
+                animation: fi-desliza-mobile 36s linear infinite;
+            }
+        }
+    }
+
+    // Pausa ao passar o mouse, para dar tempo de ler o número — mas só onde
+    // existe mouse de verdade. No touch o `:hover` gruda: encostar o dedo na
+    // faixa aplica o estado e nada o remove depois, então a animação ficava
+    // pausada para sempre. O `hover: hover` exclui celular e tablet.
+    @media (hover: hover) and (pointer: fine) {
+        &:hover .fi-trilha {
+            animation-play-state: paused;
+        }
+    }
+
+    // Teclado continua pausando em qualquer aparelho: aqui o foco sai quando
+    // o usuário navega para fora, diferente do hover no touch.
+    &:focus-within .fi-trilha {
+        animation-play-state: paused;
+    }
+
+    .fi-grupo {
+        flex: 0 0 $fi-grupo;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .fi-item {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 7px;
+        white-space: nowrap;
+        padding: 0 10px;
+        font-size: 13px;
+        line-height: 1;
+        color: rgba($white, 0.92);
+        text-decoration: none;
+    }
+
+    .fi-link:hover .fi-valor {
+        color: $white;
+        text-decoration: underline;
+    }
+
+    .fi-rotulo {
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: rgba($white, 0.68);
+    }
+
+    .fi-valor {
+        font-weight: 700;
+        font-size: 14px;
+        color: $accent;
+    }
+
+    // segundo valor: presente e legível, mas sem competir com o principal
+    .fi-sep {
+        color: rgba($white, 0.35);
+    }
+
+    .fi-valor2 {
+        font-weight: 600;
+        font-size: 13px;
+        color: rgba($white, 0.9);
+    }
+
+    .fi-rotulo2 {
+        font-size: 11px;
+        color: rgba($white, 0.6);
+    }
+}
+
+// Valor literal, sem calc, sem porcentagem e sem var(): são justamente os
+// três construtos que falham silenciosamente em transform e deixam a
+// animação rodando sem sair do lugar.
+@keyframes fi-desliza {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-$fi-grupo, 0, 0);
+    }
+}
+
+// O celular tem keyframe próprio porque o grupo tem outra largura: a animação
+// precisa deslocar exatamente a largura do grupo, senão o laço dá um salto.
+@keyframes fi-desliza-mobile {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-$fi-grupo-mobile, 0, 0);
+    }
+}
+
+// Quem pediu menos movimento no sistema não recebe animação nenhuma — ela
+// nem é declarada, acima. Mas parada a faixa mostraria só os dois primeiros
+// indicadores e os outros dois ficariam inalcançáveis, então ela vira uma
+// tira de rolagem horizontal: a pessoa arrasta e vê todos, no tempo dela.
+// As cópias do grupo saem, senão a rolagem repetiria o mesmo conteúdo.
+@media (prefers-reduced-motion: reduce) {
+    .faixa-indicadores {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        // Centraliza a faixa parada. A trilha é `width: max-content`, então
+        // no desktop ela é mais estreita que a tela e ficava encostada na
+        // esquerda, com metade da faixa vazia à direita.
+        //
+        // `margin-inline: auto` e não `justify-content: center` no pai: num
+        // contêiner com overflow, centralizar pelo pai torna a parte que
+        // transborda à esquerda inalcançável pela rolagem. Com margem auto a
+        // caixa fica centrada enquanto couber e, quando não couber, as
+        // margens resolvem para zero e a rolagem funciona normalmente.
+        .fi-trilha {
+            margin-inline: auto;
+        }
+
+        .fi-grupo {
+            flex: 0 0 auto;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 0 4px;
+
+            &:not(:first-child) {
+                display: none;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-top: $fi-altura-mobile;
+    }
+
+    #topnav {
+        top: $fi-altura-mobile;
+    }
+
+    .faixa-indicadores {
+        height: $fi-altura-mobile;
+
+        .fi-grupo {
+            // os 4 indicadores não cabem numa tela estreita, então o grupo
+            // ocupa duas larguras de tela e mostra cerca de dois por vez
+            flex: 0 0 $fi-grupo-mobile;
+        }
+
+        // a animação do celular está declarada junto da desktop, dentro do
+        // bloco de prefers-reduced-motion: no-preference
+
+        .fi-item {
+            font-size: 12px;
+            padding: 0 12px;
+        }
+
+        .fi-valor {
+            font-size: 13px;
+        }
+    }
+}

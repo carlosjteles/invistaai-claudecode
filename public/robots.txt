@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 
 Disallow: /api/
+Disallow: /painel-seo
 
 Sitemap: https://www.invistaai.com/sitemap.xml

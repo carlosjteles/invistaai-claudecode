@@ -6,6 +6,7 @@ import prisma from "../../db/prisma";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 import { formatDateISO } from "../helper/formatter";
+import Mdi from "./Mdi";
 
 export default async function Blog() {
 	const recentData = await prisma.blog.findMany({
@@ -97,8 +98,7 @@ export default async function Blog() {
 											src={imageSrc}
 											width={0}
 											height={0}
-											sizes="100vw"
-											style={{ width: "100%", height: "auto" }}
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
 											className="img-fluid"
 											alt={item.title}
 										/>
@@ -128,13 +128,16 @@ export default async function Blog() {
 											{item.description}
 										</p>
 
+										{/* empurra o "Leia mais" para a base: resumos de tamanhos diferentes continuam alinhados */}
+										<div className="blog-espaco" aria-hidden="true" />
+
 										<Link
 											href={`/blog/${item.slug}`}
 											className="text-dark read-more"
 											aria-label={`Ler o artigo completo: ${item.title}`}
 										>
 											Leia mais{" "}
-											<i className="mdi mdi-chevron-right align-middle"></i>
+											<Mdi n="chevron-right" className="align-middle" />
 										</Link>
 
 										<div

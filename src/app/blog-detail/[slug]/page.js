@@ -27,9 +27,10 @@ export async function generateMetadata({ params }) {
 
 	return {
 		title: `${blogPost.title} | ${getSiteName()}`,
-		description: blogPost.desc,
+		description: blogPost.description,
 		keywords: blogPost.keywords,
 		openGraph: {
+			locale: "pt_BR",
 			title: blogPost.title,
 			description: blogPost.description,
 			url: `${getBaseUrl()}/blog/${blogPost.slug}`,

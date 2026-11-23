@@ -341,12 +341,6 @@ export default function Navbar({
 					>
 						<ul className={menuClass}>
 							<li>
-								<Link href="/" className="sub-menu-item" itemProp="url">
-									<span itemProp="name">Home</span>
-								</Link>
-							</li>
-
-							<li>
 								<Link href="/imoveis" className="sub-menu-item" itemProp="url">
 									<span itemProp="name">Venda</span>
 								</Link>
@@ -359,6 +353,30 @@ export default function Navbar({
 									itemProp="url"
 								>
 									<span itemProp="name">Lançamentos</span>
+								</Link>
+							</li>
+
+							<li>
+								<Link href="/coberturas" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Coberturas</span>
+								</Link>
+							</li>
+
+							<li>
+								<Link href="/investimento" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Renda</span>
+								</Link>
+							</li>
+
+							<li>
+								<Link href="/indice-preco-m2" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Preço do m²</span>
+								</Link>
+							</li>
+
+							<li>
+								<Link href="/comparar" className="sub-menu-item" itemProp="url">
+									<span itemProp="name">Comparar</span>
 								</Link>
 							</li>
 

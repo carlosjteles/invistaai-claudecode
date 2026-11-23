@@ -11,6 +11,8 @@ import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
 
 import { formatPrice } from "../helper/formatter";
 import { getBaseUrl } from "../helper/utils";
+import Mdi from "./Mdi";
+import PropertyCard from "./PropertyCard";
 
 const settings = {
 	container: ".tiny-slide-three",
@@ -23,8 +25,8 @@ const settings = {
 	autoplayTimeout: 3000,
 	navPosition: "bottom",
 	controlsText: [
-		'<i class="mdi mdi-chevron-left "></i>',
-		'<i class="mdi mdi-chevron-right"></i>',
+		'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"/></svg>',
+		'<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>',
 	],
 	nav: false,
 	speed: 400,
@@ -49,220 +51,51 @@ const settings = {
 };
 
 export default function RelatedPropertySlider({ propertyData }) {
+	const [ready, setReady] = React.useState(false);
+
+	React.useEffect(() => {
+		setReady(true);
+	}, []);
+
+	const slides = propertyData.map((item, index) => {
+				const thumbnail = item.images?.[0] || null;
+
+				return (
+					<div
+						className="tiny-slide"
+						key={index}
+						itemProp="itemListElement"
+						itemScope
+						itemType="https://schema.org/ListItem"
+					>
+						<meta itemProp="position" content={index + 1} />
+						<meta itemProp="url" content={`${getBaseUrl()}/imovel/${item.slug}`} />
+						<meta itemProp="name" content={item.name} />
+
+						<PropertyCard item={item} className="m-2" />
+					</div>
+				);
+			});
+
 	return (
-		<div className="row">
+		<div className="row" itemScope itemType="https://schema.org/ItemList">
 			<meta itemProp="name" content="Imóveis Relacionados" />
 			<meta itemProp="numberOfItems" content={propertyData.length} />
 			<meta itemProp="itemListOrder" content="Unordered" />
 
 			<div className="col-12">
 				<div className="tiny-slide-three">
-					<TinySlider settings={settings}>
-						{propertyData.map((item, index) => {
-							const thumbnail = item.images?.[0] || null;
-
-							return (
-								<div
-									className="tiny-slide"
-									key={index}
-									itemProp="itemListElement"
-									itemScope
-									itemType="https://schema.org/ListItem"
-								>
-									<meta itemProp="position" content={index + 1} />
-
-									<div
-										className="card property border-0 shadow position-relative overflow-hidden rounded-3 m-2"
-										itemScope
-										itemType="https://schema.org/RealEstateListing"
-									>
-										<meta itemProp="identifier" content={item.id} />
-										<meta
-											itemProp="url"
-											content={`${getBaseUrl()}/imovel/${item.slug}`}
-										/>
-
-										{thumbnail && (
-											<div className="property-image position-relative overflow-hidden shadow">
-												<Image
-													src={thumbnail.src}
-													width={0}
-													height={0}
-													sizes="100vw"
-													className="img-fluid"
-													alt={thumbnail.alt}
-													itemProp="image"
-												/>
-												<ul className="list-unstyled property-icon">
-													<li>
-														<Link
-															href={`/imovel/${item.slug}`}
-															className="btn btn-sm btn-icon btn-pills btn-primary"
-															aria-label={`Ver detalhes do imóvel ${
-																item.name || item.address
-															}`}
-														>
-															<FiHome className="icons" aria-hidden="true" />
-														</Link>
-													</li>
-													<li className="mt-1">
-														<Link
-															href={`/imovel/${item.slug}?openGallery=true`}
-															className="btn btn-sm btn-icon btn-pills btn-primary"
-															aria-label={`Ver galeria de fotos do imóvel ${
-																item.name || item.address
-															}`}
-														>
-															<FiCamera className="icons" aria-hidden="true" />
-														</Link>
-													</li>
-												</ul>
-											</div>
-										)}
-
-										<div className="card-body content p-4">
-											<Link
-												href={`/imovel/${item.slug}`}
-												className="title fs-5 text-dark fw-medium"
-												itemProp="name"
-											>
-												{item.name || item.address}
-											</Link>
-
-											<div
-												itemProp="itemReviewed"
-												itemScope
-												itemType="https://schema.org/Product"
-											>
-												<meta itemProp="name" content={item.name} />
-												<meta
-													itemProp="url"
-													content={`https://www.invistaai.com/imovel/${item.slug}`}
-												/>
-
-												{thumbnail && (
-													<meta itemProp="image" content={thumbnail.src} />
-												)}
-
-												{item.quantity_reviews > 0 && (
-													<div
-														itemProp="aggregateRating"
-														itemScope
-														itemType="https://schema.org/AggregateRating"
-													>
-														<meta
-															itemProp="ratingValue"
-															content={item.rating}
-														/>
-														<meta
-															itemProp="reviewCount"
-															content={item.quantity_reviews}
-														/>
-														<meta itemProp="bestRating" content="5" />
-														<meta itemProp="worstRating" content="1" />
-													</div>
-												)}
-											</div>
-
-											<div
-												itemProp="accommodationFeature"
-												itemScope
-												itemType="https://schema.org/QuantitativeValue"
-											>
-												<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-													<li className="col-6 d-flex align-items-center m-0">
-														<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-														<small className="text-muted" itemProp="value">
-															{item.preview?.area}
-														</small>
-														<meta itemProp="unitText" content="m²" />
-													</li>
-
-													<li className="col-6 d-flex align-items-center m-0">
-														<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-														<small className="text-muted">
-															{item.preview?.bedroom}
-														</small>
-														<meta itemProp="unitText" content="bedroom" />
-													</li>
-												</ul>
-												<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-													<li className="col-6 d-flex align-items-center m-0">
-														<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-														<small className="text-muted">
-															{item.preview?.suite}
-														</small>
-														<meta itemProp="unitText" content="bathroom" />
-													</li>
-
-													<li className="col-6 d-flex align-items-center m-0">
-														<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
-														<small className="text-muted">
-															{item.preview?.parking}
-														</small>
-														<meta itemProp="unitText" content="parkingSpace" />
-													</li>
-												</ul>
-											</div>
-
-											<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
-												<li className="list-inline-item mb-0">
-													<span className="text-muted">Preço</span>
-													<p
-														className="fw-medium mb-0"
-														itemProp="offers"
-														itemScope
-														itemType="https://schema.org/Offer"
-													>
-														{item.price === 0 ? (
-															"Consulte"
-														) : (
-															<>
-																<meta itemProp="priceCurrency" content="BRL" />
-																<meta itemProp="price" content={item.price} />
-																<span
-																	itemProp="availability"
-																	content="https://schema.org/InStock"
-																></span>
-																{formatPrice(item.price)}
-															</>
-														)}
-													</p>
-												</li>
-												<li className="list-inline-item mb-0 text-muted">
-													<span className="text-muted">Avaliação</span>
-													<ul
-														className={`fw-medium ${
-															item.quantity_reviews > 0 ? "text-warning" : ""
-														} list-unstyled mb-0`}
-													>
-														<li className="list-inline-item mb-0">
-															<i className="mdi mdi-star"></i>
-														</li>
-														<li className="list-inline-item mb-0">
-															<i className="mdi mdi-star"></i>
-														</li>
-														<li className="list-inline-item mb-0">
-															<i className="mdi mdi-star"></i>
-														</li>
-														<li className="list-inline-item mb-0">
-															<i className="mdi mdi-star"></i>
-														</li>
-														<li className="list-inline-item mb-0">
-															<i className="mdi mdi-star"></i>
-														</li>
-														<li className="list-inline-item mb-0 text-dark">
-															{item.rating} ({item.quantity_reviews})
-														</li>
-													</ul>
-												</li>
-											</ul>
-										</div>
-									</div>
+					{ready ? (
+						<TinySlider settings={settings}>{slides}</TinySlider>
+					) : (
+						<div className="row">
+							{slides.map((slide, index) => (
+								<div className="col-lg-4 col-md-6 col-12" key={index}>
+									{slide}
 								</div>
-							);
-						})}
-					</TinySlider>
+							))}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

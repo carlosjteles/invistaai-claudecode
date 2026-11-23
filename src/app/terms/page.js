@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 
 import { FiArrowRight } from "../assets/icons/vander";
 
@@ -25,6 +24,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/termos-e-condicoes`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Termos e Condições | ${getSiteName()}`,
 		description:
 			"Conheça os termos e condições de uso da nossa plataforma imobiliária.",
@@ -97,10 +97,12 @@ export default function Terms() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="terms-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(termsJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(termsJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

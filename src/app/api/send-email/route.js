@@ -2,18 +2,77 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 import { getSiteName } from "@/app/helper/utils";
+import prisma from "@/db/prisma";
 
-async function validateRecaptcha(recaptchaResponse) {
+// Verificação anti-robô do Cloudflare Turnstile (a chave secreta fica só na Vercel: TURNSTILE_SECRET_KEY)
+// Credenciais do Gmail: variáveis da Vercel ou, se faltarem, conteudo.config (email_user / email_pass)
+async function credenciaisEmail() {
+	let user = process.env.EMAIL_USER || "";
+	let pass = process.env.EMAIL_PASS || "";
 	try {
-		const secretKey = process.env.NEXT_GOOGLE_RECAPTCHA_SECRET_KEY;
-		const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaResponse}`;
-		const response = await fetch(url, { method: "POST" });
-		const data = await response.json();
-		return data.success;
-	} catch (error) {
-		console.error("Erro ao validar o reCAPTCHA:", error);
+		const rows = await prisma.$queryRaw`select chave, valor from conteudo.config where chave in ('email_user', 'email_pass')`;
+		const cfg = Object.fromEntries(rows.map((r) => [r.chave, r.valor]));
+		if (cfg.email_user && cfg.email_pass) {
+			user = cfg.email_user;
+			pass = cfg.email_pass;
+		}
+	} catch (e) {}
+	return { user, pass };
+}
+
+// Para onde vai o aviso de contato. O Gmail exige que o remetente seja a conta
+// autenticada, então só o destinatário é configurável: variável na Vercel,
+// depois conteudo.config (email_to) e, por último, a caixa do Carlos.
+async function destinatario(remetente) {
+	if (process.env.EMAIL_TO) return process.env.EMAIL_TO;
+	try {
+		const [r] = await prisma.$queryRaw`select valor from conteudo.config where chave = 'email_to'`;
+		if (r?.valor) return r.valor;
+	} catch (e) {}
+	return remetente || "carlosjteles@gmail.com";
+}
+
+async function chaveSecreta() {
+	if (process.env.TURNSTILE_SECRET_KEY) return process.env.TURNSTILE_SECRET_KEY;
+	// Sem variável na Vercel: usa a chave guardada no banco (conteudo.config, sem acesso público)
+	try {
+		const [r] = await prisma.$queryRaw`select valor from conteudo.config where chave = 'turnstile_secret'`;
+		return r?.valor || "";
+	} catch (e) {
+		return "";
+	}
+}
+
+async function validarTurnstile(token, ip) {
+	const secret = await chaveSecreta();
+	if (!secret) {
+		console.error("TURNSTILE_SECRET_KEY não configurada");
 		return false;
 	}
+	try {
+		const body = new URLSearchParams({ secret, response: String(token || "") });
+		if (ip) body.append("remoteip", ip);
+		const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body });
+		const data = await r.json();
+		return data.success === true;
+	} catch (error) {
+		console.error("Erro ao validar o Turnstile:", error);
+		return false;
+	}
+}
+
+const esc = (s) =>
+	String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+// Envios recentes por IP (por instância do servidor): no máximo 3 por hora
+const recentes = new Map();
+function excedeuLimite(ip) {
+	if (!ip) return false;
+	const agora = Date.now();
+	const lista = (recentes.get(ip) || []).filter((t) => agora - t < 3600000);
+	lista.push(agora);
+	recentes.set(ip, lista);
+	return lista.length > 3;
 }
 
 const validateEmail = (email) => {
@@ -22,9 +81,29 @@ const validateEmail = (email) => {
 };
 
 export async function POST(request) {
-	const { name, email, subject, message, recaptcha } = await request.json();
+	const corpo = await request.json().catch(() => ({}));
+	const { subject, site, tempo } = corpo;
+	const name = String(corpo.name || "").trim().slice(0, 100);
+	const email = String(corpo.email || "").trim().slice(0, 150);
+	const message = String(corpo.message || "").trim().slice(0, 4000);
+	const ip = (request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "").split(",")[0].trim();
 
-	if (!name || !email || !subject || !message || !recaptcha) {
+	// Robôs: campo escondido preenchido ou envio rápido demais. Respondemos "ok" sem enviar.
+	if (site || (typeof tempo === "number" && tempo < 3000)) {
+		return NextResponse.json({ message: "E-mail enviado com sucesso!" }, { status: 200 });
+	}
+
+	// Spam típico: links ou texto em outro alfabeto (cirílico, chinês etc.)
+	const textoTodo = `${name} ${subject} ${message}`;
+	if (/https?:\/\/|www\.|\[url|<a\s/i.test(textoTodo) || /[\u0400-\u04FF\u4E00-\u9FFF\u3040-\u30FF\u0600-\u06FF]/.test(textoTodo)) {
+		return NextResponse.json({ message: "E-mail enviado com sucesso!" }, { status: 200 });
+	}
+
+	if (excedeuLimite(ip)) {
+		return NextResponse.json({ error: "Muitos envios em sequência. Tente de novo mais tarde ou fale pelo WhatsApp." }, { status: 429 });
+	}
+
+	if (!name || !email || !subject || !message || !corpo.turnstile) {
 		return NextResponse.json(
 			{ message: "Todos os campos são obrigatórios!" },
 			{ status: 400 }
@@ -35,21 +114,29 @@ export async function POST(request) {
 		return NextResponse.json({ error: "Email inválido" }, { status: 400 });
 	}
 
-	const isRecaptchaValid = await validateRecaptcha(recaptcha);
-
-	if (!isRecaptchaValid) {
+	if (!(await validarTurnstile(corpo.turnstile, ip))) {
 		return NextResponse.json(
-			{ error: "Falha na validação do reCAPTCHA" },
+			{ error: "Não conseguimos confirmar o envio. Atualize a página e tente de novo, ou fale pelo WhatsApp." },
 			{ status: 400 }
 		);
 	}
 
+	// Guarda a mensagem no banco antes de tudo: o contato não se perde mesmo se o e-mail falhar
+	let contatoId = null;
+	try {
+		const [c] = await prisma.$queryRaw`
+			insert into conteudo.contatos (nome, email, assunto, mensagem, ip)
+			values (${name}, ${email}, ${String(subject).slice(0, 200)}, ${message}, ${ip || null})
+			returning id`;
+		contatoId = c?.id ?? null;
+	} catch (e) {
+		console.error("contato (banco):", e?.message);
+	}
+
+	const cred = await credenciaisEmail();
 	const transporter = nodemailer.createTransport({
 		service: "gmail",
-		auth: {
-			user: process.env.EMAIL_USER,
-			pass: process.env.EMAIL_PASS,
-		},
+		auth: { user: cred.user, pass: cred.pass },
 	});
 
 	const template = `
@@ -191,10 +278,10 @@ export async function POST(request) {
                                     <tr>
                                         <td class="wrapper">
                                             <p>Nova mensagem recebida</p>
-                                            <p><strong>Nome</strong>: ${name}</p>
-                                            <p><strong>Email</strong>: ${email}</p>
-                                            <p><strong>Assunto</strong>: ${subject}</p>
-                                            <p><strong>Mensagem</strong>: ${message}</p>
+                                            <p><strong>Nome</strong>: ${esc(name)}</p>
+                                            <p><strong>Email</strong>: ${esc(email)}</p>
+                                            <p><strong>Assunto</strong>: ${esc(subject)}</p>
+                                            <p><strong>Mensagem</strong>: ${esc(message).replace(/\n/g, "<br>")}</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -208,21 +295,26 @@ export async function POST(request) {
     `;
 
 	const mailOptions = {
-		from: process.env.EMAIL_USER,
-		to: process.env.EMAIL_USER,
+		from: cred.user,
+		to: await destinatario(cred.user),
 		subject: `Formulário ${getSiteName()} - Contato ${name}`,
+		replyTo: email,
 		html: template,
 	};
 
 	try {
 		await transporter.sendMail(mailOptions);
-		return NextResponse.json(
-			{ message: "E-mail enviado com sucesso!" },
-			{ status: 200 }
-		);
+		if (contatoId) await prisma.$executeRaw`update conteudo.contatos set enviado = true where id = ${contatoId}`.catch(() => {});
+		return NextResponse.json({ message: "Mensagem enviada! Retornaremos em breve." }, { status: 200 });
 	} catch (error) {
+		console.error("contato (e-mail):", error?.message);
+		if (contatoId) {
+			await prisma.$executeRaw`update conteudo.contatos set erro = ${String(error?.message || "erro").slice(0, 300)} where id = ${contatoId}`.catch(() => {});
+			// A mensagem ficou salva: para o cliente, o envio foi recebido
+			return NextResponse.json({ message: "Mensagem enviada! Retornaremos em breve." }, { status: 200 });
+		}
 		return NextResponse.json(
-			{ message: "Falha ao enviar e-mail" },
+			{ error: "Não foi possível enviar agora. Fale com a gente pelo WhatsApp." },
 			{ status: 500 }
 		);
 	}

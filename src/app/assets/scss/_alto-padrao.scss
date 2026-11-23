@@ -1,0 +1,167 @@
+//
+// alto-padrao.scss: ajustes da identidade alto padrão (azul-marinho + champagne, Cormorant + Manrope)
+//
+.text-accent { color: $accent !important; }
+.bg-accent { background-color: $accent !important; }
+.border-accent { border-color: $accent !important; }
+
+// Títulos de seção com um fio champagne discreto
+.section-title .title::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    margin-top: 12px;
+    background: $accent;
+}
+.section-title.text-center .title::after { margin-left: auto; margin-right: auto; }
+
+// Rodapé: títulos das colunas em champagne
+.footer-head { color: $accent !important; letter-spacing: 0.08em; text-transform: uppercase; font-size: 15px !important; font-family: var(--font-body) !important; }
+
+// Botões com leve espaçamento de letras (padrão das marcas de alto padrão)
+.btn { letter-spacing: 0.02em; }
+
+// Cards de imóveis: título em até 2 linhas (sem invadir a linha de baixo no celular)
+.property .card-body .title {
+    font-family: var(--font-heading);
+    font-size: 23px !important;
+    font-weight: 600 !important;
+    height: auto;
+    min-height: 2.6em;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+// Ícones de metragem, dormitórios, suítes e vagas maiores e texto mais legível
+.property .card-body ul li svg {
+    font-size: 24px !important;
+    margin-right: 10px !important;
+    flex-shrink: 0;
+}
+.property .card-body ul.row > li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.property .card-body ul li > span {
+    display: flex;
+    align-items: center;
+}
+.property .card-body ul li small {
+    font-size: 15px;
+    font-weight: 500;
+    color: $dark !important;
+}
+
+// Títulos menores no celular (os tamanhos do tema eram fixos para desktop)
+@media (max-width: 767.98px) {
+    h1, .h1, .fs-1 { font-size: 32px !important; }
+    h2, .h2, .fs-2 { font-size: 28px !important; }
+    h3, .h3, .fs-3 { font-size: 24px !important; }
+    h4, .h4, .fs-4 { font-size: 22px !important; }
+    .title-heading .heading { font-size: 34px !important; line-height: 1.2; }
+}
+
+// Card de imóvel v2 (nome, bairro, resumo, preço com R$/m², entrega e estágio)
+.property-v2 {
+    // ocupa toda a altura da coluna para que os rodapés dos cards fiquem na mesma linha
+    height: 100%;
+    .card-body { display: flex; flex-direction: column; }
+    .pv2-local { font-size: 15px; color: $muted; margin-top: 2px; }
+    .pv2-resumo { font-size: 15px; color: $dark; margin-top: 12px; }
+    // cresce para empurrar o rodapé para baixo, mas nunca encosta no conteúdo acima
+    .pv2-espaco { flex: 1 1 auto; min-height: 16px; }
+    .pv2-rodape { padding-top: 14px; border-top: 1px solid rgba($dark, 0.08); gap: 12px; }
+    .pv2-rotulo { display: block; font-size: 14px; color: $muted; }
+    .pv2-preco { font-size: 24px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
+    .pv2-m2 { display: block; font-size: 13px; color: $muted; }
+    .pv2-entrega { font-size: 14px; color: $muted; strong { color: $dark; } }
+    .pv2-estagio {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $primary;
+        border: 1px solid rgba($primary, 0.35);
+        border-radius: 999px;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
+    .pv2-estagio-1, .pv2-estagio-2 { color: darken($accent, 12%); border-color: rgba($accent, 0.5); }
+    .pv2-estagio-4 { color: #15803d; border-color: rgba(#15803d, 0.35); }
+}
+@media (max-width: 767.98px) {
+    .property-v2 .card-body .title { min-height: 0; }
+}
+
+// Página do imóvel: textos longos mais legíveis e preço no mesmo estilo dos cards
+.imovel-bloco {
+    p, li { color: #475569 !important; line-height: 1.7; }
+    li strong, p strong { color: $dark; }
+}
+.imovel-rotulo { display: block; font-size: 14px; color: $muted; margin-bottom: 2px; }
+.imovel-preco { font-family: var(--font-body); font-size: 28px; font-weight: 700; color: $primary; line-height: 1.2; letter-spacing: -0.01em; }
+@media (max-width: 767.98px) {
+    .imovel-preco { font-size: 24px; }
+}
+
+// Histórico de preço (página do imóvel)
+.historico-preco {
+    .hp-linha { stroke: $primary; stroke-width: 2.5; stroke-linejoin: round; }
+    .hp-ponto { fill: #fff; stroke: $accent; stroke-width: 2.5; }
+    .hp-eixo { stroke: #e2e8f0; stroke-width: 1; }
+    .hp-rotulo { font-family: var(--font-body); font-size: 13px; fill: $muted; }
+    .hp-alta { color: #15803d; font-weight: 600; }
+    .hp-baixa { color: #b45309; font-weight: 600; }
+}
+
+// Simulador de pagamento (página do imóvel)
+.simulador-pagamento {
+    scroll-margin-top: 90px;
+    .form-label { font-family: var(--font-body); }
+    .sim-resultado {
+        background: $light;
+        border: 1px solid rgba($accent, 0.25);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-family: var(--font-body);
+        font-size: 15px;
+    }
+    .sim-resultado li + li { border-top: 1px dashed #e5e0d8; }
+}
+
+// Alerta de imóveis
+.alerta-imoveis {
+    border-top: 3px solid $accent;
+    scroll-margin-top: 90px;
+    .form-label, .form-control, .form-select { font-family: var(--font-body); }
+    .alerta-chip {
+        border: 1px solid #d6dbe3;
+        border-radius: 999px;
+        background: #fff;
+        color: $dark;
+        padding: 4px 14px;
+        font-size: 14px;
+        &:hover { border-color: $primary; }
+        &.ativo { background: $primary; border-color: $primary; color: #fff; }
+    }
+}
+
+// Cartões da Home (fase e tipo): imagem com a mesma proporção para fotos locais e do banco
+.categories .categoria-img { aspect-ratio: 400 / 275; overflow: hidden; }
+.categories .categoria-img img { transition: transform 0.5s ease; }
+.categories:hover .categoria-img img { transform: scale(1.05); }
+
+// Selos de tipo de unidade (página do imóvel) e destaque da unidade no card
+.selos-tipo { display: flex; flex-wrap: wrap; gap: 6px; }
+.selo-tipo { font-family: var(--font-body); font-size: 13px; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba($accent, 0.5); color: darken($accent, 18%); background: rgba($accent, 0.08); }
+.pv2-destaque { display: block; font-family: var(--font-body); font-size: 13px; font-weight: 600; color: darken($accent, 18%); letter-spacing: 0.02em; margin-bottom: 2px; }
+
+// Filtros das páginas temáticas
+.filtro-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.filtro-chips a { font-family: var(--font-body); font-size: 14px; padding: 5px 14px; border-radius: 999px; border: 1px solid #d6dbe3; color: $dark; background: #fff; }
+.filtro-chips a:hover { border-color: $primary; }
+.filtro-chips a.ativo { background: $primary; border-color: $primary; color: #fff; }

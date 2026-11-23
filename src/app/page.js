@@ -1,9 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 
 import Categories from "./components/Categories";
-import Customers from "./components/Customers";
 import FeaturedProperties from "./components/FeaturedProperties";
 import Footer from "./components/Footer";
 import GetInTouch from "./components/GetInTouch";
@@ -15,8 +13,16 @@ import TextAnimation from "./components/TextAnimation";
 import { getBaseUrl, getSiteName } from "./helper/utils";
 
 import { contact } from "./storage/about";
+import Mdi from "./components/Mdi";
 
 export const revalidate = 300;
+
+export const metadata = {
+	title: `Apartamentos de alto padrão em São Paulo | ${getSiteName()}`,
+	description:
+		"Lançamentos, obras e imóveis prontos de alto padrão em São Paulo, com preço, plantas e entrega atualizados toda semana. Compare projetos e veja o preço do m² por bairro.",
+	alternates: { canonical: getBaseUrl() },
+};
 
 export default function Home() {
 	const homeJsonLd = {
@@ -38,7 +44,7 @@ export default function Home() {
 		},
 		name: "Página Inicial",
 		description:
-			"Uma plataforma inteligente para quem quer comprar imóveis com agilidade, confiança e sem taxas abusivas.",
+			"Apartamentos de alto padrão em São Paulo: lançamentos, obras e prontos selecionados, com preço, plantas e entrega atualizados toda semana.",
 		url: getBaseUrl(),
 		breadcrumb: {
 			"@type": "BreadcrumbList",
@@ -63,7 +69,7 @@ export default function Home() {
 		dateModified: new Date().toISOString().split("T")[0],
 		primaryImageOfPage: {
 			"@type": "ImageObject",
-			url: `${getBaseUrl()}/images/bg/home.webp`,
+			url: "https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/76146/10.jpg",
 		},
 		speakable: {
 			"@type": "SpeakableSpecification",
@@ -123,17 +129,41 @@ export default function Home() {
 		sameAs,
 	};
 
+	// Nome do site: é daqui que o Google tira o rótulo exibido acima do título
+	// nos resultados de busca, no lugar do domínio.
+	const websiteJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"@id": `${getBaseUrl()}/#site`,
+		name: getSiteName(),
+		alternateName: ["InvistaAi", "Invista AI", "invistaai.com"],
+		url: getBaseUrl(),
+		inLanguage: "pt-BR",
+		publisher: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+	};
+
 	return (
 		<>
-			<Script
+			<script
+				id="website-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c"),
+				}}
+			/>
+			<script
 				id="homepage-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(homeJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
-			<Script
+			<script
 				id="organization-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -147,15 +177,15 @@ export default function Home() {
 						id="home"
 					>
 						<Image
-							src="/images/bg/home.webp"
-							alt={`Investimento imobiliário em São Paulo - ${getSiteName()}`}
+							src="https://deolsoahklnyjahujmdh.supabase.co/storage/v1/object/public/media/images/property/76146/10.jpg"
+							alt={`Salão de festas de empreendimento de alto padrão em São Paulo - ${getSiteName()}`}
 							fill
 							priority
 							fetchPriority="high"
-							quality={85}
+							quality={75}
 							sizes="100vw"
 							id="hero-images"
-							className="bg-overlay image-wrap"
+							className="bg-overlay"
 							style={{
 								objectFit: "cover",
 								objectPosition: "center",
@@ -169,8 +199,9 @@ export default function Home() {
 									<div className="title-heading">
 										<TextAnimation />
 										<p className="para-desc text-white title-dark mb-0">
-											Unimos tecnologia e propósito para transformar a sua
-											compra na melhor experiência.
+											Lançamentos, obras e imóveis prontos selecionados pela
+											nossa equipe, com preço, plantas e prazo de entrega
+											atualizados toda semana.
 										</p>
 									</div>
 								</div>
@@ -236,28 +267,35 @@ export default function Home() {
 								<p className="h6 text-primary fw-medium mb-2 mt-0 mx-0">
 									Por que escolher a {getSiteName()}
 								</p>
-								<h4 className="title mb-3">
-									Investimento Imobiliário Humanizado
-								</h4>
-								<p className="text-muted para-desc mb-0">
-									Nossa plataforma une dados de mercado, tecnologia e curadoria
-									criteriosa para entregar comparativos claros e análises
-									fundamentadas. Isso garante decisões de investimento seguras e
-									alinhadas ao seu perfil, seja para diversificação de carteira
-									ou conquista do primeiro imóvel.
+								<h2 className="title h4 mb-3">
+									Investimento imobiliário humanizado
+								</h2>
+								<p className="text-muted para-desc mb-3">
+									Selecionamos lançamentos e imóveis prontos de alto padrão das
+									principais incorporadoras de São Paulo e mantemos preço,
+									plantas e prazo de entrega sempre atualizados. Com o{" "}
+									<Link href="/indice-preco-m2" className="text-primary text-decoration-underline">
+										Índice de preço do m²
+									</Link>{" "}
+									e o{" "}
+									<Link href="/comparar" className="text-primary text-decoration-underline">
+										comparador de imóveis
+									</Link>
+									, você vê quanto vale cada bairro e cada projeto antes de
+									decidir.
 								</p>
 
 								<p className="text-muted para-desc mb-0">
-									Mais do que uma plataforma, oferecemos acompanhamento
-									consultivo em todas as etapas: do estudo financeiro ao crédito
-									e documentação. Transparência e resultados reais são a base da
-									confiança que construímos com cada cliente.
+									E você não decide sozinho: um corretor acompanha cada etapa,
+									da visita ao decorado à negociação, à simulação de crédito e à
+									documentação. Para morar ou para investir, a escolha é sua,
+									com todas as informações na mesa.
 								</p>
 
 								<div className="mt-4">
 									<Link href="/sobre" className="btn btn-pills btn-primary">
 										Saiba Mais{" "}
-										<i className="mdi mdi-arrow-right align-middle"></i>
+										<Mdi n="arrow-right" className="align-middle" />
 									</Link>
 								</div>
 							</div>
@@ -271,10 +309,6 @@ export default function Home() {
 
 				<div className="container mt-100 mt-60">
 					<FeaturedProperties />
-				</div>
-
-				<div className="container mt-100 mt-60">
-					<Customers />
 				</div>
 
 				<div className="container mt-100 mt-60">

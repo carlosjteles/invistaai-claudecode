@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Script from "next/script";
 
 import Navbar from "../components/Navbar";
 import About from "../components/About";
@@ -17,6 +16,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { contact } from "../storage/about";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
+import Mdi from "../components/Mdi";
 
 export const revalidate = 300;
 
@@ -35,6 +35,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/sobre`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Sobre a ${getSiteName()} | Especialistas em Investimento Imobiliário`,
 		description:
 			"Conectamos pessoas e capital a oportunidades imobiliárias em São Paulo com curadoria rigorosa e dados de mercado.",
@@ -120,10 +121,12 @@ export default function AboutUs() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="about-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(aboutJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -315,7 +318,7 @@ export default function AboutUs() {
 										<meta itemProp="contactType" content="customer service" />
 										<meta itemProp="telephone" content={`+${contact.phone}`} />
 										Fale com um consultor{" "}
-										<i className="mdi mdi-arrow-right align-middle"></i>
+										<Mdi n="arrow-right" className="align-middle" />
 									</Link>
 								</div>
 							</div>

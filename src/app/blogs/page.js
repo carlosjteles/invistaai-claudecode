@@ -18,6 +18,7 @@ export const metadata = {
 		"investimento imobiliário",
 	],
 	openGraph: {
+		locale: "pt_BR",
 		title: `Blog Imobiliário | ${getSiteName()}`,
 		description:
 			"Conteúdo especializado sobre mercado imobiliário e dicas para investidores.",

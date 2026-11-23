@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -25,6 +24,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/politica-de-privacidade`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Política de Privacidade | ${getSiteName()}`,
 		description:
 			"Entenda como coletamos e protegemos seus dados em conformidade com a LGPD.",
@@ -92,10 +92,12 @@ export default function Privacy() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="privacy-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(privacyJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(privacyJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

@@ -2,7 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/Navbar";
@@ -12,6 +11,7 @@ import Pagination from "../components/Pagination";
 
 import { getBaseUrl, getSiteName } from "../helper/utils";
 import { formatDate, formatDateISO } from "../helper/formatter";
+import Mdi from "../components/Mdi";
 
 export default function BlogsClient({
 	blogs,
@@ -135,10 +135,12 @@ export default function BlogsClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="blogs-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogsJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(blogsJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -260,8 +262,7 @@ export default function BlogsClient({
 																src={imageSrc}
 																width={0}
 																height={0}
-																sizes="100vw"
-																style={{ width: "100%", height: "auto" }}
+																sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 420px"
 																className="img-fluid"
 																alt={item.title}
 																itemProp="image"
@@ -301,12 +302,15 @@ export default function BlogsClient({
 																{item.desc}
 															</p>
 
+															{/* empurra o "Leia mais" para a base: resumos de tamanhos diferentes continuam alinhados */}
+															<div className="blog-espaco" aria-hidden="true" />
+
 															<Link
 																href={`/blog/${item.slug}`}
 																className="text-dark read-more"
 															>
 																Leia mais{" "}
-																<i className="mdi mdi-chevron-right align-middle"></i>
+																<Mdi n="chevron-right" className="align-middle" />
 															</Link>
 														</div>
 													</div>

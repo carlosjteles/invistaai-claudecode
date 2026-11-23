@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Navbar from "../components/Navbar";
@@ -13,7 +12,9 @@ import ScrollTop from "../components/ScrollTop";
 import {
 	bedrooms,
 	categories,
+	fases,
 	parkingSpaces,
+	tiposUnidade,
 	suites,
 } from "../storage/filters";
 
@@ -23,6 +24,9 @@ import { formatPrice } from "../helper/formatter";
 import { getBaseUrl } from "../helper/utils";
 
 import Pagination from "../components/Pagination";
+import Mdi from "../components/Mdi";
+import PropertyCard from "../components/PropertyCard";
+import AlertaImoveis from "../components/AlertaImoveis";
 
 export default function PropertiesClient({
 	initialProperties,
@@ -30,6 +34,8 @@ export default function PropertiesClient({
 	totalPages,
 	totalCount,
 	currentPage,
+	bairrosAlerta = [],
+	initialTipo = "",
 }) {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -39,7 +45,8 @@ export default function PropertiesClient({
 	const [searchTerm, setSearchTerm] = React.useState(
 		queryParams.get("q") || ""
 	);
-	const [category, setCategory] = React.useState(initialCategory);
+	const [category, setCategory] = React.useState(initialCategory === 1 ? 2 : initialCategory);
+	const [tipo, setTipo] = React.useState(initialTipo);
 	const [bedroom, setBedroom] = React.useState(
 		queryParams.get("quartos") || "all"
 	);
@@ -63,6 +70,7 @@ export default function PropertiesClient({
 		if (queryParams.size > 0) {
 			setSearchTerm("");
 			setCategory(0);
+			setTipo("");
 			setBedroom("all");
 			setParking("all");
 			setSuite("all");
@@ -78,6 +86,7 @@ export default function PropertiesClient({
 
 		if (searchTerm) params.set("q", searchTerm);
 		if (category !== 0) params.set("categoria", category);
+		if (tipo) params.set("tipo", tipo);
 		if (bedroom !== "all") params.set("quartos", bedroom);
 		if (parking !== "all") params.set("vagas", parking);
 		if (suite !== "all") params.set("suites", suite);
@@ -172,10 +181,12 @@ export default function PropertiesClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="properties-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(propertiesJsonLd) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(propertiesJsonLd).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar
@@ -277,17 +288,34 @@ export default function PropertiesClient({
 								/>
 
 								<div className="mt-4">
-									<h6 className="mb-0">Categorias</h6>
+									<h6 className="mb-0">Fase</h6>
 									<select
 										className="form-select form-control border mt-2"
-										aria-label="Filtrar por Categorias"
+										aria-label="Filtrar por fase da obra"
 										name="categoria"
 										value={category}
 										onChange={(e) => setCategory(Number(e.target.value))}
 									>
-										<option value="">Selecione ...</option>
-										{categories.map((item) => (
+										<option value="0">Todas</option>
+										{fases.map((item) => (
 											<option key={item.id} value={item.id}>
+												{item.label}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className="mt-4">
+									<h6 className="mb-0">Tipo de unidade</h6>
+									<select
+										className="form-select form-control border mt-2"
+										aria-label="Filtrar por tipo de unidade"
+										name="tipo"
+										value={tipo}
+										onChange={(e) => setTipo(e.target.value)}
+									>
+										<option value="">Todos</option>
+										{tiposUnidade.map((item) => (
+											<option key={item.value} value={item.value}>
 												{item.label}
 											</option>
 										))}
@@ -389,181 +417,10 @@ export default function PropertiesClient({
 													itemProp="position"
 													content={(currentPage - 1) * 8 + index + 1}
 												/>
-												<meta itemProp="item" content={itemUrl} />
+												<meta itemProp="url" content={itemUrl} />
+												<meta itemProp="name" content={item.name} />
 
-												<div
-													className="card property border-0 shadow position-relative overflow-hidden rounded-3"
-													itemScope
-													itemType="https://schema.org/Product"
-												>
-													<meta itemProp="identifier" content={item.id} />
-													<meta itemProp="url" content={itemUrl} />
-													<meta itemProp="name" content={item.name} />
-
-													{thumbnail && (
-														<div className="property-image position-relative overflow-hidden shadow">
-															<Image
-																src={thumbnail.src}
-																width={0}
-																height={0}
-																sizes="100vw"
-																className="img-fluid"
-																alt={thumbnail.alt}
-																itemProp="image"
-															/>
-															<ul className="list-unstyled property-icon">
-																<li>
-																	<Link
-																		href={`/imovel/${item.slug}`}
-																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		aria-label={`Ver detalhes do imóvel ${
-																			item.name || item.address
-																		}`}
-																	>
-																		<FiHome
-																			className="icons"
-																			aria-hidden="true"
-																		/>
-																	</Link>
-																</li>
-																<li className="mt-1">
-																	<Link
-																		href={`/imovel/${item.slug}?openGallery=true`}
-																		className="btn btn-sm btn-icon btn-pills btn-primary"
-																		aria-label={`Ver galeria de fotos do imóvel ${
-																			item.name || item.address
-																		}`}
-																	>
-																		<FiCamera
-																			className="icons"
-																			aria-hidden="true"
-																		/>
-																	</Link>
-																</li>
-															</ul>
-														</div>
-													)}
-
-													<div className="card-body content p-4">
-														<Link
-															href={`/imovel/${item.slug}`}
-															className="title fs-5 text-dark fw-medium"
-														>
-															{item.name || item.address}
-														</Link>
-
-														{item.quantity_reviews > 0 && (
-															<div
-																itemProp="aggregateRating"
-																itemScope
-																itemType="https://schema.org/AggregateRating"
-															>
-																<meta
-																	itemProp="ratingValue"
-																	content={item.rating}
-																/>
-																<meta
-																	itemProp="reviewCount"
-																	content={item.quantity_reviews}
-																/>
-																<meta itemProp="bestRating" content="5" />
-																<meta itemProp="worstRating" content="1" />
-															</div>
-														)}
-
-														<ul className="list-unstyled mt-3 mb-0 pt-3 border-top row">
-															<li className="col-6 d-flex align-items-center m-0">
-																<i className="mdi mdi-arrow-expand-all fs-5 me-2 text-primary"></i>
-																<small className="text-muted">
-																	{item.preview.area}
-																</small>
-															</li>
-
-															<li className="col-6 d-flex align-items-center m-0">
-																<i className="mdi mdi-bed fs-5 me-2 text-primary"></i>
-																<small className="text-muted">
-																	{item.preview.bedroom}
-																</small>
-															</li>
-														</ul>
-														<ul className="list-unstyled pb-3 pt-0 border-bottom row">
-															<li className="col-6 d-flex align-items-center m-0">
-																<i className="mdi mdi-shower fs-5 me-2 text-primary"></i>
-																<small className="text-muted">
-																	{item.preview.suite}
-																</small>
-															</li>
-
-															<li className="col-6 d-flex align-items-center m-0">
-																<i className="mdi mdi-car fs-5 me-2 text-primary"></i>
-																<small className="text-muted">
-																	{item.preview.parking}
-																</small>
-															</li>
-														</ul>
-
-														<ul className="list-unstyled d-flex justify-content-between mt-2 mb-0">
-															<li className="list-inline-item mb-0">
-																<span className="text-muted">Preço</span>
-																<p
-																	className="fw-medium mb-0"
-																	itemProp="offers"
-																	itemScope
-																	itemType="https://schema.org/Offer"
-																>
-																	{item.price === 0 ? (
-																		"Consulte"
-																	) : (
-																		<>
-																			<meta
-																				itemProp="priceCurrency"
-																				content="BRL"
-																			/>
-																			<meta
-																				itemProp="price"
-																				content={item.price}
-																			/>
-																			<span
-																				itemProp="availability"
-																				content="https://schema.org/InStock"
-																			></span>
-																			{formatPrice(item.price)}
-																		</>
-																	)}
-																</p>
-															</li>
-															<li className="list-inline-item mb-0 text-muted">
-																<span className="text-muted">Avaliação</span>
-																<ul
-																	className={`fw-medium ${
-																		item.quantity_reviews > 0
-																			? "text-warning"
-																			: ""
-																	} list-unstyled mb-0`}
-																>
-																	<li className="list-inline-item mb-0">
-																		<i className="mdi mdi-star"></i>
-																	</li>
-																	<li className="list-inline-item mb-0">
-																		<i className="mdi mdi-star"></i>
-																	</li>
-																	<li className="list-inline-item mb-0">
-																		<i className="mdi mdi-star"></i>
-																	</li>
-																	<li className="list-inline-item mb-0">
-																		<i className="mdi mdi-star"></i>
-																	</li>
-																	<li className="list-inline-item mb-0">
-																		<i className="mdi mdi-star"></i>
-																	</li>
-																	<li className="list-inline-item mb-0 text-dark">
-																		{item.rating} ({item.quantity_reviews})
-																	</li>
-																</ul>
-															</li>
-														</ul>
-													</div>
-												</div>
+												<PropertyCard item={item} />
 											</div>
 										);
 									})}
@@ -593,6 +450,14 @@ export default function PropertiesClient({
 								</div>
 							</div>
 						)}
+					</div>
+
+					<div className="mt-100 mt-60">
+						<AlertaImoveis
+							bairros={bairrosAlerta}
+							titulo="Não achou o imóvel certo? Crie um alerta"
+							origem="/imoveis"
+						/>
 					</div>
 				</div>
 			</section>

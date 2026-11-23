@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "../../db/prisma";
 import { getBaseUrl } from "../helper/utils";
+import { lastmodDe } from "../helper/lastmod";
 
 export const revalidate = 300;
 
@@ -19,7 +20,7 @@ export async function GET() {
 					(blog) =>
 						`<url>
 							<loc>${baseUrl}/blog/${blog.slug}</loc>
-							<lastmod>${blog.updatedAt.toISOString()}</lastmod>
+							<lastmod>${lastmodDe(blog.updatedAt)}</lastmod>
 							<changefreq>monthly</changefreq>
 							<priority>0.6</priority>
 						</url>`

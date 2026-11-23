@@ -20,6 +20,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/lancamentos`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Lançamentos Imobiliários | ${getSiteName()}`,
 		description:
 			"Descubra os mais recentes lançamentos imobiliários em São Paulo com condições especiais de pré-lançamento.",

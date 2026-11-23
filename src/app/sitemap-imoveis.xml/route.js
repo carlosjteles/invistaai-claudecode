@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../db/prisma";
 
 import { getBaseUrl } from "../helper/utils";
+import { lastmodDe } from "../helper/lastmod";
 
 export const revalidate = 300;
 
@@ -10,6 +11,8 @@ export async function GET() {
 	const baseUrl = getBaseUrl();
 
 	const properties = await prisma.property.findMany({
+		// Só imóveis que já têm fotos (os recém-publicados entram quando a fila de fotos termina)
+		where: { images: { some: {} } },
 		select: { slug: true, updatedAt: true },
 		orderBy: { updatedAt: "desc" },
 	});
@@ -21,7 +24,7 @@ export async function GET() {
 								(property) =>
 									`<url>
 										<loc>${baseUrl}/imovel/${property.slug}</loc>
-										<lastmod>${property.updatedAt.toISOString()}</lastmod>
+										<lastmod>${lastmodDe(property.updatedAt)}</lastmod>
 										<changefreq>monthly</changefreq>
 										<priority>0.8</priority>
 									</url>`

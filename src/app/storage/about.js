@@ -2,6 +2,10 @@ export const contact = {
 	email: "contato@invistaai.com",
 	phone: "5511978777584",
 	map: "https://maps.app.goo.gl/whD1DvhRWCPnxfqb7",
+	broker: {
+		name: "Carlos Teles",
+		creci: "230798",
+	},
 	address: {
 		street: "Av. Luiz Carlos Berrini 1681",
 		//complement: "Sala 111",

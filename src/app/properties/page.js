@@ -2,7 +2,7 @@ import PropertiesClient from "./PropertiesClient";
 
 import prisma from "../../db/prisma";
 
-import { getBaseUrl, getSiteName } from "../helper/utils";
+import { getBaseUrl, getSiteName, ordenarPorEntrega } from "../helper/utils";
 
 import { categories } from "../storage/filters";
 
@@ -23,6 +23,7 @@ export const metadata = {
 		canonical: `${getBaseUrl()}/imoveis`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Imóveis à Venda em São Paulo | ${getSiteName()}`,
 		description:
 			"Explore nossa seleção de apartamentos, studios e imóveis em São Paulo com o melhor custo-benefício.",
@@ -79,6 +80,7 @@ export default async function Properties({ searchParams, params }) {
 	const minPrice = searchParams["preco-min"] || 0;
 	const maxPrice = searchParams["preco-max"] || 0;
 	let searchTerm = searchParams.q || "";
+	const tipo = /^[a-z-]{2,30}$/.test(searchParams.tipo || "") ? searchParams.tipo : "";
 
 	/** Set filters prisma */
 	const filterWhere = {};
@@ -102,8 +104,21 @@ export default async function Properties({ searchParams, params }) {
 		});
 	}
 
-	if (category !== 0) {
+	// "Lançamento" inclui os de breve lançamento
+	if (category === 2 || category === 1) {
+		filterAnd.push({ category: { in: [1, 2] } });
+	} else if (category !== 0) {
 		filterAnd.push({ category });
+	}
+
+	if (tipo) {
+		let ids = [];
+		try {
+			ids = (await prisma.$queryRaw`select id from conteudo.ids_por_tipo(${tipo}) id`).map((r) => r.id);
+		} catch (e) {
+			ids = [];
+		}
+		filterAnd.push({ id: { in: ids } });
 	}
 
 	if (bedroom !== "all") {
@@ -187,7 +202,8 @@ export default async function Properties({ searchParams, params }) {
 		filterWhere.AND = filterAnd;
 	}
 
-	const properties = await prisma.property.findMany({
+	// Entrega mais distante primeiro (a data é texto dd/mm/aaaa, então a ordenação é feita aqui)
+	const todos = await prisma.property.findMany({
 		where: { ...filterWhere, images: { some: {} } },
 		include: {
 			images: {
@@ -197,19 +213,22 @@ export default async function Properties({ searchParams, params }) {
 				take: 1,
 			},
 		},
-		orderBy: {
-			id: "desc",
-		},
-		skip: (page - 1) * itemsPerPage,
-		take: itemsPerPage,
 	});
+	const properties = ordenarPorEntrega(todos).slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
 	/** Total pages */
-	const totalCount = await prisma.property.count({ where: filterWhere });
+	const totalCount = await prisma.property.count({ where: { ...filterWhere, images: { some: {} } } });
 	const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+	let bairrosAlerta = [];
+	try {
+		bairrosAlerta = await prisma.$queryRaw`select slug, nome from conteudo.bairros where ativo order by ordem`;
+	} catch (e) {}
 
 	return (
 		<PropertiesClient
+			bairrosAlerta={bairrosAlerta}
+			initialTipo={tipo}
 			initialCategory={category}
 			initialProperties={properties}
 			totalPages={totalPages}

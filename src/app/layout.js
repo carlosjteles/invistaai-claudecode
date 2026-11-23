@@ -1,9 +1,9 @@
-import { League_Spartan } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
-import "bootstrap/dist/css/bootstrap.css";
+import "../app/assets/css/bootstrap.purged.css";
 import "../app/assets/scss/style.scss";
-import "../app/assets/css/materialdesignicons.min.css";
 
+import FaixaIndicadores from "./components/FaixaIndicadores";
 import GoogleAnalyticsClient from "./components/GoogleAnalyticsClient";
 
 import { Providers } from "./providers";
@@ -12,12 +12,19 @@ import { getBaseUrl, getSiteName } from "./helper/utils";
 
 import { contact } from "./storage/about";
 
-const league = League_Spartan({
+const heading = Cormorant_Garamond({
 	subsets: ["latin"],
-	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+	weight: ["500", "600", "700"],
 	display: "swap",
-	variable: "--font-league",
-	preload: true,
+	variable: "--font-heading",
+	fallback: ["Georgia", "serif"],
+});
+
+const body = Manrope({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	display: "swap",
+	variable: "--font-body",
 	fallback: ["Arial", "sans-serif"],
 });
 
@@ -66,10 +73,6 @@ export const metadata = {
 	alternates: {
 		canonical: `${getBaseUrl()}`,
 	},
-	viewport: {
-		width: "device-width",
-		initialScale: 1,
-	},
 	icons: {
 		icon: "/images/favicon.ico",
 		shortcut: "/images/favicon-16x16.png",
@@ -81,7 +84,12 @@ export const metadata = {
 			sizes: "32x32",
 		},
 	},
-	themeColor: "#09acf4",
+};
+
+export const viewport = {
+	width: "device-width",
+	initialScale: 1,
+	themeColor: "#1e3a5f",
 };
 
 export const jsonLd = {
@@ -144,9 +152,9 @@ export default function RootLayout({ children }) {
 					src={`https://www.googletagmanager.com/gtag/js?id=${
 						process.env.NEXT_PUBLIC_GA_ID || "G-4BELWMGKF8"
 					}`}
-					strategy="afterInteractive"
+					strategy="lazyOnload"
 				/>
-				<Script id="gtag-init" strategy="afterInteractive">
+				<Script id="gtag-init" strategy="lazyOnload">
 					{`
                         window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}
@@ -157,13 +165,19 @@ export default function RootLayout({ children }) {
                     `}
 				</Script>
 
-				<Script
+				<script
 					id="schema-org"
 					type="application/ld+json"
-					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+					}}
 				/>
 			</head>
-			<body className={league.variable}>
+			<body className={`${heading.variable} ${body.variable}`}>
+				{/* Fica acima do #topnav, que é fixo e transparente sobre o hero.
+				    Aqui no layout a faixa aparece em todas as páginas de uma vez,
+				    inclusive nas que vierem depois, sem tocar em cada uma. */}
+				<FaixaIndicadores />
 				<Providers>
 					<GoogleAnalyticsClient />
 					{children}

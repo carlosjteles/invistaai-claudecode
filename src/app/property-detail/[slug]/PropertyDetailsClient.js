@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import Script from "next/script";
 import dynamic from "next/dynamic";
 
 import PropertyDetailImg from "../../components/PropertyDetailImg";
@@ -22,10 +20,12 @@ const FinancingSimulation = dynamic(
 	{ ssr: false },
 );
 
-const RelatedPropertySlider = dynamic(
-	() => import("../../components/RelatedPropertySlider"),
-	{ ssr: false },
-);
+import RelatedPropertySlider from "../../components/RelatedPropertySlider";
+import PriceHistory from "../../components/PriceHistory";
+import RendaAnalise from "../../components/RendaAnalise";
+import Proximidades from "../../components/Proximidades";
+import PaymentSimulator from "../../components/PaymentSimulator";
+import AlertaImoveis, { faixaAcima } from "../../components/AlertaImoveis";
 
 const YoutubeEmbed = dynamic(() => import("../../components/YoutubeEmbed"), {
 	ssr: false,
@@ -36,13 +36,49 @@ import { contact } from "../../storage/about";
 
 import { formatPrice } from "../../helper/formatter";
 import { getBaseUrl, getSiteName, getVideoId } from "../../helper/utils";
+import {
+	faqDoDescription,
+	coordsDoEmbed,
+	plantasSchema,
+	amenidadesSchema,
+	perguntasComparativas,
+	nomeSemIncorporadora,
+} from "../../helper/schema";
+import Mdi from "../../components/Mdi";
+
+// Selos dos tipos de unidade do prédio, com link para a página temática
+const SELOS = {
+	"cobertura-duplex": ["Cobertura duplex", "/coberturas?tipo=cobertura-duplex"],
+	"cobertura-horizontal": ["Cobertura horizontal", "/coberturas?tipo=cobertura-horizontal"],
+	duplex: ["Duplex", "/coberturas?tipo=duplex"],
+	garden: ["Garden", "/gardens"],
+	studio: ["Studio", "/investimento?tipo=studio"],
+	loft: ["Loft", "/investimento?tipo=loft"],
+	nr: ["NR", "/investimento?tipo=nr"],
+};
 
 export default function PropertyDetailsClient({
 	propertyData,
 	relatedProperties,
+	updatedLabel,
+	bairro = null,
+	incorporadora = null,
+	historico = [],
+	tabelaEm = null,
+	bairrosAlerta = [],
+	bairroAlerta = null,
+	tipos = [],
+	analiseRenda = null,
+	analise = null,
+	publishedISO = null,
+	modifiedISO = null,
 }) {
-	const searchParams = useSearchParams();
-	const openGallery = searchParams.get("openGallery");
+	const temSimulador = propertyData.price >= 600000;
+	// Lido no navegador (sem useSearchParams) para a página continuar sendo gerada no servidor
+	const [openGallery, setOpenGallery] = React.useState(false);
+	React.useEffect(() => {
+		setOpenGallery(Boolean(new URLSearchParams(window.location.search).get("openGallery")));
+	}, []);
 
 	const [activeTab, setActiveTab] = React.useState("plantas");
 
@@ -64,6 +100,17 @@ export default function PropertyDetailsClient({
 		return propertyData.images.filter((img) => img.type === "perspectives");
 	}, [propertyData.images]);
 
+	// Páginas no padrão novo já listam as plantas com preço no texto ("Plantas e preços");
+	// nelas a tabela de tipologias repetiria a mesma informação.
+	const temPlantasNoTexto = React.useMemo(
+		() =>
+			Array.isArray(propertyData.description) &&
+			propertyData.description.some(
+				(b) => b && typeof b === "object" && (b.title || "").startsWith("Plantas e preços")
+			),
+		[propertyData.description]
+	);
+
 	const typelogiesByType = React.useMemo(() => {
 		if (!propertyData.typelogies) return {};
 		return propertyData.typelogies.reduce((type, item) => {
@@ -83,6 +130,7 @@ export default function PropertyDetailsClient({
 	};
 
 	const brandName = React.useMemo(() => {
+		if (propertyData.seo?.developer) return propertyData.seo.developer;
 		const kw = propertyData.seo?.keywords;
 		if (Array.isArray(kw)) {
 			if (kw.length >= 2) return kw[kw.length - 2];
@@ -131,12 +179,60 @@ export default function PropertyDetailsClient({
 			.trim();
 	}, [propertyData.description]);
 
+	// "Lux 590 Itaim Bibi - Lux" vira "Lux 590 Itaim Bibi": é o nome do
+	// empreendimento, tanto nos textos quanto na entidade do schema.
+	const nomeCurto = React.useMemo(
+		() =>
+			nomeSemIncorporadora(
+				propertyData.name || propertyData.address,
+				propertyData.seo?.developer,
+			),
+		[propertyData.name, propertyData.address, propertyData.seo],
+	);
+
+	const coords = coordsDoEmbed(propertyData.description_embed);
+	const plantas = plantasSchema(propertyData.typelogies, nomeCurto);
+	const amenidades = amenidadesSchema(propertyData.attributes);
+	const perguntasTexto = React.useMemo(
+		() => faqDoDescription(propertyData.description),
+		[propertyData.description],
+	);
+
+	// Perguntas geradas dos números do imóvel: preço do m² x bairro, metrô, polos.
+	const perguntasDados = React.useMemo(
+		() =>
+			perguntasComparativas({
+				nome: nomeCurto,
+				analise,
+				preco: propertyData.price,
+				area: Number(propertyData.min_area) || 0,
+				entregaEm: propertyData.delivery_in,
+			}),
+		[nomeCurto, propertyData.price, propertyData.min_area, propertyData.delivery_in, analise],
+	);
+	// O FAQPage só pode conter o que está visível na página, então é a mesma lista.
+	const vistas = new Set(perguntasTexto.map((p) => p.q.toLowerCase()));
+	const perguntas = [
+		...perguntasTexto,
+		...perguntasDados.filter((p) => !vistas.has(p.q.toLowerCase())),
+	];
+	const paginaUrl = `${getBaseUrl()}/imovel/${propertyData.slug}`;
+	const autorId = `${getBaseUrl()}/#corretor`;
+
 	const propertySchema = {
 		"@context": "https://schema.org",
-		"@type": "Product",
-		name: propertyData.name || propertyData.address,
-		description: normalizedDescription,
-		image: propertyData.images?.map((img) => img.src) || [],
+		// Product mantém a oferta com preço; ApartmentComplex diz ao Google que
+		// isto é um empreendimento residencial, com plantas e amenidades.
+		// Sem preço não há offers, e um Product sem offers/review/aggregateRating
+		// é erro crítico no Rich Results: nesse caso fica só o ApartmentComplex.
+		"@type":
+			propertyData.price > 0
+				? ["Product", "ApartmentComplex"]
+				: "ApartmentComplex",
+		"@id": `${paginaUrl}#empreendimento`,
+		name: nomeCurto,
+		description: normalizedDescription.slice(0, 5000),
+		image: perspectiveImages.slice(0, 10).map((img) => img.src),
 		identifier: propertyData.id,
 		url: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 		category:
@@ -217,17 +313,95 @@ export default function PropertyDetailsClient({
 						},
 					]
 				: []),
+			...(analise?.metro?.nome
+				? [
+						{
+							"@type": "PropertyValue",
+							name: `Distância até ${analise.metro.nome}`,
+							value: analise.metro.dist,
+							unitCode: "MTR",
+						},
+					]
+				: []),
+			...(Array.isArray(analise?.polos)
+				? analise.polos.slice(0, 5).map((polo) => ({
+						"@type": "PropertyValue",
+						name: `Distância até ${polo.nome}`,
+						value: polo.dist,
+						unitCode: "MTR",
+					}))
+				: []),
 		].filter(Boolean),
-		...(propertyData.quantity_reviews > 0 && {
-			aggregateRating: {
-				"@type": "AggregateRating",
-				ratingValue: Number(propertyData.rating) || 0,
-				reviewCount: propertyData.quantity_reviews || 0,
-				bestRating: 5,
-				worstRating: 1,
+		address: {
+			"@type": "PostalAddress",
+			streetAddress: propertyData.seo?.street,
+			addressLocality: propertyData.seo?.city,
+			addressRegion: propertyData.seo?.state,
+			postalCode: propertyData.seo?.zip,
+			addressCountry: "BR",
+		},
+		...(coords && {
+			geo: {
+				"@type": "GeoCoordinates",
+				latitude: coords.lat,
+				longitude: coords.lon,
 			},
 		}),
+		...(plantas.length > 0 && {
+			containsPlace: plantas,
+			numberOfAccommodationUnits: {
+				"@type": "QuantitativeValue",
+				value: plantas.length,
+			},
+		}),
+		...(amenidades.length > 0 && { amenityFeature: amenidades }),
 	};
+
+	// Autoria: quem responde pelo conteúdo da página, com CRECI.
+	const autorSchema = {
+		"@type": "Person",
+		"@id": autorId,
+		name: contact.broker.name,
+		jobTitle: "Corretor de imóveis",
+		identifier: `CRECI-SP ${contact.broker.creci}`,
+		worksFor: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+		knowsAbout: [
+			"Imóveis de alto padrão em São Paulo",
+			"Lançamentos imobiliários",
+			"Investimento em imóveis para renda",
+		],
+	};
+
+	const paginaSchema = {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"@id": `${paginaUrl}#pagina`,
+		url: paginaUrl,
+		name: propertyData.seo?.title || propertyData.name,
+		description: propertyData.seo?.description,
+		inLanguage: "pt-BR",
+		primaryImageOfPage: perspectiveImages[0]?.src,
+		mainEntity: { "@id": `${paginaUrl}#empreendimento` },
+		...(publishedISO && { datePublished: publishedISO }),
+		...(modifiedISO && { dateModified: modifiedISO }),
+		author: autorSchema,
+		reviewedBy: { "@id": autorId },
+		publisher: { "@type": "Organization", name: getSiteName(), url: getBaseUrl() },
+	};
+
+	const faqSchema =
+		perguntas.length > 0
+			? {
+					"@context": "https://schema.org",
+					"@type": "FAQPage",
+					"@id": `${paginaUrl}#faq`,
+					mainEntity: perguntas.map((p) => ({
+						"@type": "Question",
+						name: p.q,
+						acceptedAnswer: { "@type": "Answer", text: p.a },
+					})),
+				}
+			: null;
 
 	const breadcrumbSchema = {
 		"@context": "https://schema.org",
@@ -245,28 +419,56 @@ export default function PropertyDetailsClient({
 				name: "Imóveis",
 				item: `${getBaseUrl()}/imoveis`,
 			},
-			{
+			bairro && {
 				"@type": "ListItem",
 				position: 3,
+				name: bairro.nome,
+				item: `${getBaseUrl()}/bairro/${bairro.slug}`,
+			},
+			{
+				"@type": "ListItem",
+				position: bairro ? 4 : 3,
 				name: propertyData.name || propertyData.address,
 				item: `${getBaseUrl()}/imovel/${propertyData.slug}`,
 			},
-		],
+		].filter(Boolean),
 	};
 
 	return (
 		<>
-			<Script
+			<script
 				id="property-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(propertySchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(propertySchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
-			<Script
+			<script
 				id="breadcrumb-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
+
+			<script
+				id="page-schema"
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(paginaSchema).replace(/</g, "\\u003c"),
+				}}
+			/>
+
+			{faqSchema && (
+				<script
+					id="faq-schema"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+					}}
+				/>
+			)}
 
 			<Navbar
 				navClass="defaultscroll sticky"
@@ -294,6 +496,11 @@ export default function PropertyDetailsClient({
 									Imóveis
 								</Link>
 							</li>
+							{bairro && (
+								<li className="breadcrumb-item">
+									<Link href={`/bairro/${bairro.slug}`}>{bairro.nome}</Link>
+								</li>
+							)}
 						</ol>
 					</nav>
 				</div>
@@ -305,13 +512,42 @@ export default function PropertyDetailsClient({
 								<h1 className="title mb-0">
 									{propertyData.name || propertyData.address}
 								</h1>
+								{(incorporadora || bairro) && (
+									<p className="text-muted mb-0 mt-1">
+										{incorporadora && (
+											<>
+												Incorporadora{" "}
+												<Link href={`/incorporadora/${incorporadora.slug}`} className="text-primary">
+													{incorporadora.nome}
+												</Link>
+											</>
+										)}
+										{incorporadora && bairro && " · "}
+										{bairro && (
+											<>
+												Mais imóveis{" "}
+												<Link href={`/bairro/${bairro.slug}`} className="text-primary">
+													{bairro.prep || bairro.nome}
+												</Link>
+											</>
+										)}
+									</p>
+								)}
+								{tipos.some((t) => SELOS[t]) && (
+									<div className="selos-tipo mt-2">
+										{tipos
+											.filter((t) => SELOS[t])
+											.map((t) => (
+												<Link key={t} href={SELOS[t][1]} className="selo-tipo">
+													{SELOS[t][0]}
+												</Link>
+											))}
+									</div>
+								)}
 								<ul className="list-unstyled row align-items-center justify-content-between mb-0 py-3">
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-arrow-expand-all fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="arrow-expand-all" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.area}</small>
 											</span>
@@ -320,10 +556,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-bed fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="bed" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.bedroom}</small>
 											</span>
@@ -332,10 +565,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-shower fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="shower" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.suite}</small>
 											</span>
@@ -344,10 +574,7 @@ export default function PropertyDetailsClient({
 
 									<li className="col-6 col-md-auto ms-0">
 										<span className="d-flex align-items-center">
-											<i
-												className="mdi mdi-car fs-4 me-2 text-primary"
-												aria-hidden="true"
-											></i>
+											<Mdi n="car" className="fs-4 me-2 text-primary" />
 											<span className="text-muted fs-5">
 												<small>{propertyData.preview?.parking}</small>
 											</span>
@@ -358,9 +585,9 @@ export default function PropertyDetailsClient({
 								{Array.isArray(propertyData.description) &&
 								typeof propertyData.description[0] === "object" ? (
 									propertyData.description.map((dataDescription, index) => (
-										<div key={index} className="mb-4">
+										<div key={index} className="mb-4 imovel-bloco">
 											{dataDescription.title && (
-												<h2 className="h5 mb-3 text-dark">
+												<h2 className="h4 mb-3 text-dark">
 													{dataDescription.title}
 												</h2>
 											)}
@@ -415,7 +642,7 @@ export default function PropertyDetailsClient({
 										{propertyData.attributes &&
 											propertyData.attributes.length > 0 && (
 												<>
-													<h2 className="h5 mb-3 text-dark">Características</h2>
+													<h2 className="h4 mb-3 text-dark">Características</h2>
 													<ul className="row list-unstyled">
 														{propertyData.attributes.map((attr, index) => (
 															<li
@@ -431,10 +658,11 @@ export default function PropertyDetailsClient({
 									</>
 								)}
 
-								{typelogiesByType &&
+								{!temPlantasNoTexto &&
+									typelogiesByType &&
 									Object.keys(typelogiesByType).length > 0 && (
 										<div className="mb-4">
-											<h2 className="h5 mb-3 text-dark">
+											<h2 className="h4 mb-3 text-dark">
 												Tipologias Disponíveis
 											</h2>
 											{Object.entries(typelogiesByType).map(([type, items]) => (
@@ -459,22 +687,13 @@ export default function PropertyDetailsClient({
 																m²
 															</th>
 															<th scope="col" aria-label="Quartos">
-																<i
-																	className="mdi mdi-bed fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="bed" className="fs-5 me-2 text-muted" />
 															</th>
 															<th scope="col" aria-label="Banheiros">
-																<i
-																	className="mdi mdi-shower fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="shower" className="fs-5 me-2 text-muted" />
 															</th>
 															<th scope="col" aria-label="Vagas de Garagem">
-																<i
-																	className="mdi mdi-car fs-5 me-2 text-muted"
-																	aria-hidden="true"
-																></i>
+																<Mdi n="car" className="fs-5 me-2 text-muted" />
 															</th>
 														</tr>
 													</thead>
@@ -500,80 +719,94 @@ export default function PropertyDetailsClient({
 										</div>
 									)}
 
-								{(buildingDocumentsImages.length > 0 ||
-									hasValidYoutubeVideo) && (
+								{(buildingDocumentsImages.length > 0 || hasValidYoutubeVideo) && (
 									<div className="mb-4">
-										<ul className="nav nav-pills nav-justified mb-0">
-											<li className="nav-item">
-												<a
-													className={`nav-link ${
-														activeTab === "plantas" ? "active" : ""
-													}`}
-													aria-current="page"
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														setActiveTab("plantas");
-													}}
-												>
-													Plantas
-												</a>
-											</li>
-											<li className="nav-item">
-												<a
-													className={`nav-link ${
-														activeTab === "video" ? "active" : ""
-													}`}
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														setActiveTab("video");
-													}}
-												>
-													Video
-												</a>
-											</li>
-										</ul>
-										<div className="tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom">
-											{activeTab === "plantas" && (
-												<div
-													className="tab-pane fade show active"
-													role="tabpanel"
-													id="tab-plantas"
-												>
-													{buildingDocumentsImages.length > 0 ? (
-														<BuildingDocumentsSlider
-															images={buildingDocumentsImages}
-														/>
-													) : (
-														<div className="text-center py-5">
-															<span className="text-muted">Indisponível</span>
-														</div>
-													)}
-												</div>
-											)}
-
-											{activeTab === "video" && (
-												<div
-													className="tab-pane fade show active"
-													role="tabpanel"
-													id="tab-video"
-												>
-													{hasValidYoutubeVideo ? (
-														<YoutubeEmbed video={propertyData.video} />
-													) : (
-														<div className="text-center py-5">
-															<span className="text-muted">Indisponível</span>
-														</div>
-													)}
-												</div>
-											)}
+										{/* Só mostra as abas que têm conteúdo; com uma só, vira um título simples */}
+										{buildingDocumentsImages.length > 0 && hasValidYoutubeVideo ? (
+											<ul className="nav nav-pills nav-justified mb-0">
+												{[
+													["plantas", "Plantas"],
+													["video", "Vídeo"],
+												].map(([aba, rotulo]) => (
+													<li className="nav-item" key={aba}>
+														<a
+															className={`nav-link ${activeTab === aba ? "active" : ""}`}
+															href="#"
+															onClick={(e) => {
+																e.preventDefault();
+																setActiveTab(aba);
+															}}
+														>
+															{rotulo}
+														</a>
+													</li>
+												))}
+											</ul>
+										) : (
+											<h2 className="h4 mb-3 text-dark">
+												{buildingDocumentsImages.length > 0 ? "Plantas" : "Vídeo"}
+											</h2>
+										)}
+										<div
+											className={
+												buildingDocumentsImages.length > 0 && hasValidYoutubeVideo
+													? "tab-content ps-4 pe-4 pb-4 pt-2 border border-top-0 rounded-bottom"
+													: ""
+											}
+										>
+											{buildingDocumentsImages.length > 0 &&
+												(activeTab === "plantas" || !hasValidYoutubeVideo) && (
+													<BuildingDocumentsSlider images={buildingDocumentsImages} />
+												)}
+											{hasValidYoutubeVideo &&
+												(activeTab === "video" || buildingDocumentsImages.length === 0) && (
+													<YoutubeEmbed video={propertyData.video} />
+												)}
 										</div>
 									</div>
 								)}
 
+								{!analiseRenda && (
+									<Proximidades analise={analise} nome={nomeCurto} />
+								)}
+
+								{perguntasDados.length > 0 && (
+									<div className="mb-4">
+										<h2 className="h4 mb-3 text-dark">
+											Preço e localização do {nomeCurto}
+										</h2>
+										{perguntasDados.map((p) => (
+											<div className="mb-3" key={p.q}>
+												<h3 className="h6 fw-semibold mb-1">{p.q}</h3>
+												<p className="text-muted mb-0">{p.a}</p>
+											</div>
+										))}
+									</div>
+								)}
+
+								<RendaAnalise
+									analise={analiseRenda}
+									nome={propertyData.name}
+									category={propertyData.category}
+									deliveryIn={propertyData.delivery_in}
+									phone={contact.phone}
+								/>
+
+								{temSimulador && (
+									<PaymentSimulator
+										name={propertyData.name}
+										price={propertyData.price}
+										typelogies={propertyData.typelogies}
+										deliveryIn={propertyData.delivery_in}
+										category={propertyData.category}
+										phone={contact.phone}
+									/>
+								)}
+
+								<PriceHistory historico={historico} tabelaEm={tabelaEm} />
+
 								{propertyData.description_embed && (
-									<div className="card map border-0 mt-2">
+									<div className="card map border-0 mt-4">
 										<div className="card-body p-0">
 											<iframe
 												src={propertyData.description_embed}
@@ -586,21 +819,40 @@ export default function PropertyDetailsClient({
 										</div>
 									</div>
 								)}
+
+								<div className="border rounded-3 p-3 mt-4">
+									<p className="fw-semibold mb-1">
+										{contact.broker.name}
+										<span className="text-muted fw-normal">
+											{" "}
+											· CRECI-SP {contact.broker.creci}
+										</span>
+									</p>
+									<p className="text-muted small mb-1">
+										Corretor de imóveis especializado em lançamentos e imóveis
+										de alto padrão em São Paulo. Responsável pelas informações
+										desta página.
+									</p>
+									<p className="text-muted small mb-0">
+										{updatedLabel && <>Página atualizada em {updatedLabel}.</>}
+										{tabelaEm && <> Tabela do empreendimento de {tabelaEm}.</>}
+									</p>
+								</div>
 							</div>
 						</div>
 
 						<div className="col-lg-4 col-md-5 col-12">
 							<div className="rounded-3 shadow bg-white sticky-bar p-4">
-								{propertyData.price > 0 && (
-									<h2 className="mb-3 h5">A partir de:</h2>
-								)}
+								<span className="imovel-rotulo">
+									{propertyData.price > 0 ? "A partir de" : "Preço"}
+								</span>
 
-								<div className="d-flex align-items-center justify-content-between">
-									<h3 className="mb-0 h5">
+								<div className="d-flex align-items-center justify-content-between gap-2">
+									<p className="imovel-preco mb-0">
 										{propertyData.price === 0
 											? "Consulte"
 											: formatPrice(propertyData.price)}
-									</h3>
+									</p>
 									<span className="badge bg-primary">
 										{
 											categories.find(
@@ -634,6 +886,12 @@ export default function PropertyDetailsClient({
 											<span className="small">{propertyData.release_in}</span>
 										</div>
 									)}
+									{tabelaEm && (
+										<div className="d-flex align-items-center justify-content-between mt-2">
+											<span className="small text-muted">Tabela atualizada</span>
+											<span className="small">{tabelaEm}</span>
+										</div>
+									)}
 								</div>
 
 								<div className="d-flex mt-3 gap-2">
@@ -658,12 +916,40 @@ export default function PropertyDetailsClient({
 									</Link>
 								</div>
 
+								{temSimulador && (
+									<a href="#simulador" className="btn btn-soft-primary w-100 small mt-2">
+										Simular pagamento
+									</a>
+								)}
+
+								<Link
+									href={`/comparar?imoveis=${propertyData.slug}`}
+									className="btn btn-soft-primary w-100 small mt-2"
+									aria-label={`Comparar ${propertyData.name} com outros imóveis`}
+								>
+									Comparar com outros imóveis
+								</Link>
+
 								{propertyData.price > 0 && propertyData.price < 600000 && (
 									<FinancingSimulation />
 								)}
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div className="container mt-100 mt-60">
+					<AlertaImoveis
+						bairros={bairrosAlerta}
+						inicial={{
+							bairros: bairroAlerta ? [bairroAlerta] : [],
+							precoMax: faixaAcima(propertyData.price),
+							estagio: propertyData.category === 4 ? "pronto" : "qualquer",
+						}}
+						titulo={`Quer opções parecidas com o ${propertyData.name}?`}
+						subtitulo="Crie um alerta: avisamos quando entrar um imóvel novo ou quando um preço baixar dentro do que você procura."
+						origem={`/imovel/${propertyData.slug}`}
+					/>
 				</div>
 
 				{relatedProperties && relatedProperties.length > 0 && (

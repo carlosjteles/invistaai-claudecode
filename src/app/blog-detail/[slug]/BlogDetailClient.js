@@ -3,7 +3,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Script from "next/script";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -11,8 +10,10 @@ import ScrollTop from "../../components/ScrollTop";
 
 import { formatDate, formatDateISO } from "../../helper/formatter";
 import { getBaseUrl, getSiteName } from "../../helper/utils";
+import { faqDeBlocos } from "../../helper/schema";
 
 import Swal from "sweetalert2";
+import Mdi from "../../components/Mdi";
 
 export default function BlogDetailClient({
 	blogPost,
@@ -105,6 +106,22 @@ export default function BlogDetailClient({
 		articleBody: articleBody,
 	};
 
+	// O post já traz uma seção "Perguntas frequentes" na tela; aqui ela ganha marcação.
+	const faqSchema = React.useMemo(() => {
+		const perguntas = faqDeBlocos(content);
+		if (perguntas.length === 0) return null;
+		return {
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"@id": `${getBaseUrl()}/blog/${blogPost.slug}#faq`,
+			mainEntity: perguntas.map((p) => ({
+				"@type": "Question",
+				name: p.q,
+				acceptedAnswer: { "@type": "Answer", text: p.a },
+			})),
+		};
+	}, [content, blogPost.slug]);
+
 	const breadcrumbSchema = {
 		"@context": "https://schema.org",
 		"@type": "BreadcrumbList",
@@ -132,16 +149,29 @@ export default function BlogDetailClient({
 
 	return (
 		<>
-			<Script
+			<script
 				id="blog-post-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(blogSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
-			<Script
+			<script
 				id="breadcrumb-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
+			{faqSchema && (
+				<script
+					id="blog-faq-schema"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
+					}}
+				/>
+			)}
 
 			<Navbar
 				navClass="defaultscroll sticky"
@@ -249,6 +279,7 @@ export default function BlogDetailClient({
 								{blogPost.image && (
 									<figure>
 										<Image
+											unoptimized
 											src={blogPost.image}
 											width={0}
 											height={0}
@@ -285,7 +316,7 @@ export default function BlogDetailClient({
 													className="text-center mx-auto blockquote"
 													key={idx}
 												>
-													<i className="mdi mdi-format-quote-open mdi-48px text-muted opacity-2 d-block"></i>
+													<Mdi n="format-quote-open" className="text-muted opacity-2 d-block" style={{ fontSize: 48 }} />
 													{item.value}
 													{item.author && (
 														<small className="d-block text-muted mt-2">
@@ -309,6 +340,7 @@ export default function BlogDetailClient({
 										if (item.type === "image" && item.src) {
 											return (
 												<Image
+													unoptimized
 													src={item.src}
 													width={0}
 													height={0}
@@ -381,11 +413,11 @@ export default function BlogDetailClient({
 															<div className="card-img blog-image position-relative overflow-hidden rounded-0">
 																<div className="position-relative overflow-hidden">
 																	<Image
+																		unoptimized
 																		src={imgSrc}
 																		width={0}
 																		height={0}
 																		sizes="100vw"
-																		style={{ width: "100%", height: "auto" }}
 																		className="img-fluid"
 																		alt={item.title}
 																		itemProp="image"
@@ -424,13 +456,16 @@ export default function BlogDetailClient({
 																		{item.description}
 																	</p>
 
+																	{/* empurra o "Leia mais" para a base: resumos de tamanhos diferentes continuam alinhados */}
+																	<div className="blog-espaco" aria-hidden="true" />
+
 																	<Link
 																		href={`/blog/${item.slug}`}
 																		className="text-dark read-more"
 																		aria-label={`Ler mais sobre ${item.title}`}
 																	>
 																		Leia Mais{" "}
-																		<i className="mdi mdi-chevron-right align-middle"></i>
+																		<Mdi n="chevron-right" className="align-middle" />
 																	</Link>
 																</div>
 															</div>
@@ -537,6 +572,7 @@ export default function BlogDetailClient({
 															/>
 
 															<Image
+																unoptimized
 																src={imgSrc}
 																width={105}
 																height={65}

@@ -1,4 +1,3 @@
-import Script from "next/script";
 import Link from "next/link";
 
 import FaqTab from "../components/FaqTab";
@@ -13,17 +12,19 @@ import { getBaseUrl, getSiteName } from "../helper/utils";
 export const metadata = {
 	title: `Perguntas Frequentes | ${getSiteName()}`,
 	description:
-		"Encontre respostas para as dúvidas mais comuns sobre imóveis, processo de compra, financiamento e nossos serviços de consultoria imobiliária.",
+		"Dúvidas sobre compra de imóveis de alto padrão em São Paulo: compra na planta, fluxo de pagamento, INCC, financiamento, FGTS, ITBI, investimento e compradores estrangeiros.",
 	keywords: [
-		"perguntas frequentes imóveis",
-		"dúvidas imobiliárias",
-		"FAQ imobiliária",
-		"ajuda compra imóvel",
+		"comprar imóvel na planta",
+		"fluxo de pagamento imóvel na planta",
+		"ITBI São Paulo",
+		"financiamento imóvel alto padrão",
+		"estrangeiro comprar imóvel no Brasil",
 	],
 	alternates: {
 		canonical: `${getBaseUrl()}/perguntas-frequentes`,
 	},
 	openGraph: {
+		locale: "pt_BR",
 		title: `Perguntas Frequentes | ${getSiteName()}`,
 		description:
 			"Encontre respostas para as principais dúvidas sobre imóveis e nossos serviços.",
@@ -88,10 +89,12 @@ export default function Faqs() {
 
 	return (
 		<>
-			<Script
+			<script
 				id="faq-schema"
 				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(faqsSchema) }}
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(faqsSchema).replace(/</g, "\\u003c"),
+				}}
 			/>
 
 			<Navbar

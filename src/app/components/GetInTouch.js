@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getSiteName } from "../helper/utils";
+import Mdi from "./Mdi";
 
 export default function GetInTouch() {
 	return (
@@ -11,9 +12,9 @@ export default function GetInTouch() {
 		>
 			<div className="col-12">
 				<div className="section-title text-center">
-					<h4 className="title mb-3" itemProp="name">
+					<h2 className="title h4 mb-3" itemProp="name">
 						Tem dúvidas? Fale com a gente
-					</h4>
+					</h2>
 					<p
 						className="text-muted para-desc mb-0 mx-auto"
 						itemProp="description"
@@ -34,10 +35,7 @@ export default function GetInTouch() {
 							itemProp="url"
 						>
 							Fale com um consultor{" "}
-							<i
-								className="mdi mdi-arrow-right align-middle"
-								aria-hidden="true"
-							></i>
+							<Mdi n="arrow-right" className="align-middle" />
 						</Link>
 					</div>
 				</div>

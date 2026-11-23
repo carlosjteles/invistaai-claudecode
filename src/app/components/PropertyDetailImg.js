@@ -18,8 +18,15 @@ export default function PropertyDetailImg({
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [open, setIsOpen] = useState(openGallery);
 
+	React.useEffect(() => {
+		if (openGallery) setIsOpen(true);
+	}, [openGallery]);
+
 	const currentImage = images[currentImageIndex];
 	const firstImage = images.find((img, idx) => idx === 0);
+
+	// Sem fotos (imóvel recém-publicado aguardando a fila de fotos): não quebra a página
+	if (!firstImage) return null;
 
 	const handleMovePrev = () => {
 		setCurrentImageIndex(
@@ -57,10 +64,12 @@ export default function PropertyDetailImg({
 					aria-label={`Ver imagem: ${firstImage.alt}`}
 				>
 					<Image
+						unoptimized
 						src={firstImage.src}
 						width={0}
 						height={0}
 						sizes="100vw"
+						priority
 						className="img-fluid rounded-3 shadow"
 						alt={firstImage.alt || `Imóvel: vista principal`}
 						itemProp="image"
@@ -85,6 +94,7 @@ export default function PropertyDetailImg({
 								aria-label={`Ver imagem: ${img.alt || `Vista ${idx + 2}`}`}
 							>
 								<Image
+									unoptimized
 									src={img.src}
 									width={0}
 									height={0}

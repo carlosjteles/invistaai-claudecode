@@ -7,6 +7,7 @@ import { getBaseUrl, getSiteName } from "../helper/utils";
 
 const TinySlider = dynamic(() => import("tiny-slider-react"), { ssr: false });
 import "../../../node_modules/tiny-slider/dist/tiny-slider.css";
+import Mdi from "./Mdi";
 
 const data = [
 	{
@@ -110,7 +111,7 @@ export default function Customers() {
 
 										<div className="card border-0 bg-white">
 											<div className="card-body p-4 rounded-3 shadow m-2">
-												<i className="mdi mdi-format-quote-open display-1 text-primary opacity-25 position-absolute end-0 top-0"></i>
+												<Mdi n="format-quote-open" className="display-1 text-primary opacity-25 position-absolute end-0 top-0" />
 
 												<div className="d-flex">
 													<Image
@@ -153,19 +154,19 @@ export default function Customers() {
 
 													<ul className="list-unstyled mb-0 mt-3 text-warning h5">
 														<li className="list-inline-item">
-															<i className="mdi mdi-star"></i>
+															<Mdi n="star" />
 														</li>
 														<li className="list-inline-item">
-															<i className="mdi mdi-star"></i>
+															<Mdi n="star" />
 														</li>
 														<li className="list-inline-item">
-															<i className="mdi mdi-star"></i>
+															<Mdi n="star" />
 														</li>
 														<li className="list-inline-item">
-															<i className="mdi mdi-star"></i>
+															<Mdi n="star" />
 														</li>
 														<li className="list-inline-item">
-															<i className="mdi mdi-star"></i>
+															<Mdi n="star" />
 														</li>
 													</ul>
 												</div>
