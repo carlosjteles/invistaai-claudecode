@@ -182,6 +182,19 @@ body {
             display: none;
         }
 
+        // Centraliza a faixa parada. A trilha é `width: max-content`, então
+        // no desktop ela é mais estreita que a tela e ficava encostada na
+        // esquerda, com metade da faixa vazia à direita.
+        //
+        // `margin-inline: auto` e não `justify-content: center` no pai: num
+        // contêiner com overflow, centralizar pelo pai torna a parte que
+        // transborda à esquerda inalcançável pela rolagem. Com margem auto a
+        // caixa fica centrada enquanto couber e, quando não couber, as
+        // margens resolvem para zero e a rolagem funciona normalmente.
+        .fi-trilha {
+            margin-inline: auto;
+        }
+
         .fi-grupo {
             flex: 0 0 auto;
             justify-content: flex-start;
